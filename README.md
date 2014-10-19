@@ -10,5 +10,5 @@ Oscar Åkesson (<oscak367@student.liu.se>)
 
 Libraries
 ---------
-* SFML (Simple and Fast Multimedia Library): <https://github.com/LaurentGomila/SFML> (zlib/png license)
-* C++11 Perlin Noise: <https://github.com/Reputeless/PerlinNoise> (MIT license)
+* SFML (Simple and Fast Multimedia Library): <https://github.com/LaurentGomila/SFML>
+* C++11 Perlin Noise: <https://github.com/Reputeless/PerlinNoise>
