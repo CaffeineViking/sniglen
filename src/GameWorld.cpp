@@ -3,7 +3,6 @@
 #include "GameWorld.hpp"
 
 void GameWorld::update(){
-    
 }
 
 void GameWorld::keyPressed(const sf::Keyboard::Key & keyEvent){
@@ -17,9 +16,7 @@ void GameWorld::keyReleased(const sf::Keyboard::Key & keyEvent){
 }
 
 void GameWorld::mousePressed(const sf::Mouse::Button & mouseEvent){
-    
 }
 
 void GameWorld::mouseReleased(const sf::Mouse::Button & mouseEvent){
-    
 }
