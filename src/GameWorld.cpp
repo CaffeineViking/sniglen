@@ -1,3 +1,6 @@
+#ifndef GAMEWORLD_CPP
+#define GAMEWORLD_CPP
+
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include "GameWorld.hpp"
@@ -23,3 +26,5 @@ void GameWorld::mousePressed(const sf::Mouse::Button & mouseEvent){
 void GameWorld::mouseReleased(const sf::Mouse::Button & mouseEvent){
     
 }
+
+#endif
