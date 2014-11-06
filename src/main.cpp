@@ -1,15 +1,14 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "GameWorld.hpp"
-#include "Entity/Entity.hpp"
+#include "entities/Entity.hpp"
 
 using namespace std;
 
-sf::Texture loadTexture(string);
 int main() {
     
     sf::RenderWindow window{sf::VideoMode{1280, 720}, "GeglQuest", sf::Style::Close};
-    
+    window.setFramerateLimit(60); 
     GameWorld game{window};
     
     while(window.isOpen()){
@@ -33,15 +32,11 @@ int main() {
         }
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
             window.close();
-        window.clear();
         game.update();
+        window.clear();
+	game.draw();
         window.display();
     }
     return 0;
 }
 
-sf::Texture loadTexture(const string& fileName){
-    sf::Texture temp;
-    temp.loadFromFile(fileName);
-    return temp;
-}

@@ -32,14 +32,18 @@ void Unit::getMovement(){
         if(abs(momentum_.y) < 0.10f) 
             momentum_.y = 0;
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && -momentum_.x <= maxMomentum_.x) {
-        momentum_.x += -speed_*2;
-    } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && momentum_.x <= maxMomentum_.x) {
-        momentum_.x += speed_*2;
-    } else{
-        momentum_.x = momentum_.x * 0.85f;
-        if(abs(momentum_.x) < 0.10f)
-            momentum_.x = 0;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && -momentum_.x <= maxMomentum_.x)
+        momentum_.x += -speed_;
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+	    momentum_.x = -maxMomentum_.x;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && momentum_.x <= maxMomentum_.x)
+        momentum_.x += speed_;
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && momentum_.x <= maxMomentum_.x)
+	    momentum_.x = maxMomentum_.x;
+    if(!(position_.y < 500)){
+    	momentum_.x = momentum_.x * 0.85f;
+    	if(abs(momentum_.x) < 0.10f)
+        	momentum_.x = 0;
     }
 }
 
