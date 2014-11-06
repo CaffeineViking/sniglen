@@ -1,7 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "GameWorld.hpp"
-//#include "Entity/Entity.hpp"
+#include "Entity/Entity.hpp"
 
 using namespace std;
 
