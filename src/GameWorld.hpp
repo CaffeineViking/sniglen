@@ -1,30 +1,20 @@
+#ifndef GAMEWORLD_HPP
+#define GAMEWORLD_HPP
+
+#include <SFML/Graphics.hpp>
+#include <iostream>
+
 class GameWorld {
     private:
+        sf::RenderWindow * gameWindow;
     
     public:
-        void keyPressed(sf::Event keyEvent);
-        void keyReleased(sf::Event keyEvent);
-        void mousePressed(sf::Event mouseEvent);
-        void mouseReleased(sf::Event mosueEvent);
-        
+        GameWorld(sf::RenderWindow & window): gameWindow{&window}{}
+        void update();
+        void keyPressed(const sf::Keyboard::Key & keyEvent);
+        void keyReleased(const sf::Keyboard::Key & keyEvent);
+        void mousePressed(const sf::Mouse::Button & mouseEvent);
+        void mouseReleased(const sf::Mouse::Button & mouseEvent);
 };
 
-void GameWorld::keyPressed(Keyboard::Key keyEvent){
-    if(keyEvent == 'A')
-        cout << "bokstaven a var nedtryckt" << endl;
-}
-
-void GameWorld::keyReleased(Keyboard::Key keyEvent){
-    if(keyEvent == 'A')
-        cout << "bokstaven a var släppt" << endl; 
-}
-
-void GameWorld::mousePressed(Mouse::Button mouseEvent){
-    
-}
-
-void GameWorld::mouseReleased(Mouse::Button mosueEvent){
-    
-}
-
-
+#endif // GAMEWORLD_HPP
