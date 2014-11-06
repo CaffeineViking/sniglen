@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include "GameWorld.hpp"
 //#include "Entity/Entity.hpp"
 
 using namespace std;
@@ -17,26 +18,21 @@ int main() {
             if (event.type == sf::Event::Closed) {
                 window.close();
             }
-            if (event == sf::Event::KeyPressed)
+            if (event.type == sf::Event::KeyPressed)
                 game.keyPressed(event.key.code);
                 
-            if (event == sf::Event::KeyReleased)
+            if (event.type == sf::Event::KeyReleased)
                 game.keyReleased(event.key.code);
                 
-            if (event == sf::Event::MouseButtonPressed)
-                game.mousePressed(event.mouse.button);
+            if (event.type == sf::Event::MouseButtonPressed)
+                game.mousePressed(event.mouseButton.button);
                 
-            if (event == sf::Event::MouseButtonReleased)
-                game.mouseReleased(event.mouse.button);
-                
-            /*if (event == sf::Event::JoystickButtonPressed)
-                
-            if (event == sf::Event::JoystickButtonReleased)*/
+            if (event.type == sf::Event::MouseButtonReleased)
+                game.mouseReleased(event.mouseButton.button);
             
         }
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
             window.close();
-        //gegl.update();
         window.clear();
         game.update();
         window.display();
