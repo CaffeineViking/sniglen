@@ -13,11 +13,17 @@ void Entity::move(){
 void Entity::applyPhysics(){
     if(position_.y <= 500)
         momentum_.y += 1.5f;
-    else if(momentum_.y > 0)
+    else if(momentum_.y > 0){
         momentum_.y = 0;
+        position_.y = 501;
+    }
+}
+void Entity::getMovement(){
+}
+void Entity::draw(sf::RenderWindow& window){
+    window.draw(sprite_);
 }
 void Unit::getMovement(){
-    
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && position_.y >= 500){ //500 To be changed to variable y coords
         momentum_.y = -20.0f; 
     } else { 
@@ -26,21 +32,15 @@ void Unit::getMovement(){
         if(abs(momentum_.y) < 0.10f) 
             momentum_.y = 0;
     }
-
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && -momentum_.x <= maxMomentum_.x) {
-        position_ += {-speed_*2, 0.0f};
+        momentum_.x += -speed_*2;
     } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && momentum_.x <= maxMomentum_.x) {
-        position_ += {speed_*2, 0.0f};
+        momentum_.x += speed_*2;
     } else{
         momentum_.x = momentum_.x * 0.85f;
         if(abs(momentum_.x) < 0.10f)
             momentum_.x = 0;
     }
-
-    if(position_.y > 500){
-        position_.y = 501;
-    }
-    sprite_.setPosition(position_);
 }
 
 void Unit::applyPhysics(){

@@ -19,19 +19,20 @@ class Entity{
         const float speed_;
 
         Entity(sf::Texture tex, sf::Vector2f pos, float spd, int mass):
-            texture_{tex}, position_{pos}, speed_{spd}, mass_{mass}{ 
+            texture_{tex}, position_{pos}, mass_{mass}, speed_{spd}{
             sprite_.setTexture(texture_);
             sprite_.setPosition(pos);
         }
 
-        virtual void getMovement(){}
-        virtual void move(){}
-        virtual void applyPhysics(){}
+        virtual void getMovement();
+        virtual void move();
+        virtual void applyPhysics();
     public:
         sf::Sprite getSprite(){return sprite_;};
         sf::Vector2f getPos(){return position_;};
         virtual ~Entity() = default;
         virtual void update(){getMovement(); applyPhysics(); move();};
+        virtual void draw(sf::RenderWindow&);
 };
 
 class Unit: public Entity{
