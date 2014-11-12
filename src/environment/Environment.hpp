@@ -3,6 +3,7 @@
 
 class Environment {
 public:
+    Environment() = default;
     Environment(float gravity) : gravity_{gravity} {}
     void randomizeWind();
     float getWindForce() const;
