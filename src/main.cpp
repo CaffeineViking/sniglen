@@ -1,8 +1,10 @@
 #include <SFML/Graphics.hpp>
 #include "GameWorld.hpp"
+#include "entities/Entity.hpp"
 
 int main() {
     sf::RenderWindow window{sf::VideoMode{1280, 720}, "TDDI02", sf::Style::Close};
+    window.setFramerateLimit(60);
     GameWorld game{window};
 
     while (window.isOpen()){
@@ -27,8 +29,9 @@ int main() {
             window.close();
         }
 
-        window.clear();
         game.update();
+        window.clear();
+        game.draw();
         window.display();
     }
 

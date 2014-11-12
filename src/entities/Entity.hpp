@@ -45,7 +45,7 @@ class Unit: public Entity{
         void move() override;
     public:
 
-        Unit(sf::Texture tex, sf::Vector2f pos, float spd, int mass, Player* player = nullptr): 
+        Unit(sf::Texture tex, sf::Vector2f pos, float spd, int mass, Player* player = nullptr):
             Entity(tex, pos, spd, mass), owner_{player}{ sprite_.setPosition(position_);}
         void update(){getMovement(); applyPhysics(); move();};
 };
