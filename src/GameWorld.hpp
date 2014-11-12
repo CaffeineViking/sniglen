@@ -13,6 +13,7 @@ class GameWorld {
     private:
         sf::RenderWindow* gameWindow;
         std::vector<std::unique_ptr<Entity>> entVec;
+        Environment environment_;
 
     public:
         GameWorld(sf::RenderWindow&);

@@ -18,6 +18,7 @@ void GameWorld::update() {
     }
 }
 void GameWorld::draw() {
+    gameWindow->draw(environment_.getTerrain().getSprite());
     for (std::unique_ptr<Entity>& ent : entVec){
         ent->draw(*gameWindow);
     }
@@ -44,4 +45,5 @@ sf::Texture loadTexture(const std::string& fileName) {
     temp.loadFromFile(fileName);
     return temp;
 }
+
 #endif

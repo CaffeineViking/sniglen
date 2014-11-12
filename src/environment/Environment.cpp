@@ -8,3 +8,11 @@ void Environment::randomizeWind() {
 float Environment::getWindForce() const {
     return windForce_;
 }
+
+float Environment::getGravity() const {
+    return gravity_;
+}
+
+const Terrain& Environment::getTerrain() const {
+    return terrain_;
+}
