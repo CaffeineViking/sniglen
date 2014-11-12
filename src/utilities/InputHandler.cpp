@@ -5,7 +5,7 @@
 
 void InputHandler::keyboardUpdate(){
     releasedKeys_.clear();
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && ){ //500 To be changed to variable y coords
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){ //500 To be changed to variable y coords
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){ //500 To be changed to variable y coords
     }
