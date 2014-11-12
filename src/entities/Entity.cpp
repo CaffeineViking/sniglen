@@ -26,27 +26,57 @@ void Entity::draw(sf::RenderWindow& window){
     window.draw(sprite_);
 }
 void Unit::getMovement(){
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && position_.y >= 500){ //500 To be changed to variable y coords
+
+
+    if (kb.isKeyPressed(sf::Keyboard::Up) && position_.y >= 500){ //500 To be changed to variable y coords
         momentum_.y = -20.0f; 
+        std::cout << "Up" << std::endl;
+
     } else { 
         if(momentum_.y < 0) 
             momentum_.y = momentum_.y * 0.99f; 
         if(abs(momentum_.y) < 0.10f) 
             momentum_.y = 0;
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && -momentum_.x <= maxMomentum_.x)
+    if (kb.isKeyPressed(sf::Keyboard::Left) && -momentum_.x <= maxMomentum_.x){
         momentum_.x += -speed_;
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+        std::cout << "Left" << std::endl;
+    }
+    else if (kb.isKeyPressed(sf::Keyboard::Left))
 	    momentum_.x = -maxMomentum_.x;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && momentum_.x <= maxMomentum_.x)
+    if (kb.isKeyPressed(sf::Keyboard::Right) && momentum_.x <= maxMomentum_.x){
+        std::cout << "Right" << std::endl;
         momentum_.x += speed_;
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && momentum_.x <= maxMomentum_.x)
+    }
+    else if (kb.isKeyPressed(sf::Keyboard::Right) && momentum_.x <= maxMomentum_.x)
 	    momentum_.x = maxMomentum_.x;
     if(!(position_.y < 500)){
     	momentum_.x = momentum_.x * 0.85f;
     	if(abs(momentum_.x) < 0.10f)
         	momentum_.x = 0;
     }
+//
+//    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && position_.y >= 500){ //500 To be changed to variable y coords
+//        momentum_.y = -20.0f; 
+//    } else { 
+//        if(momentum_.y < 0) 
+//            momentum_.y = momentum_.y * 0.99f; 
+//        if(abs(momentum_.y) < 0.10f) 
+//            momentum_.y = 0;
+//    }
+//    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && -momentum_.x <= maxMomentum_.x)
+//        momentum_.x += -speed_;
+//    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+//	    momentum_.x = -maxMomentum_.x;
+//    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && momentum_.x <= maxMomentum_.x)
+//        momentum_.x += speed_;
+//    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && momentum_.x <= maxMomentum_.x)
+//	    momentum_.x = maxMomentum_.x;
+//    if(!(position_.y < 500)){
+//    	momentum_.x = momentum_.x * 0.85f;
+//    	if(abs(momentum_.x) < 0.10f)
+//        	momentum_.x = 0;
+//    }
 }
 
 void Unit::applyPhysics(){
