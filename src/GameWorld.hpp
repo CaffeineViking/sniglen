@@ -23,8 +23,7 @@ class GameWorld {
         void keyReleased(const sf::Keyboard::Key & keyEvent);
         void mousePressed(const sf::Mouse::Button & mouseEvent);
         void mouseReleased(const sf::Mouse::Button & mouseEvent);
-		~GameWorld
+	//~GameWorld()
 };
-
 
 #endif // GAMEWORLD_HPP
