@@ -2,6 +2,7 @@
 #define ENTITIES_CPP
 
 #include "Entity.hpp"
+#include "../utilities/InputHandler.hpp"
 #include <vector>
 
 //void Entity::getMovement(){;}
