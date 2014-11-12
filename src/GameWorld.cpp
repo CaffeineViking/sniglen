@@ -9,7 +9,7 @@
 
 GameWorld::GameWorld(sf::RenderWindow& window) : gameWindow{&window} {
     sf::Texture gegelTexture{loadTexture("share/test.png")};
-    entVec.push_back(std::unique_ptr<Entity>{new Unit{gegelTexture, {255, 255}, 5, 150}});
+    entVec.push_back(std::unique_ptr<Entity>{new Unit{gegelTexture, {255, 255}, 2, 150}});
 }
 
 void GameWorld::update() {

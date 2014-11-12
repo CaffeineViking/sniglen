@@ -1,22 +1,25 @@
 #ifndef INPUTHANDLER_HPP
 #define INPUTHANDLER_HPP
 
-#include <vector>
+#include <set>
 #include <SFML/Window/Keyboard.hpp>
 #include <SFML/System/Vector2.hpp>
 
+
 class InputHandler{
     private:
-        std::vector<sf::Keyboard::Key> pressedKeys_;
-        std::vector<sf::Keyboard::Key> releasedKeys_;
+        std::set<sf::Keyboard::Key> pressedKeys_;
+        std::set<sf::Keyboard::Key> releasedKeys_;
         bool mouseClicked_;
         bool mouseReleased_;
         sf::Vector2f mousePos_;
         void keyboardUpdate();
-        void mouseUpdate();
+        void mouseUpdate(){};
     public:
-        const std::vector<sf::Keyboard::Key>& getPressedKeys(){return pressedKeys_;};
-        const std::vector<sf::Keyboard::Key>& getReleasedKeys(){return releasedKeys_;};
+        InputHandler() = default;
+        const std::set<sf::Keyboard::Key>& getPressedKeys(){return pressedKeys_;};
+        const std::set<sf::Keyboard::Key>& getReleasedKeys(){return releasedKeys_;};
+        bool isKeyPressed(sf::Keyboard::Key key);
         bool mouseClicked(){return mouseClicked_;};
         bool mouseReleased(){return mouseReleased_;};
         const sf::Vector2f& mousePosition(){return mousePos_;};
