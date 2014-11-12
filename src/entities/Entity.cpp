@@ -74,5 +74,7 @@ void Projectile::move(){
     sprite_.setOrigin({(float)texture_.getSize().x/2,(float)texture_.getSize().y});
     Entity::move();
 }
+void Projectile::getMovement(){
+}
 
 #endif

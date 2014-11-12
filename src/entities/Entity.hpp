@@ -54,6 +54,9 @@ class Projectile: public Entity{
     private:
         Weapon* type_;
         float angle_;
+	void getMovement();
+        void applyPhysics() override;
+        void move();
     public:
         bool deleted_ = false;
         Projectile(sf::Texture tex, sf::Vector2f pos, float spd, int mass, sf::Vector2f inMom, float angle, Weapon* weapon):
@@ -71,8 +74,6 @@ class Projectile: public Entity{
             }
         sf::CircleShape explode();
         void update();
-        void applyPhysics() override;
-        void move();
 
 };
 
