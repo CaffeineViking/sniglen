@@ -19,6 +19,7 @@ void Entity::applyPhysics(){
     }
 }
 void Entity::getMovement(){
+
 }
 void Entity::draw(sf::RenderWindow& window){
     window.draw(sprite_);

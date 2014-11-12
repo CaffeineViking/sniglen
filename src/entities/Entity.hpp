@@ -40,6 +40,8 @@ class Unit: public Entity{
         enum class unitState{idle=0, walking, falling, shooting};
         unitState state_;
         Player* owner_;
+        int shootPower_{0};
+	    bool shooting_;
         void getMovement();
         void applyPhysics() override;
         void move() override;
@@ -48,6 +50,9 @@ class Unit: public Entity{
         Unit(sf::Texture tex, sf::Vector2f pos, float spd, int mass, Player* player = nullptr): 
             Entity(tex, pos, spd, mass), owner_{player}{ sprite_.setPosition(position_);}
         void update(){getMovement(); applyPhysics(); move();};
+	    bool isShooting(){return shooting_;};
+        int getShootPower(){return shootPower_;};
+        ~Unit(){delete owner_;};
 };
 
 class Projectile: public Entity{
@@ -75,6 +80,7 @@ class Projectile: public Entity{
         sf::CircleShape explode();
         void update();
 
+        ~Projectile(){delete type_;};
 };
 
 #endif
