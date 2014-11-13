@@ -5,7 +5,7 @@
 #include <SFML/Graphics.hpp>
 #include "../entities/Entity.hpp"
 
-class Terrain : public sf::Sprite {
+class Terrain {
 public:
     Terrain(unsigned);
     void draw(sf::RenderWindow&) const;
