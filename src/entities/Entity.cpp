@@ -57,7 +57,7 @@ void Unit::getMovement(){
         }
         else if (kb.isKeyPressed(sf::Keyboard::Right) && momentum_.x <= maxMomentum_.x)
             momentum_.x = maxMomentum_.x;
-        if(!(position_.y < 500)){
+        if(!(position_.y < 400)){
             momentum_.x = momentum_.x * 0.85f;
             if(abs(momentum_.x) < 0.10f)
                 momentum_.x = 0;
