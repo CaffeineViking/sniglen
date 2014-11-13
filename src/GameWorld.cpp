@@ -13,7 +13,10 @@ GameWorld::GameWorld(sf::RenderWindow& window) : gameWindow{&window} {
 }
 
 void GameWorld::update() {
-    for (std::unique_ptr<Entity>& ent : entVec){
+    for (std::unique_ptr<Entity>& ent : entVec) {
+        if (environment_.getTerrain().isColliding(*ent)) {
+            std::cout << "Colliding" << std::endl;
+        }
         ent->update();
     }
 }
