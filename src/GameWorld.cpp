@@ -18,7 +18,7 @@ void GameWorld::update() {
     }
 }
 void GameWorld::draw() {
-    gameWindow->draw(environment_.getTerrain().getSprite());
+    environment_.getTerrain().draw(*gameWindow);
     for (std::unique_ptr<Entity>& ent : entVec){
         ent->draw(*gameWindow);
     }

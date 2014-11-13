@@ -4,10 +4,10 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 
-class Terrain {
+class Terrain : public sf::Sprite {
 public:
-    Terrain(unsigned size);
-    const sf::Sprite& getSprite() const;
+    Terrain(unsigned);
+    void draw(sf::RenderWindow&) const;
 
 private:
     sf::Sprite sprite_;
