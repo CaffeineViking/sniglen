@@ -13,6 +13,7 @@ GameWorld::GameWorld(sf::RenderWindow& window) : gameWindow{&window} {
 }
 
 void GameWorld::update() {
+    input.update(gameWindow);
     for (std::unique_ptr<Entity>& ent : entVec){
         ent->update();
     }
