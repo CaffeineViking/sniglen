@@ -55,7 +55,7 @@ void InputHandler::keyboardUpdate(){
         pressedKeys_.insert(sf::Keyboard::Key::Space);
     }
 }
-bool InputHandler::isKeyPressed(sf::Keyboard::Key key){
+bool InputHandler::isKeyPressed(sf::Keyboard::Key key) const{
     return pressedKeys_.find(key) != pressedKeys_.end();
 }
 void InputHandler::mouseUpdate(sf::RenderWindow* window){

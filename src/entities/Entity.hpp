@@ -35,6 +35,7 @@ class Entity{
         sf::Vector2f getPos() const {return position_;};
         virtual ~Entity() = default;
         virtual void update(){getMovement(); applyPhysics(); move();};
+        virtual void collide();
         virtual void draw(sf::RenderWindow&);
 };
 
@@ -54,6 +55,7 @@ class Unit: public Entity{
         Unit(sf::Texture tex, sf::Vector2f pos, float spd, int mass, Player* player = nullptr):
             Entity(tex, pos, spd, mass), owner_{player}{ sprite_.setPosition(position_);}
         void update(){kb.update(); getMovement(); applyPhysics(); move();};
+        void collide();
 	    bool isShooting(){return shooting_;};
         int getShootPower(){return shootPower_;};
         ~Unit(){delete owner_;};
