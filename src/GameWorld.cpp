@@ -18,6 +18,7 @@ void GameWorld::update() {
     for (std::unique_ptr<Entity>& ent : entVec) {
         if (environment_.getTerrain().isColliding(*ent)) {
             std::cout << "Colliding" << std::endl;
+            ent->collide();
         }
         ent->update();
     }
