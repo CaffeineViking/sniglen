@@ -13,12 +13,16 @@ GameWorld::GameWorld(sf::RenderWindow& window) : gameWindow{&window} {
 }
 
 void GameWorld::update() {
-    for (std::unique_ptr<Entity>& ent : entVec){
+    input.update(gameWindow);
+    for (std::unique_ptr<Entity>& ent : entVec) {
+        if (environment_.getTerrain().isColliding(*ent)) {
+            std::cout << "Colliding" << std::endl;
+        }
         ent->update();
     }
 }
 void GameWorld::draw() {
-    gameWindow->draw(environment_.getTerrain().getSprite());
+    environment_.getTerrain().draw(*gameWindow);
     for (std::unique_ptr<Entity>& ent : entVec){
         ent->draw(*gameWindow);
     }

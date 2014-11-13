@@ -9,20 +9,21 @@ Terrain::Terrain(unsigned size) {
     const PerlinNoise perlin{Random::GENERATE()};
 
     const double frequency{4.0f};
-    const double frequency_x{image_.getSize().x / frequency};
-    const double frequency_y{image_.getSize().y / frequency};
+    const double frequencyX{image_.getSize().x / frequency};
 
-    sf::Image terrain_texture;
-    terrain_texture.loadFromFile("share/terrain.png");
+    sf::Image terrainTexture;
+    terrainTexture.loadFromFile("share/terrain.png");
 
     for (size_t x{0}; x < image_.getSize().x; ++x) {
-        const double noise{(perlin.octaveNoise(x / frequency_x, 3) + 1.0) / 2.0};
+        const double noise{(perlin.octaveNoise(x / frequencyX, 3) + 1.0) / 2.0};
+        data_.push_back(noise * image_.getSize().y);
+
         for (size_t y{noise * image_.getSize().y}; y < image_.getSize().y; ++y) {
-            size_t x_mod{x % terrain_texture.getSize().x};
-            size_t y_mod{y % terrain_texture.getSize().y};
-            sf::Color pix{terrain_texture.getPixel(x_mod, y_mod).r,
-                          terrain_texture.getPixel(x_mod, y_mod).g,
-                          terrain_texture.getPixel(x_mod, y_mod).b};
+            size_t xMod{x % terrainTexture.getSize().x};
+            size_t yMod{y % terrainTexture.getSize().y};
+            sf::Color pix{terrainTexture.getPixel(xMod, yMod).r,
+                terrainTexture.getPixel(xMod, yMod).g,
+                terrainTexture.getPixel(xMod, yMod).b};
 
             if (y < noise * image_.getSize().y + 10) {
                 image_.setPixel(x, y, {96, 83, 66});
@@ -37,6 +38,14 @@ Terrain::Terrain(unsigned size) {
     sprite_.move(0, 720 - image_.getSize().y);
 }
 
-const sf::Sprite& Terrain::getSprite() const {
-    return sprite_;
+void Terrain::draw(sf::RenderWindow& window) const {
+    window.draw(sprite_);
+}
+
+bool Terrain::isColliding(const Entity& entity) const {
+    if (entity.getPos().x < 0 || entity.getPos().x > image_.getSize().x) {
+        return false;
+    } else {
+        return entity.getPos().y > (sprite_.getPosition().y + data_[entity.getPos().x]);
+    }
 }

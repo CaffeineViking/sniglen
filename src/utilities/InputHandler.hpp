@@ -3,7 +3,7 @@
 
 #include <set>
 #include <SFML/Window/Keyboard.hpp>
-#include <SFML/System/Vector2.hpp>
+#include <SFML/Graphics.hpp>
 
 
 class InputHandler{
@@ -12,9 +12,9 @@ class InputHandler{
         std::set<sf::Keyboard::Key> releasedKeys_;
         bool mouseClicked_;
         bool mouseReleased_;
-        sf::Vector2f mousePos_;
+        sf::Vector2i mousePos_;
         void keyboardUpdate();
-        void mouseUpdate(){};
+        void mouseUpdate(sf::RenderWindow* window);
     public:
         InputHandler() = default;
         const std::set<sf::Keyboard::Key>& getPressedKeys(){return pressedKeys_;};
@@ -22,7 +22,8 @@ class InputHandler{
         bool isKeyPressed(sf::Keyboard::Key key);
         bool mouseClicked(){return mouseClicked_;};
         bool mouseReleased(){return mouseReleased_;};
-        const sf::Vector2f& mousePosition(){return mousePos_;};
-        void update(){keyboardUpdate(); mouseUpdate();};
+        const sf::Vector2i& mousePosition(){return mousePos_;};
+        void update(){keyboardUpdate();};
+        void update(sf::RenderWindow* window){keyboardUpdate(); mouseUpdate(window);};
 };
 #endif
