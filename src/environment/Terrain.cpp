@@ -8,7 +8,7 @@ Terrain::Terrain(unsigned size) {
     image_.create(size, 540, {0, 0, 0, 0});
     const PerlinNoise perlin{Random::GENERATE()};
 
-    const double frequency{4.0f};
+    const double frequency{(size / 1024) * 2.5f};
     const double frequencyX{image_.getSize().x / frequency};
 
     sf::Image terrainTexture;

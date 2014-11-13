@@ -16,7 +16,7 @@ class GameWorld {
         std::vector<std::unique_ptr<Entity>> entVec;
         Environment environment_;
         InputHandler input;
-
+        sf::View camera_;
 
     public:
         GameWorld(sf::RenderWindow&);

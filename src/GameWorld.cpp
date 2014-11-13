@@ -8,6 +8,7 @@
 #include "utilities/Random.hpp"
 
 GameWorld::GameWorld(sf::RenderWindow& window) : gameWindow{&window} {
+    camera_ = window.getDefaultView();
     sf::Texture gegelTexture{loadTexture("share/test.png")};
     entVec.push_back(std::unique_ptr<Entity>{new Unit{gegelTexture, {255, 255}, 2, 150}});
 }
@@ -22,6 +23,7 @@ void GameWorld::update() {
     }
 }
 void GameWorld::draw() {
+    gameWindow->setView(camera_);
     environment_.getTerrain().draw(*gameWindow);
     for (std::unique_ptr<Entity>& ent : entVec){
         ent->draw(*gameWindow);
@@ -29,8 +31,11 @@ void GameWorld::draw() {
 }
 
 void GameWorld::keyPressed(const sf::Keyboard::Key & keyEvent) {
-    if (keyEvent == sf::Keyboard::Key::A)
-        std::cout << "bokstaven a var nedtryckt: " << Random::GENERATE_MAX(30) << std::endl;
+    if (keyEvent == sf::Keyboard::Key::A) {
+        camera_.move(-100, 0);
+    } else if (keyEvent == sf::Keyboard::Key::D) {
+        camera_.move(100, 0);
+    }
 }
 
 void GameWorld::keyReleased(const sf::Keyboard::Key & keyEvent) {

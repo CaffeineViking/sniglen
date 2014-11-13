@@ -21,8 +21,8 @@ CXXFLAGS += -std=c++11 -Wall -Wextra -pedantic
 
 DEBUG := NO
 ifeq ($(DEBUG), YES)
-CFLAGS += -g -Werror -pedantic-errors
-CXXFLAGS += -g -Werror -pedantic-errors
+CFLAGS += -g
+CXXFLAGS += -g
 program_NAME := $(program_NAME)_debug
 endif
 

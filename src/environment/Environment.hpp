@@ -16,7 +16,7 @@ public:
 private:
     float windForce_{0.0f};
     const float gravity_{9.82f};
-    Terrain terrain_{1280};
+    Terrain terrain_{6144};
 };
 
 #endif
