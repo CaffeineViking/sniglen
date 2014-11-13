@@ -1,0 +1,13 @@
+Vi har insett styrkan i en bra strukturerad klasshierarki.
+Parallellt lagarbete med git.
+Hur skönt makefiles är under större projekt.
+Bra kommunikation i gruppen är nödvändig för att inte skapa filkonflikter i git.
+Smidigheten i att bestämma kodningsstandarder.
+
+PS
+Detta dokument syns bäst i ed/ex/Vi/VIM/GVIM.
+Använder du emacs så får du inte läsa denna. Så det så.
+Juste, så passa dig.
+M-x butterfly kan inte rädda dig här inte.
+Suck it up emacs-användare, vi har undo som träd, inte stack.
+Get #rekt
