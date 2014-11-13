@@ -18,13 +18,15 @@ class Entity{
         const int mass_;
         const float gravity_{9.82};
         const float speed_;
-
         Entity(sf::Texture tex, sf::Vector2f pos, float spd, int mass):
             texture_{tex}, position_{pos}, mass_{mass}, speed_{spd}{
             sprite_.setTexture(texture_);
             sprite_.setPosition(pos);
         }
 
+        bool lookLeft_{true};
+        bool doUnitLookLeft(){return lookLeft_;};
+        void unitLookLeftNow(bool maybe){lookLeft_ = maybe;};
         virtual void getMovement();
         virtual void move();
         virtual void applyPhysics();

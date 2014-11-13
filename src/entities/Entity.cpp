@@ -27,7 +27,11 @@ void Entity::draw(sf::RenderWindow& window){
 }
 void Unit::getMovement(){
     if (kb.isKeyPressed(sf::Keyboard::Up) && position_.y >= 500){ //500 To be changed to variable y coords
-        momentum_.y = -20.0f; 
+        momentum_.y = -20.0f;
+        if(doUnitLookLeft())
+            momentum_.x = 20.0f;
+        else
+            momentum_.x = 20.0f;
         std::cout << "Up" << std::endl;
     } else { 
         if(momentum_.y < 0) 
