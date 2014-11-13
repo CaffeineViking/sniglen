@@ -58,4 +58,11 @@ void InputHandler::keyboardUpdate(){
 bool InputHandler::isKeyPressed(sf::Keyboard::Key key){
     return pressedKeys_.find(key) != pressedKeys_.end();
 }
+void InputHandler::mouseUpdate(sf::RenderWindow* window){
+    mousePos_ = sf::Mouse::getPosition(*window);
+    mouseReleased_ = false;
+    if(mouseClicked_ && !sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+        mouseReleased_ = true;
+    mouseClicked_ = sf::Mouse::isButtonPressed(sf::Mouse::Button::Left);
+}
 #endif
