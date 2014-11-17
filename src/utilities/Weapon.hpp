@@ -1,16 +1,22 @@
 #ifndef WEAPONS_HPP
 #define WEAPONS_HPP
 
-class Weapon{
-    public:
-        int damage_;
-        int blastRadius_;
-        Weapon(int dmg = 1, int rad = 20):
-            damage_{dmg}, blastRadius_{rad}{}
+class Weapon {
+private:
+    int damage_;
+    float explosionRadius_;
+
+public:
+    Weapon(int damage, float explosionRadius) :
+        damage_{damage}, explosionRadius_{explosionRadius} {}
+
+    int getDamage() const { return damage_; }
+    float getExplosionRadius() const { return explosionRadius_; }
 };
 
-class Bazooka: public Weapon{
-    public:
-        using Weapon::Weapon;
+class Bazooka: public Weapon {
+public:
+    Bazooka() : Weapon{10, 20.0} {}
 };
+
 #endif
