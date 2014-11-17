@@ -32,7 +32,7 @@ void Unit::getMovement(){
         if (kb.isKeyPressed(sf::Keyboard::Up) && position_.y >= 400){ //500 To be changed to variable y coords
             state_ = unitState::falling;
             momentum_.y = -20.0f;
-            if(doUnitLookLeft())
+            if(lookLeft_)
                 momentum_.x = -10.0f;
             else
                 momentum_.x = 10.0f;
@@ -45,15 +45,15 @@ void Unit::getMovement(){
         }
         if (kb.isKeyPressed(sf::Keyboard::Left) && -momentum_.x <= maxMomentum_.x){
             momentum_.x += -speed_;
-            unitLookLeftNow(true); 
-            std::cout << "Left, look at left?: " << doUnitLookLeft() << std::endl;
+            lookLeft_ = true; 
+            std::cout << "Left, look at left?: " << lookLeft_ << std::endl;
         }
         else if (kb.isKeyPressed(sf::Keyboard::Left))
             momentum_.x = -maxMomentum_.x;
         if (kb.isKeyPressed(sf::Keyboard::Right) && momentum_.x <= maxMomentum_.x){
             momentum_.x += speed_;
-            unitLookLeftNow(false);
-            std::cout << "Right, look at left?: " << doUnitLookLeft() << std::endl;
+            lookLeft_ = false;
+            std::cout << "Right, look at left?: " << lookLeft_ << std::endl;
         }
         else if (kb.isKeyPressed(sf::Keyboard::Right) && momentum_.x <= maxMomentum_.x)
             momentum_.x = maxMomentum_.x;
