@@ -16,18 +16,17 @@ class Entity{
         sf::Vector2f momentum_{0,0};
         sf::Vector2f maxMomentum_{10,10};
         const int mass_;
-        const float gravity_{9.82};
+        const float gravity_{9.82}; // Should be removed when Environment is implemented
         const float speed_;
         Entity(sf::Texture tex, sf::Vector2f pos, float spd, int mass):
             texture_{tex}, position_{pos}, mass_{mass}, speed_{spd}{
                 sprite_.setTexture(texture_);
                 sprite_.setPosition(pos);
             }
-
         bool lookLeft_{true};
-        virtual void getMovement();
-        virtual void move();
-        virtual void applyPhysics();
+        virtual void getMovement(); // Reads input and sets what movements should be done
+        virtual void applyPhysics(); // Applies friction and gravity to the movements that should be done
+        virtual void move(); // Applies movement to the entity
     public:
         const sf::Sprite& getSprite() const {return sprite_;};
         const sf::Vector2f& getPos() const {return position_;};
@@ -35,18 +34,17 @@ class Entity{
         virtual ~Entity() = default;
         virtual void update(){getMovement(); applyPhysics(); move();};
         virtual void collide();
-        virtual void draw(sf::RenderWindow&);
+        virtual void draw(sf::RenderWindow&); // Standardise draw functions
 };
 
 class Unit: public Entity{
     private:
         enum class unitState{idle=0, walking, falling, shooting};
-        unitState state_;
-        Player* owner_;
+        unitState state_; // Used to tell what the unit is currently doing
+        Player* owner_;  
         InputHandler kb;
-        int shootPower_{0};
-        bool shooting_;
-        void getMovement();
+        int shootPower_{0}; // Release power of shots
+        void getMovement() override;
         void applyPhysics() override;
         void move() override;
 
@@ -55,14 +53,14 @@ class Unit: public Entity{
             Entity(tex, pos, spd, mass), owner_{player}{ sprite_.setPosition(position_);}
         void update(){kb.update(); getMovement(); applyPhysics(); move();};
         void collide();
-        bool isShooting(){return shooting_;};
+        bool isShooting(){return state_ == unitState::shooting;};
         int getShootPower(){return shootPower_;};
         ~Unit(){delete owner_;};
 };
 
 class Projectile: public Entity{
     private:
-        Weapon* type_;
+        Weapon* type_; // Variable to keep track of what kind of weapon it is
         float angle_;
         void getMovement();
         void applyPhysics() override;

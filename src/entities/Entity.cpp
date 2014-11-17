@@ -7,9 +7,9 @@
 
 //void Entity::getMovement(){;}
 void Entity::move(){
-    sprite_.setOrigin({(float)texture_.getSize().x/2,(float)texture_.getSize().y});
-    sprite_.move(momentum_);
-    position_ = sprite_.getPosition();
+    sprite_.setOrigin({(float)texture_.getSize().x/2,(float)texture_.getSize().y}); // Set origin to middle of sprite
+    sprite_.move(momentum_); // Use sf::Sprite::move to move the sprite
+    position_ = sprite_.getPosition(); // Get new position
 }
 void Entity::applyPhysics(){
     if(position_.y <= 400)
@@ -29,7 +29,7 @@ void Entity::collide(){
 }
 void Unit::getMovement(){
     if(state_ != unitState::falling){
-        if (kb.isKeyPressed(sf::Keyboard::Up) && position_.y >= 400){ //500 To be changed to variable y coords
+        if (kb.isKeyPressed(sf::Keyboard::Up) && position_.y >= 400){ // To be changed to variable y coords
             state_ = unitState::falling;
             momentum_.y = -20.0f;
             if(lookLeft_)
