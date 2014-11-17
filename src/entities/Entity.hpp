@@ -31,8 +31,8 @@ class Entity{
         virtual void move();
         virtual void applyPhysics();
     public:
-        sf::Sprite getSprite() const {return sprite_;};
-        sf::Vector2f getPos() const {return position_;};
+        const sf::Sprite& getSprite() const {return sprite_;};
+        const sf::Vector2f& getPos() const {return position_;};
         virtual ~Entity() = default;
         virtual void update(){getMovement(); applyPhysics(); move();};
         virtual void collide();
