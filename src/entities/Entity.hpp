@@ -55,7 +55,7 @@ class Unit: public Entity{
         void collide();
         bool isShooting(){return state_ == unitState::shooting;};
         int getShootPower(){return shootPower_;};
-        ~Unit(){delete owner_;};
+        ~Unit() = default;
 };
 
 class Projectile: public Entity{
@@ -83,7 +83,7 @@ class Projectile: public Entity{
         sf::CircleShape explode();
         void update();
 
-        ~Projectile(){delete type_;};
+        ~Projectile() = default;
 };
 
 #endif
