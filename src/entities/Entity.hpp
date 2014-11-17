@@ -20,19 +20,18 @@ class Entity{
         const float speed_;
         Entity(sf::Texture tex, sf::Vector2f pos, float spd, int mass):
             texture_{tex}, position_{pos}, mass_{mass}, speed_{spd}{
-            sprite_.setTexture(texture_);
-            sprite_.setPosition(pos);
-        }
+                sprite_.setTexture(texture_);
+                sprite_.setPosition(pos);
+            }
 
         bool lookLeft_{true};
-        bool doUnitLookLeft(){return lookLeft_;};
-        void unitLookLeftNow(bool maybe){lookLeft_ = maybe;};
         virtual void getMovement();
         virtual void move();
         virtual void applyPhysics();
     public:
         const sf::Sprite& getSprite() const {return sprite_;};
         const sf::Vector2f& getPos() const {return position_;};
+        bool doUnitLookLeft(){return lookLeft_;};
         virtual ~Entity() = default;
         virtual void update(){getMovement(); applyPhysics(); move();};
         virtual void collide();
@@ -46,7 +45,7 @@ class Unit: public Entity{
         Player* owner_;
         InputHandler kb;
         int shootPower_{0};
-	    bool shooting_;
+        bool shooting_;
         void getMovement();
         void applyPhysics() override;
         void move() override;
@@ -56,7 +55,7 @@ class Unit: public Entity{
             Entity(tex, pos, spd, mass), owner_{player}{ sprite_.setPosition(position_);}
         void update(){kb.update(); getMovement(); applyPhysics(); move();};
         void collide();
-	    bool isShooting(){return shooting_;};
+        bool isShooting(){return shooting_;};
         int getShootPower(){return shootPower_;};
         ~Unit(){delete owner_;};
 };
@@ -65,7 +64,7 @@ class Projectile: public Entity{
     private:
         Weapon* type_;
         float angle_;
-	void getMovement();
+        void getMovement();
         void applyPhysics() override;
         void move();
     public:
