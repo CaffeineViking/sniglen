@@ -39,9 +39,17 @@ Terrain::Terrain(unsigned size) {
         }
     }
 
+    refresh(); // Write terrain to texture.
+    sprite_.move(0, 720 - image_.getSize().y);
+}
+
+void Terrain::refresh() {
     texture_.loadFromImage(image_);
     sprite_.setTexture(texture_);
-    sprite_.move(0, 720 - image_.getSize().y);
+}
+
+void Terrain::destroy(int x, int y, float radius) {
+    refresh();
 }
 
 void Terrain::draw(sf::RenderWindow& window) const {
