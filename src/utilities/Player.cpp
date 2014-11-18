@@ -15,5 +15,6 @@ Weapon* Player::selectWeapon(int weaponID){
     return weaponList_[weaponID].first; // Return weapon
 }
 void Player::insertUnit(Unit* unit){
+    unit->setColor(color_);
     team_.push_back(unit);
 }

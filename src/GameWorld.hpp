@@ -5,10 +5,10 @@
 #include <iostream>
 #include <vector>
 #include <memory>
+#include "utilities/Player.hpp"
 #include "entities/Entity.hpp"
 #include "environment/Environment.hpp"
 #include "utilities/InputHandler.hpp"
-#include "utilities/Player.hpp"
 
 sf::Texture loadTexture(const std::string&);
 class GameWorld {
@@ -18,6 +18,7 @@ class GameWorld {
         Environment environment_;
         InputHandler input;
         sf::View camera_;
+        Unit* currentUnit;
 
     public:
         GameWorld(sf::RenderWindow&);

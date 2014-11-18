@@ -6,25 +6,32 @@
 
 GameWorld::GameWorld(sf::RenderWindow& window) : gameWindow{&window} {
     camera_ = window.getDefaultView();
-    sf::Texture gegelTexture{loadTexture("share/test.png")};
-    playerVector.push_back(std::unique_ptr<Player>{new Player{}});
-    playerVector.push_back(std::unique_ptr<Player>{new Player{}});
+    
+    playerVector.push_back(std::unique_ptr<Player>{new Player{{255,0,0}}});
+    playerVector.push_back(std::unique_ptr<Player>{new Player{{0,0,255}}});
     for(auto& i : playerVector)
-        i->insertUnit((new Unit{gegelTexture, {255, 255}, 2, 150}));
+        i->insertUnit((new Unit{loadTexture("share/test.png"), {255, 255}, 2, 150}));
+    for(auto& i : playerVector)
+        i->insertUnit((new Unit{loadTexture("share/test2.jpg"), {255, 255}, 2, 150}));
+    for(auto& i : playerVector)
+        i->insertUnit((new Unit{loadTexture("share/test3.jpg"), {255, 255}, 2, 150}));
+    for(auto& i : playerVector)
+        i->insertUnit((new Unit{loadTexture("share/test4.jpg"), {255, 255}, 2, 150}));
+    currentUnit = (*playerVector.begin())->getNextUnit();
 }
 
 void GameWorld::update() {
     static auto currentPlayer = playerVector.begin();
-    Unit* unit = (*currentPlayer)->getNextUnit();
     input.update(gameWindow);
-    if (environment_.getTerrain().isColliding(*unit)) {
-        unit->collide();
+    if (environment_.getTerrain().isColliding(*currentUnit)) {
+        currentUnit->collide();
     }
-    unit->update(input);
-    if(input.isKeyReleased(sf::Keyboard::Key::Space)){
+    currentUnit->update(input);
+    if(input.isKeyReleased(sf::Keyboard::Key::Space) && currentUnit->inControl()){
         ++currentPlayer;
         if(currentPlayer == playerVector.end())
             currentPlayer = playerVector.begin();
+        currentUnit = (*currentPlayer)->getNextUnit();
     }
 }
 void GameWorld::draw() {

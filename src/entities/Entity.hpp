@@ -50,9 +50,13 @@ class Unit: public Entity{
 
     public:
         Unit(sf::Texture tex, sf::Vector2f pos, float spd, int mass, Player* player = nullptr):
-            Entity(tex, pos, spd, mass), owner_{player}{ sprite_.setPosition(position_);}
+            Entity(tex, pos, spd, mass), owner_{player}{ 
+                sprite_.setPosition(position_);
+            }
         void update(const InputHandler& input){getMovement(input); applyPhysics(); move();};
         void collide();
+        bool inControl(){return (state_ != unitState::falling);};
+        void setColor(sf::Color color){sprite_.setColor(color);}
         bool isShooting(){return state_ == unitState::shooting;};
         int getShootPower(){return shootPower_;};
         ~Unit() = default;
