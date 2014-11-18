@@ -6,25 +6,40 @@
 
 GameWorld::GameWorld(sf::RenderWindow& window) : gameWindow{&window} {
     camera_ = window.getDefaultView();
-    sf::Texture gegelTexture{loadTexture("share/test.png")};
-    entVec.push_back(std::unique_ptr<Entity>{new Unit{gegelTexture, {255, 255}, 2, 150}});
+    
+    playerVector.push_back(std::unique_ptr<Player>{new Player{{255,0,0}}});
+    playerVector.push_back(std::unique_ptr<Player>{new Player{{0,0,255}}});
+    for(auto& i : playerVector)
+        i->insertUnit((new Unit{loadTexture("share/test.png"), {255, 255}, 2, 150}));
+    for(auto& i : playerVector)
+        i->insertUnit((new Unit{loadTexture("share/test2.jpg"), {255, 255}, 2, 150}));
+    for(auto& i : playerVector)
+        i->insertUnit((new Unit{loadTexture("share/test3.jpg"), {255, 255}, 2, 150}));
+    for(auto& i : playerVector)
+        i->insertUnit((new Unit{loadTexture("share/test4.jpg"), {255, 255}, 2, 150}));
+    currentUnit = (*playerVector.begin())->getNextUnit();
 }
 
 void GameWorld::update() {
+    static auto currentPlayer = playerVector.begin();
     input.update(gameWindow);
-    for (std::unique_ptr<Entity>& ent : entVec) {
-        if (environment_.getTerrain().isColliding(*ent)) {
-            //std::cout << "Colliding" << std::endl;
-            ent->collide();
-        }
-        ent->update(input);
+    if (environment_.getTerrain().isColliding(*currentUnit)) {
+        currentUnit->collide();
+    }
+    currentUnit->update(input);
+    if(input.isKeyReleased(sf::Keyboard::Key::Space) && currentUnit->inControl()){
+        ++currentPlayer;
+        if(currentPlayer == playerVector.end())
+            currentPlayer = playerVector.begin();
+        currentUnit = (*currentPlayer)->getNextUnit();
     }
 }
 void GameWorld::draw() {
     gameWindow->setView(camera_);
     environment_.getTerrain().draw(*gameWindow);
-    for (std::unique_ptr<Entity>& ent : entVec){
-        ent->draw(*gameWindow);
+    for (std::unique_ptr<Player>& player : playerVector){
+        for(auto ent : player->getTeam())
+            ent->draw(*gameWindow);
     }
 }
 

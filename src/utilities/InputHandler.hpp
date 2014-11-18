@@ -19,7 +19,8 @@ class InputHandler{
         InputHandler() = default;
         const std::set<sf::Keyboard::Key>& getPressedKeys() const {return pressedKeys_;};
         const std::set<sf::Keyboard::Key>& getReleasedKeys() const {return releasedKeys_;};
-        bool isKeyPressed(sf::Keyboard::Key key) const ;
+        bool isKeyPressed(sf::Keyboard::Key key) const;
+        bool isKeyReleased(sf::Keyboard::Key key) const;
         bool mouseClicked() const {return mouseClicked_;};
         bool mouseReleased() const {return mouseReleased_;};
         const sf::Vector2i& mousePosition() const {return mousePos_;};

@@ -5,6 +5,7 @@
 #include <iostream>
 #include <vector>
 #include <memory>
+#include "utilities/Player.hpp"
 #include "entities/Entity.hpp"
 #include "environment/Environment.hpp"
 #include "utilities/InputHandler.hpp"
@@ -13,10 +14,11 @@ sf::Texture loadTexture(const std::string&);
 class GameWorld {
     private:
         sf::RenderWindow* gameWindow;
-        std::vector<std::unique_ptr<Entity>> entVec;
+        std::vector<std::unique_ptr<Player>> playerVector;
         Environment environment_;
         InputHandler input;
         sf::View camera_;
+        Unit* currentUnit;
 
     public:
         GameWorld(sf::RenderWindow&);

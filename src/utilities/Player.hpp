@@ -17,9 +17,11 @@ class Player{
         int unitCounter_{-1};
     public:
         Player(sf::Color col) : color_{col}{}
-        Player(){}
+        sf::Color getColor(){return color_;};
         Unit* getRandomUnit();
         Unit* getNextUnit();
+        const std::vector<Unit*>& getTeam(){return team_;};
+        void insertUnit(Unit*);
         Weapon* selectWeapon(int weaponID);
         ~Player() = default;
 };
