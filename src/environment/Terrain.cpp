@@ -2,7 +2,6 @@
 
 #include "../utilities/Random.hpp"
 #include "../perlinnoise/PerlinNoise.hpp"
-#include <iostream>
 #include <cmath>
 
 Terrain::Terrain(unsigned size) {
@@ -50,6 +49,7 @@ void Terrain::refresh() {
 }
 
 void Terrain::destroy(sf::Vector2i position, float radius) {
+    // These variables will be used to check if the bounds of the terrain have been crossed.
     int terrainMaxY = sprite_.getPosition().y + sprite_.getTexture()->getSize().y;
     int terrainMaxX = sprite_.getPosition().x + sprite_.getTexture()->getSize().x;
 
@@ -57,14 +57,17 @@ void Terrain::destroy(sf::Vector2i position, float radius) {
         if (y < sprite_.getPosition().y || y > terrainMaxY) continue;
         for (int x = position.x - radius; x <= position.x + radius; ++x) {
             if (x < sprite_.getPosition().x || x > terrainMaxX) continue;
+            // Determine distance between origin and current checked pixel.
             unsigned distance = std::sqrt(std::pow(x - position.x, 2) + std::pow(y - position.y, 2));
 
+            // If the distance is smaller than the target radius, clear that pixel (we are in the circle).
             if (distance <= radius) {
                 image_.setPixel(x - sprite_.getPosition().x, y - sprite_.getPosition().y, {0, 0, 0, 0});
             }
         }
     }
 
+    // The image has been updated, the texture and sprite need to be notified.
     refresh();
 }
 
@@ -73,11 +76,26 @@ void Terrain::draw(sf::RenderWindow& window) const {
 }
 
 bool Terrain::isColliding(const Entity& entity) const {
-    // This initial check here saves us the trouble from out of bounds errors.
-    if (entity.getPos().x < 0 || entity.getPos().x > image_.getSize().x) {
-        return false;
-    } else {
-        // See if part of the entity is below the generated terrain height.
-        return entity.getPos().y > (sprite_.getPosition().y + data_[entity.getPos().x]);
+    sf::Image entityImage{entity.getSprite().getTexture()->copyToImage()}; // Could be bottleneck here if there is one. Need this in Entity instead.
+
+    // The start coordiantes to check pixels. These use the entities sprite size, no need to check the entire terrain.
+    int startX = (entity.getPos().x - entityImage.getSize().x / 2) - sprite_.getPosition().x;
+    int startY = (entity.getPos().y - entityImage.getSize().y / 2) - sprite_.getPosition().y;
+
+    // The end coordinates to check for a pixel collision.
+    int endX = startX + entity.getSprite().getTexture()->getSize().x;
+    int endY = startY + entity.getSprite().getTexture()->getSize().y;
+
+    for (int y{startY}; y < endY; ++y) {
+        // Make sure we are within bounds.
+        if (y < 0 || y > static_cast<int>(sprite_.getTexture()->getSize().y)) continue;
+        for (int x{startX}; x < endX; ++x) {
+            if (x < 0 || x > static_cast<int>(sprite_.getTexture()->getSize().x)) continue;
+            // If both (terrain and entity) pixel colors are NOT transparent, we have a collision.
+            if (image_.getPixel(x, y).a != 0 && entityImage.getPixel(x - startX, y - startY).a != 0) return true;
+        }
     }
+
+    // Otherwise no collision.
+    return false;
 }
