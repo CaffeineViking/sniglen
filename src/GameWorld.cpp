@@ -22,7 +22,6 @@ void GameWorld::update() {
     }
     unit->update(input);
     if(input.isKeyReleased(sf::Keyboard::Key::Space)){
-        std::cout << "plas" << std::endl;
         ++currentPlayer;
         if(currentPlayer == playerVector.end())
             currentPlayer = playerVector.begin();

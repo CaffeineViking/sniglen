@@ -33,7 +33,6 @@ void Unit::getMovement(const InputHandler& input){
                 momentum_.x = -10.0f;
             else
                 momentum_.x = 10.0f;
-            std::cout << "Up" << std::endl;
         } else { 
             if(momentum_.y < 0) 
                 momentum_.y = momentum_.y * 0.99f; 
@@ -43,14 +42,12 @@ void Unit::getMovement(const InputHandler& input){
         if (input.isKeyPressed(sf::Keyboard::Left) && -momentum_.x <= maxMomentum_.x){
             momentum_.x += -speed_;
             lookLeft_ = true; 
-            std::cout << "Left, look at left?: " << lookLeft_ << std::endl;
         }
         else if (input.isKeyPressed(sf::Keyboard::Left))
             momentum_.x = -maxMomentum_.x;
         if (input.isKeyPressed(sf::Keyboard::Right) && momentum_.x <= maxMomentum_.x){
             momentum_.x += speed_;
             lookLeft_ = false;
-            std::cout << "Right, look at left?: " << lookLeft_ << std::endl;
         }
         else if (input.isKeyPressed(sf::Keyboard::Right) && momentum_.x <= maxMomentum_.x)
             momentum_.x = maxMomentum_.x;
@@ -60,7 +57,6 @@ void Unit::getMovement(const InputHandler& input){
                 momentum_.x = 0;
         }
     }
-    std::cout << ((state_ == unitState::falling) ? ("falling") : ("idle")) << std::endl;
 }
 
 void Unit::applyPhysics(){
