@@ -99,13 +99,9 @@ void Unit::draw(sf::RenderWindow& window){
     window.draw(sprite_);
     window.draw(crosshair_);
 }
-int Unit::getShootPower(){
-    int x = shootPower_;
-    shootPower_ = 0;
-    return x;
-}
 sf::Vector2f Unit::getShootMomentum(){ sf::Vector2f momentum; momentum.x = cos(toRadians(aimAngle_)) * shootPower_;
     momentum.y = sin(toRadians(aimAngle_)) * shootPower_;
+    shootPower_ = 0;
     return momentum;
 }
 void Projectile::applyPhysics(){

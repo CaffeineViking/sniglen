@@ -66,7 +66,6 @@ class Unit: public Entity{
         sf::Vector2f getPosition(){return sprite_.getPosition();};
         void setColor(sf::Color color){sprite_.setColor(color);}
         bool isShooting(){return shoot;};
-        int getShootPower();
         void draw(sf::RenderWindow&) override;
         ~Unit() = default;
 };
