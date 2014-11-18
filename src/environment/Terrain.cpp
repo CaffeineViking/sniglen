@@ -3,6 +3,7 @@
 #include "../utilities/Random.hpp"
 #include "../perlinnoise/PerlinNoise.hpp"
 #include <iostream>
+#include <cmath>
 
 Terrain::Terrain(unsigned size) {
     // Allocate a image with the desired size of the terrain.
@@ -23,7 +24,7 @@ Terrain::Terrain(unsigned size) {
         data_.push_back(noise * image_.getSize().y);
 
         // Also, copy pixels from the terrain overlay to every area below the generated height.
-        for (size_t y{noise * image_.getSize().y}; y < image_.getSize().y; ++y) {
+        for (size_t y = noise * image_.getSize().y; y < image_.getSize().y; ++y) {
             size_t xMod{x % terrainTexture.getSize().x};
             size_t yMod{y % terrainTexture.getSize().y};
             sf::Color pix{terrainTexture.getPixel(xMod, yMod).r,
@@ -49,9 +50,18 @@ void Terrain::refresh() {
 }
 
 void Terrain::destroy(sf::Vector2i position, float radius) {
-    for (int x = position.x - radius; x < position.x + radius; ++x) {
-        for (int y = position.y - radius; y < position.y + radius; ++y) {
-            image_.setPixel(x - sprite_.getPosition().x, y - sprite_.getPosition().y, {0, 0, 0, 0});
+    int terrainMaxY = sprite_.getPosition().y + sprite_.getTexture()->getSize().y;
+    int terrainMaxX = sprite_.getPosition().x + sprite_.getTexture()->getSize().x;
+
+    for (int y = position.y - radius; y <= position.y + radius; ++y) {
+        if (y < sprite_.getPosition().y || y > terrainMaxY) continue;
+        for (int x = position.x - radius; x <= position.x + radius; ++x) {
+            if (x < sprite_.getPosition().x || x > terrainMaxX) continue;
+            unsigned distance = std::sqrt(std::pow(x - position.x, 2) + std::pow(y - position.y, 2));
+
+            if (distance <= radius) {
+                image_.setPixel(x - sprite_.getPosition().x, y - sprite_.getPosition().y, {0, 0, 0, 0});
+            }
         }
     }
 

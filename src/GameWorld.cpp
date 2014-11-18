@@ -38,9 +38,9 @@ void GameWorld::update() {
             currentPlayer = playerVector.begin();
         currentUnit = (*currentPlayer)->getNextUnit();
     }
-    
+
     if(input.mouseReleased())
-        environment_.getTerrain().destroy(sf::Mouse::getPosition(*gameWindow), 32.0);
+        environment_.getTerrain().destroy(sf::Mouse::getPosition(*gameWindow), 64.0);
 }
 void GameWorld::draw() {
     gameWindow->setView(camera_);
