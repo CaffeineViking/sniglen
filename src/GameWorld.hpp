@@ -15,6 +15,7 @@ class GameWorld {
     private:
         sf::RenderWindow* gameWindow;
         std::vector<std::unique_ptr<Player>> playerVector;
+        std::vector<std::unique_ptr<Projectile>> projectileVector;
         Environment environment_;
         InputHandler input;
         sf::View camera_;

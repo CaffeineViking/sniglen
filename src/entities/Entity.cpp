@@ -1,10 +1,11 @@
 #include "Entity.hpp"
 #include "../utilities/InputHandler.hpp"
 #include <vector>
+#include <cmath>
 
-//void Entity::getMovement(){;}
+float toRadians(float degrees);
 void Entity::move(){
-    sprite_.setOrigin({(float)texture_.getSize().x/2,(float)texture_.getSize().y}); // Set origin to middle of sprite
+    sprite_.setOrigin({(float)texture_.getSize().x/2,(float)texture_.getSize().y/2}); // Set origin to middle of sprite
     sprite_.move(momentum_); // Use sf::Sprite::move to move the sprite
     position_ = sprite_.getPosition(); // Get new position
 }
@@ -18,8 +19,8 @@ void Entity::applyPhysics(){
 }
 void Entity::getMovement(const InputHandler& input){
     if(input.isKeyPressed(sf::Keyboard::Key::Space))
-            goto xkcd;
-    xkcd:
+        goto xkcd;
+xkcd:
     ;
 }
 void Entity::draw(sf::RenderWindow& window){
@@ -28,8 +29,20 @@ void Entity::draw(sf::RenderWindow& window){
 void Entity::collide(){
 }
 void Unit::getMovement(const InputHandler& input){
+    shoot = false;
     if(state_ != unitState::falling){
-        if (input.isKeyPressed(sf::Keyboard::Up) && position_.y >= 400){ // To be changed to variable y coords
+        if(input.isKeyPressed(sf::Keyboard::Key::Space))
+            state_ = unitState::shooting;
+        else if(input.isKeyReleased(sf::Keyboard::Key::Space))
+            state_ = unitState::idle;
+
+        if(input.isKeyPressed(sf::Keyboard::Key::Up)){
+            aimAngle_ -= 5;
+        }
+        if(input.isKeyPressed(sf::Keyboard::Key::Down)){
+            aimAngle_ += 5;
+        }
+        if (input.isKeyPressed(sf::Keyboard::Key::BackSpace) && position_.y >= 400){ // To be changed to variable y coords
             state_ = unitState::falling;
             momentum_.y = -20.0f;
             if(lookLeft_)
@@ -42,17 +55,17 @@ void Unit::getMovement(const InputHandler& input){
             if(abs(momentum_.y) < 0.10f) 
                 momentum_.y = 0;
         }
-        if (input.isKeyPressed(sf::Keyboard::Left) && -momentum_.x <= maxMomentum_.x){
+        if (input.isKeyPressed(sf::Keyboard::Key::Left) && -momentum_.x <= maxMomentum_.x){
             momentum_.x += -speed_;
             lookLeft_ = true; 
         }
-        else if (input.isKeyPressed(sf::Keyboard::Left))
+        else if (input.isKeyPressed(sf::Keyboard::Key::Left))
             momentum_.x = -maxMomentum_.x;
-        if (input.isKeyPressed(sf::Keyboard::Right) && momentum_.x <= maxMomentum_.x){
+        if (input.isKeyPressed(sf::Keyboard::Key::Right) && momentum_.x <= maxMomentum_.x){
             momentum_.x += speed_;
             lookLeft_ = false;
         }
-        else if (input.isKeyPressed(sf::Keyboard::Right) && momentum_.x <= maxMomentum_.x)
+        else if (input.isKeyPressed(sf::Keyboard::Key::Right) && momentum_.x <= maxMomentum_.x)
             momentum_.x = maxMomentum_.x;
         if(!(position_.y < 400)){
             momentum_.x = momentum_.x * 0.85f;
@@ -60,17 +73,40 @@ void Unit::getMovement(const InputHandler& input){
                 momentum_.x = 0;
         }
     }
+    if(state_ == unitState::shooting){
+        ++shootPower_;
+        if(shootPower_ > 100)
+            state_ = unitState::idle;
+    }
+    if(state_ != unitState::shooting && shootPower_ != 0){
+        shoot = true;
+    }
 }
-
 void Unit::applyPhysics(){
     Entity::applyPhysics();
 }
 void Unit::move(){
     Entity::move();
 }    
+void Unit::updateCrosshair(){
+    crosshair_.setPosition(sprite_.getPosition().x + 50*cos(toRadians(aimAngle_)), sprite_.getPosition().y + 50*sin(toRadians(aimAngle_)));
+}
 void Unit::collide(){
     state_ = unitState::idle;
     Entity::collide();
+}
+void Unit::draw(sf::RenderWindow& window){
+    window.draw(sprite_);
+    window.draw(crosshair_);
+}
+int Unit::getShootPower(){
+    int x = shootPower_;
+    shootPower_ = 0;
+    return x;
+}
+sf::Vector2f Unit::getShootMomentum(){ sf::Vector2f momentum; momentum.x = cos(toRadians(aimAngle_)) * shootPower_;
+    momentum.y = sin(toRadians(aimAngle_)) * shootPower_;
+    return momentum;
 }
 void Projectile::applyPhysics(){
     if(momentum_.y < -40)
@@ -90,7 +126,10 @@ void Projectile::move(){
 }
 void Projectile::getMovement(const InputHandler& input){
     if(input.isKeyPressed(sf::Keyboard::Key::Space))
-            goto xkcd;
-    xkcd:
+        goto xkcd;
+xkcd:
     ;
+}
+float toRadians(float degrees){
+    return (degrees * (3.14 / 180));
 }

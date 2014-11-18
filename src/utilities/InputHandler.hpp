@@ -10,8 +10,8 @@ class InputHandler{
     private:
         std::set<sf::Keyboard::Key> pressedKeys_;
         std::set<sf::Keyboard::Key> releasedKeys_;
-        bool mouseClicked_;
-        bool mouseReleased_;
+        bool mouseClicked_ = false;
+        bool mouseReleased_ = false;
         sf::Vector2i mousePos_;
         void keyboardUpdate();
         void mouseUpdate(sf::RenderWindow* window);

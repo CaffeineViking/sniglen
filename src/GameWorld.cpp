@@ -27,20 +27,30 @@ void GameWorld::update() {
         currentUnit->collide();
     }
     currentUnit->update(input);
-    if(input.isKeyReleased(sf::Keyboard::Key::Space) && currentUnit->inControl()){
+
+    for(std::unique_ptr<Projectile>& projectile : projectileVector)
+        projectile->update(input);
+    if(currentUnit->isShooting())
+        projectileVector.push_back(std::unique_ptr<Projectile>{new Projectile{loadTexture("share/bullet.png"), currentUnit->getPosition(), 0.0f, 10, currentUnit->getShootMomentum(), currentUnit->getShootAngle()}});
+    if(input.isKeyReleased(sf::Keyboard::Key::Return) && currentUnit->inControl()){
         ++currentPlayer;
         if(currentPlayer == playerVector.end())
             currentPlayer = playerVector.begin();
         currentUnit = (*currentPlayer)->getNextUnit();
     }
+    
+    if(input.mouseReleased())
+        environment_.getTerrain().destroy(sf::Mouse::getPosition(*gameWindow), 32.0);
 }
 void GameWorld::draw() {
     gameWindow->setView(camera_);
     environment_.getTerrain().draw(*gameWindow);
-    for (std::unique_ptr<Player>& player : playerVector){
+    for(std::unique_ptr<Player>& player : playerVector){
         for(auto ent : player->getTeam())
             ent->draw(*gameWindow);
     }
+    for(std::unique_ptr<Projectile>& projectile : projectileVector)
+        projectile->draw(*gameWindow);
 }
 //
 //void GameWorld::keyPressed(const sf::Keyboard::Key & keyEvent) {
