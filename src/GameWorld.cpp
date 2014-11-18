@@ -1,6 +1,3 @@
-#ifndef GAMEWORLD_CPP
-#define GAMEWORLD_CPP
-
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <memory>
@@ -17,10 +14,10 @@ void GameWorld::update() {
     input.update(gameWindow);
     for (std::unique_ptr<Entity>& ent : entVec) {
         if (environment_.getTerrain().isColliding(*ent)) {
-            std::cout << "Colliding" << std::endl;
+            //std::cout << "Colliding" << std::endl;
             ent->collide();
         }
-        ent->update();
+        ent->update(input);
     }
 }
 void GameWorld::draw() {
@@ -55,5 +52,3 @@ sf::Texture loadTexture(const std::string& fileName) {
     temp.loadFromFile(fileName);
     return temp;
 }
-
-#endif

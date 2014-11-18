@@ -8,6 +8,7 @@
 #include "Weapon.hpp"
 #include "../entities/Entity.hpp"
 
+class Unit;
 class Player{
     private:
         sf::Color color_;
