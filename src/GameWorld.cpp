@@ -7,24 +7,33 @@
 GameWorld::GameWorld(sf::RenderWindow& window) : gameWindow{&window} {
     camera_ = window.getDefaultView();
     sf::Texture gegelTexture{loadTexture("share/test.png")};
-    entVec.push_back(std::unique_ptr<Entity>{new Unit{gegelTexture, {255, 255}, 2, 150}});
+    playerVector.push_back(std::unique_ptr<Player>{new Player{}});
+    playerVector.push_back(std::unique_ptr<Player>{new Player{}});
+    for(auto& i : playerVector)
+        i->insertUnit((new Unit{gegelTexture, {255, 255}, 2, 150}));
 }
 
 void GameWorld::update() {
+    static auto currentPlayer = playerVector.begin();
+    Unit* unit = (*currentPlayer)->getNextUnit();
     input.update(gameWindow);
-    for (std::unique_ptr<Entity>& ent : entVec) {
-        if (environment_.getTerrain().isColliding(*ent)) {
-            //std::cout << "Colliding" << std::endl;
-            ent->collide();
-        }
-        ent->update(input);
+    if (environment_.getTerrain().isColliding(*unit)) {
+        unit->collide();
+    }
+    unit->update(input);
+    if(input.isKeyReleased(sf::Keyboard::Key::Space)){
+        std::cout << "plas" << std::endl;
+        ++currentPlayer;
+        if(currentPlayer == playerVector.end())
+            currentPlayer = playerVector.begin();
     }
 }
 void GameWorld::draw() {
     gameWindow->setView(camera_);
     environment_.getTerrain().draw(*gameWindow);
-    for (std::unique_ptr<Entity>& ent : entVec){
-        ent->draw(*gameWindow);
+    for (std::unique_ptr<Player>& player : playerVector){
+        for(auto ent : player->getTeam())
+            ent->draw(*gameWindow);
     }
 }
 
