@@ -8,6 +8,7 @@
 #include <iostream>
 #include <vector>
 
+class Player;
 class Entity{
     protected:
         sf::Texture texture_;
@@ -24,7 +25,7 @@ class Entity{
                 sprite_.setPosition(pos);
             }
         bool lookLeft_{true};
-        virtual void getMovement(); // Reads input and sets what movements should be done
+        virtual void getMovement(const InputHandler&); // Reads input and sets what movements should be done
         virtual void applyPhysics(); // Applies friction and gravity to the movements that should be done
         virtual void move(); // Applies movement to the entity
     public:
@@ -32,7 +33,7 @@ class Entity{
         const sf::Vector2f& getPos() const {return position_;};
         bool doUnitLookLeft(){return lookLeft_;};
         virtual ~Entity() = default;
-        virtual void update(){getMovement(); applyPhysics(); move();};
+        virtual void update(const InputHandler& input){getMovement(input); applyPhysics(); move();};
         virtual void collide();
         virtual void draw(sf::RenderWindow&); // Standardise draw functions
 };
@@ -42,27 +43,26 @@ class Unit: public Entity{
         enum class unitState{idle=0, walking, falling, shooting};
         unitState state_; // Used to tell what the unit is currently doing
         Player* owner_;  
-        InputHandler kb;
         int shootPower_{0}; // Release power of shots
-        void getMovement() override;
+        void getMovement(const InputHandler&) override;
         void applyPhysics() override;
         void move() override;
 
     public:
         Unit(sf::Texture tex, sf::Vector2f pos, float spd, int mass, Player* player = nullptr):
             Entity(tex, pos, spd, mass), owner_{player}{ sprite_.setPosition(position_);}
-        void update(){kb.update(); getMovement(); applyPhysics(); move();};
+        void update(const InputHandler& input){getMovement(input); applyPhysics(); move();};
         void collide();
         bool isShooting(){return state_ == unitState::shooting;};
         int getShootPower(){return shootPower_;};
-        ~Unit(){delete owner_;};
+        ~Unit() = default;
 };
 
 class Projectile: public Entity{
     private:
         Weapon* type_; // Variable to keep track of what kind of weapon it is
         float angle_;
-        void getMovement();
+        void getMovement(const InputHandler&);
         void applyPhysics() override;
         void move();
     public:
@@ -81,9 +81,9 @@ class Projectile: public Entity{
                 sprite_.setPosition(position_);
             }
         sf::CircleShape explode();
-        void update();
+        void update(const InputHandler& input){getMovement(input); applyPhysics(); move();};
 
-        ~Projectile(){delete type_;};
+        ~Projectile() = default;
 };
 
 #endif

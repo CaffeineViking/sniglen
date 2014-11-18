@@ -1,6 +1,3 @@
-#ifndef ENTITIES_CPP
-#define ENTITIES_CPP
-
 #include "Entity.hpp"
 #include "../utilities/InputHandler.hpp"
 #include <vector>
@@ -19,7 +16,7 @@ void Entity::applyPhysics(){
         position_.y = 401;
     }
 }
-void Entity::getMovement(){
+void Entity::getMovement(const InputHandler& input){
 
 }
 void Entity::draw(sf::RenderWindow& window){
@@ -27,9 +24,9 @@ void Entity::draw(sf::RenderWindow& window){
 }
 void Entity::collide(){
 }
-void Unit::getMovement(){
+void Unit::getMovement(const InputHandler& input){
     if(state_ != unitState::falling){
-        if (kb.isKeyPressed(sf::Keyboard::Up) && position_.y >= 400){ // To be changed to variable y coords
+        if (input.isKeyPressed(sf::Keyboard::Up) && position_.y >= 400){ // To be changed to variable y coords
             state_ = unitState::falling;
             momentum_.y = -20.0f;
             if(lookLeft_)
@@ -43,19 +40,19 @@ void Unit::getMovement(){
             if(abs(momentum_.y) < 0.10f) 
                 momentum_.y = 0;
         }
-        if (kb.isKeyPressed(sf::Keyboard::Left) && -momentum_.x <= maxMomentum_.x){
+        if (input.isKeyPressed(sf::Keyboard::Left) && -momentum_.x <= maxMomentum_.x){
             momentum_.x += -speed_;
             lookLeft_ = true; 
             std::cout << "Left, look at left?: " << lookLeft_ << std::endl;
         }
-        else if (kb.isKeyPressed(sf::Keyboard::Left))
+        else if (input.isKeyPressed(sf::Keyboard::Left))
             momentum_.x = -maxMomentum_.x;
-        if (kb.isKeyPressed(sf::Keyboard::Right) && momentum_.x <= maxMomentum_.x){
+        if (input.isKeyPressed(sf::Keyboard::Right) && momentum_.x <= maxMomentum_.x){
             momentum_.x += speed_;
             lookLeft_ = false;
             std::cout << "Right, look at left?: " << lookLeft_ << std::endl;
         }
-        else if (kb.isKeyPressed(sf::Keyboard::Right) && momentum_.x <= maxMomentum_.x)
+        else if (input.isKeyPressed(sf::Keyboard::Right) && momentum_.x <= maxMomentum_.x)
             momentum_.x = maxMomentum_.x;
         if(!(position_.y < 400)){
             momentum_.x = momentum_.x * 0.85f;
@@ -76,11 +73,6 @@ void Unit::collide(){
     state_ = unitState::idle;
     Entity::collide();
 }
-void Projectile::update(){
-    getMovement();
-    applyPhysics();
-    move();
-}
 void Projectile::applyPhysics(){
     if(momentum_.y < -40)
         momentum_.y = -40;
@@ -97,7 +89,5 @@ void Projectile::move(){
     sprite_.setOrigin({(float)texture_.getSize().x/2,(float)texture_.getSize().y});
     Entity::move();
 }
-void Projectile::getMovement(){
+void Projectile::getMovement(const InputHandler& input){
 }
-
-#endif
