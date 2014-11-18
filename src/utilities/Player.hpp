@@ -20,6 +20,8 @@ class Player{
         Player(){}
         Unit* getRandomUnit();
         Unit* getNextUnit();
+        const std::vector<Unit*>& getTeam(){return team_;};
+        void insertUnit(Unit*);
         Weapon* selectWeapon(int weaponID);
         ~Player() = default;
 };

@@ -14,3 +14,6 @@ Weapon* Player::selectWeapon(int weaponID){
         weaponID = 1; // Increment as more weapons gets implemented
     return weaponList_[weaponID].first; // Return weapon
 }
+void Player::insertUnit(Unit* unit){
+    team_.push_back(unit);
+}
