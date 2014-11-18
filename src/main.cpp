@@ -3,7 +3,7 @@
 #include "entities/Entity.hpp"
 
 int main() {
-    sf::RenderWindow window{sf::VideoMode{1280, 720}, "TDDI02", sf::Style::Close};
+    sf::RenderWindow window{sf::VideoMode{1280, 720}, "TDDI02 - Made in Vim", sf::Style::Close};
     window.setFramerateLimit(60);
     GameWorld game{window};
 
