@@ -11,7 +11,7 @@ public:
     void randomizeWind();
     float getWindForce() const;
     float getGravity() const;
-    const Terrain& getTerrain() const;
+    Terrain& getTerrain();
 
 private:
     float windForce_{0.0f};

@@ -42,6 +42,7 @@ void GameWorld::keyReleased(const sf::Keyboard::Key & keyEvent) {
 }
 
 void GameWorld::mousePressed(const sf::Mouse::Button & mouseEvent) {
+    environment_.getTerrain().destroy(sf::Mouse::getPosition(*gameWindow), 32.0);
 }
 
 void GameWorld::mouseReleased(const sf::Mouse::Button & mouseEvent) {

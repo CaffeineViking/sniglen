@@ -13,6 +13,6 @@ float Environment::getGravity() const {
     return gravity_;
 }
 
-const Terrain& Environment::getTerrain() const {
+Terrain& Environment::getTerrain() {
     return terrain_;
 }

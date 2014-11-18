@@ -48,7 +48,13 @@ void Terrain::refresh() {
     sprite_.setTexture(texture_);
 }
 
-void Terrain::destroy(int x, int y, float radius) {
+void Terrain::destroy(sf::Vector2i position, float radius) {
+    for (int x = position.x - radius; x < position.x + radius; ++x) {
+        for (int y = position.y - radius; y < position.y + radius; ++y) {
+            image_.setPixel(x - sprite_.getPosition().x, y - sprite_.getPosition().y, {0, 0, 0, 0});
+        }
+    }
+
     refresh();
 }
 
