@@ -10,13 +10,13 @@ GameWorld::GameWorld(sf::RenderWindow& window) : gameWindow{&window} {
     playerVector.push_back(std::unique_ptr<Player>{new Player{{255,0,0}}});
     playerVector.push_back(std::unique_ptr<Player>{new Player{{0,0,255}}});
     for(auto& i : playerVector)
-        i->insertUnit((new Unit{loadTexture("share/test.png"), {255, 255}, 2, 150}));
+        i->insertUnit((new Unit{loadTexture("share/test.png"), loadTexture("share/testa.png"), {255, 255}, 2, 150}));
     for(auto& i : playerVector)
-        i->insertUnit((new Unit{loadTexture("share/test2.jpg"), {255, 255}, 2, 150}));
+        i->insertUnit((new Unit{loadTexture("share/test2.jpg"), loadTexture("share/testa.png"), {255, 255}, 2, 150}));
     for(auto& i : playerVector)
-        i->insertUnit((new Unit{loadTexture("share/test3.jpg"), {255, 255}, 2, 150}));
+        i->insertUnit((new Unit{loadTexture("share/test3.jpg"), loadTexture("share/testa.png"), {255, 255}, 2, 150}));
     for(auto& i : playerVector)
-        i->insertUnit((new Unit{loadTexture("share/test4.jpg"), {255, 255}, 2, 150}));
+        i->insertUnit((new Unit{loadTexture("share/test4.jpg"), loadTexture("share/testa.png"), {255, 255}, 2, 150}));
     currentUnit = (*playerVector.begin())->getNextUnit();
 }
 
@@ -42,26 +42,26 @@ void GameWorld::draw() {
             ent->draw(*gameWindow);
     }
 }
-
-void GameWorld::keyPressed(const sf::Keyboard::Key & keyEvent) {
-    if (keyEvent == sf::Keyboard::Key::A) {
-        camera_.move(-100, 0);
-    } else if (keyEvent == sf::Keyboard::Key::D) {
-        camera_.move(100, 0);
-    }
-}
-
-void GameWorld::keyReleased(const sf::Keyboard::Key & keyEvent) {
-    if (keyEvent == sf::Keyboard::Key::A)
-        std::cout << "bokstaven a var släppt" << std::endl;
-}
-
-void GameWorld::mousePressed(const sf::Mouse::Button & mouseEvent) {
-    environment_.getTerrain().destroy(sf::Mouse::getPosition(*gameWindow), 32.0);
-}
-
-void GameWorld::mouseReleased(const sf::Mouse::Button & mouseEvent) {
-}
+//
+//void GameWorld::keyPressed(const sf::Keyboard::Key & keyEvent) {
+//    if (keyEvent == sf::Keyboard::Key::A) {
+//        camera_.move(-100, 0);
+//    } else if (keyEvent == sf::Keyboard::Key::D) {
+//        camera_.move(100, 0);
+//    }
+//}
+//
+//void GameWorld::keyReleased(const sf::Keyboard::Key & keyEvent) {
+//    if (keyEvent == sf::Keyboard::Key::A)
+//        std::cout << "bokstaven a var släppt" << std::endl;
+//}
+//
+//void GameWorld::mousePressed(const sf::Mouse::Button & mouseEvent) {
+//    environment_.getTerrain().destroy(sf::Mouse::getPosition(*gameWindow), 32.0);
+//}
+//
+//void GameWorld::mouseReleased(const sf::Mouse::Button & mouseEvent) {
+//}
 
 sf::Texture loadTexture(const std::string& fileName) {
     sf::Texture temp;

@@ -17,7 +17,10 @@ void Entity::applyPhysics(){
     }
 }
 void Entity::getMovement(const InputHandler& input){
-
+    if(input.isKeyPressed(sf::Keyboard::Key::Space))
+            goto xkcd;
+    xkcd:
+    ;
 }
 void Entity::draw(sf::RenderWindow& window){
     window.draw(sprite_);
@@ -86,4 +89,8 @@ void Projectile::move(){
     Entity::move();
 }
 void Projectile::getMovement(const InputHandler& input){
+    if(input.isKeyPressed(sf::Keyboard::Key::Space))
+            goto xkcd;
+    xkcd:
+    ;
 }

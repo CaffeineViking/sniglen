@@ -19,7 +19,7 @@ class Entity{
         const int mass_;
         const float gravity_{9.82}; // Should be removed when Environment is implemented
         const float speed_;
-        Entity(sf::Texture tex, sf::Vector2f pos, float spd, int mass):
+        Entity(const sf::Texture& tex, sf::Vector2f pos, float spd, int mass):
             texture_{tex}, position_{pos}, mass_{mass}, speed_{spd}{
                 sprite_.setTexture(texture_);
                 sprite_.setPosition(pos);
@@ -31,6 +31,7 @@ class Entity{
     public:
         const sf::Sprite& getSprite() const {return sprite_;};
         const sf::Vector2f& getPos() const {return position_;};
+        void setTexture(sf::Texture texture){sprite_.setTexture(texture);};
         bool doUnitLookLeft(){return lookLeft_;};
         virtual ~Entity() = default;
         virtual void update(const InputHandler& input){getMovement(input); applyPhysics(); move();};
@@ -43,15 +44,17 @@ class Unit: public Entity{
         enum class unitState{idle=0, walking, falling, shooting};
         unitState state_; // Used to tell what the unit is currently doing
         Player* owner_;  
+        Entity* crosshair_;
         int shootPower_{0}; // Release power of shots
         void getMovement(const InputHandler&) override;
         void applyPhysics() override;
         void move() override;
 
     public:
-        Unit(sf::Texture tex, sf::Vector2f pos, float spd, int mass, Player* player = nullptr):
+        Unit(const sf::Texture& tex, const sf::Texture& crosshair, sf::Vector2f pos, float spd, int mass, Player* player = nullptr):
             Entity(tex, pos, spd, mass), owner_{player}{ 
                 sprite_.setPosition(position_);
+                crosshair_->setTexture(crosshair);
             }
         void update(const InputHandler& input){getMovement(input); applyPhysics(); move();};
         void collide();
@@ -83,6 +86,8 @@ class Projectile: public Entity{
                     inMom.y = -40;
                 momentum_ = {inMom.x, inMom.y};
                 sprite_.setPosition(position_);
+                if(angle == angle)
+                    angle = angle;
             }
         sf::CircleShape explode();
         void update(const InputHandler& input){getMovement(input); applyPhysics(); move();};

@@ -24,10 +24,10 @@ class GameWorld {
         GameWorld(sf::RenderWindow&);
         void update();
         void draw();
-        void keyPressed(const sf::Keyboard::Key & keyEvent);
-        void keyReleased(const sf::Keyboard::Key & keyEvent);
-        void mousePressed(const sf::Mouse::Button & mouseEvent);
-        void mouseReleased(const sf::Mouse::Button & mouseEvent);
+       // void keyPressed(const sf::Keyboard::Key & keyEvent);
+       // void keyReleased(const sf::Keyboard::Key & keyEvent);
+       // void mousePressed(const sf::Mouse::Button & mouseEvent);
+       // void mouseReleased(const sf::Mouse::Button & mouseEvent);
 };
 
 #endif // GAMEWORLD_HPP
