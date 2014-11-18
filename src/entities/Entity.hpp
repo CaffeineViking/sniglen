@@ -31,7 +31,7 @@ class Entity{
     public:
         const sf::Sprite& getSprite() const {return sprite_;};
         const sf::Vector2f& getPos() const {return position_;};
-        void setTexture(sf::Texture texture){sprite_.setTexture(texture);};
+        void setTexture(const sf::Texture& texture){sprite_.setTexture(texture);};
         bool doUnitLookLeft(){return lookLeft_;};
         virtual ~Entity() = default;
         virtual void update(const InputHandler& input){getMovement(input); applyPhysics(); move();};
@@ -44,7 +44,7 @@ class Unit: public Entity{
         enum class unitState{idle=0, walking, falling, shooting};
         unitState state_; // Used to tell what the unit is currently doing
         Player* owner_;  
-        Entity* crosshair_;
+        sf::Sprite crosshair_;
         int shootPower_{0}; // Release power of shots
         void getMovement(const InputHandler&) override;
         void applyPhysics() override;
@@ -52,9 +52,8 @@ class Unit: public Entity{
 
     public:
         Unit(const sf::Texture& tex, const sf::Texture& crosshair, sf::Vector2f pos, float spd, int mass, Player* player = nullptr):
-            Entity(tex, pos, spd, mass), owner_{player}{ 
+            Entity(tex, pos, spd, mass), owner_{player}, crosshair_(crosshair){ 
                 sprite_.setPosition(position_);
-                crosshair_->setTexture(crosshair);
             }
         void update(const InputHandler& input){getMovement(input); applyPhysics(); move();};
         void collide();
