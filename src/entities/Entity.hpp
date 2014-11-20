@@ -58,12 +58,15 @@ class Unit: public Entity{
         Unit(const sf::Texture& tex, const sf::Texture& crosshair, sf::Vector2f pos, float spd, int mass, Player* player = nullptr):
             Entity(tex, pos, spd, mass), owner_{player}, crosshair_(crosshair){ 
                 sprite_.setPosition(position_);
+                crosshair_.setPosition(sprite_.getOrigin());
+                crosshair_.setOrigin({(float)crosshair_.getTexture()->getSize().x/2, (float)crosshair_.getTexture()->getSize().y/2});
+                //crosshair_.setOrigin({(float)crosshair_.getTexture().getSize().x/2, (float)crosshair_.getTexture().getSize().y/2});
             }
         void update(const InputHandler& input){getMovement(input); updateCrosshair(); applyPhysics(); move();};
         void collide();
         bool inControl(){return (state_ != unitState::falling);};
         float getShootAngle(){return aimAngle_;};
-        sf::Vector2f getShootMomentum();
+        sf::Vector2f getShootMomentum(sf::RenderWindow&);
         sf::Vector2f getPosition(){return sprite_.getPosition();};
         void setColor(sf::Color color){sprite_.setColor(color);}
         bool isShooting(){return shoot;};
@@ -82,14 +85,6 @@ class Projectile: public Entity{
         bool deleted_ = false;
         Projectile(sf::Texture tex, sf::Vector2f pos, float spd, int mass, sf::Vector2f inMom, float angle, Weapon* weapon = nullptr ):
             Entity(tex, {pos.x, pos.y-1}, spd, mass), type_{weapon}, angle_{angle}{
-                if(inMom.x > 8)
-                    inMom.x = 8;
-                else if(inMom.x < -8)
-                    inMom.x = -8;
-                if(inMom.y > 8)
-                    inMom.y = 8;
-                else if(inMom.y < -40)
-                    inMom.y = -40;
                 momentum_ = inMom;
                 sprite_.setPosition(position_);
                 if(angle == angle)

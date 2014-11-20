@@ -12,13 +12,13 @@ GameWorld::GameWorld(sf::RenderWindow& window) : gameWindow{&window} {
     playerVector.push_back(std::unique_ptr<Player>{new Player{{255,0,0}}});
     playerVector.push_back(std::unique_ptr<Player>{new Player{{0,0,255}}});
     for(auto& i : playerVector)
-        i->insertUnit((new Unit{loadTexture("share/test.png"), loadTexture("share/testa.png"), {255, 255}, 2, 150}));
+        i->insertUnit((new Unit{loadTexture("share/test.png"), loadTexture("share/testa.png"), {0, 0}, 2, 150}));
     for(auto& i : playerVector)
-        i->insertUnit((new Unit{loadTexture("share/test2.jpg"), loadTexture("share/testa.png"), {255, 255}, 2, 150}));
+        i->insertUnit((new Unit{loadTexture("share/test2.jpg"), loadTexture("share/testa.png"), {0, 0}, 2, 150}));
     for(auto& i : playerVector)
-        i->insertUnit((new Unit{loadTexture("share/test3.jpg"), loadTexture("share/testa.png"), {255, 255}, 2, 150}));
+        i->insertUnit((new Unit{loadTexture("share/test3.jpg"), loadTexture("share/testa.png"), {0, 0}, 2, 150}));
     for(auto& i : playerVector)
-        i->insertUnit((new Unit{loadTexture("share/test4.jpg"), loadTexture("share/testa.png"), {255, 255}, 2, 150}));
+        i->insertUnit((new Unit{loadTexture("share/test4.jpg"), loadTexture("share/testa.png"), {0, 0}, 2, 150}));
     currentUnit = (*playerVector.begin())->getNextUnit();
 }
 
@@ -34,7 +34,7 @@ void GameWorld::update() {
     for(std::unique_ptr<Projectile>& projectile : projectileVector)
         projectile->update(input);
     if(currentUnit->isShooting())
-        projectileVector.push_back(std::unique_ptr<Projectile>{new Projectile{loadTexture("share/bullet.png"), currentUnit->getPosition(), 0.0f, 10, currentUnit->getShootMomentum(), currentUnit->getShootAngle()}});
+        projectileVector.push_back(std::unique_ptr<Projectile>{new Projectile{loadTexture("share/bullet.png"), currentUnit->getPosition(), 0.0f, 10, currentUnit->getShootMomentum(*gameWindow), currentUnit->getShootAngle()}});
     if(input.isKeyReleased(sf::Keyboard::Key::Return) && currentUnit->inControl()){
         ++currentPlayer;
         if(currentPlayer == playerVector.end())

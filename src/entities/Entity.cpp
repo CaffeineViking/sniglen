@@ -2,6 +2,7 @@
 #include "../utilities/InputHandler.hpp"
 #include <vector>
 #include <cmath>
+#include <string>
 
 float toRadians(float degrees);
 void Entity::move(){
@@ -89,7 +90,7 @@ void Unit::move(){
     Entity::move();
 }    
 void Unit::updateCrosshair(){
-    crosshair_.setPosition(sprite_.getPosition().x + 50*cos(toRadians(aimAngle_)), sprite_.getPosition().y + 50*sin(toRadians(aimAngle_)));
+    crosshair_.setPosition(sprite_.getPosition().x + shootPower_*cos(toRadians(aimAngle_)), sprite_.getPosition().y + shootPower_*sin(toRadians(aimAngle_)));
 }
 void Unit::collide(){
     state_ = unitState::idle;
@@ -99,23 +100,19 @@ void Unit::draw(sf::RenderWindow& window){
     window.draw(sprite_);
     window.draw(crosshair_);
 }
-sf::Vector2f Unit::getShootMomentum(){ sf::Vector2f momentum; momentum.x = cos(toRadians(aimAngle_)) * shootPower_;
-    momentum.y = sin(toRadians(aimAngle_)) * shootPower_;
+sf::Vector2f Unit::getShootMomentum(sf::RenderWindow& screen){ 
+    sf::Vector2f momentum;
+    momentum.x = (crosshair_.getPosition().x - sprite_.getPosition().x);
+    momentum.y = (crosshair_.getPosition().y - sprite_.getPosition().y);
+    screen.setTitle("x: " + std::to_string(momentum.x) + " - y: " + std::to_string(momentum.y));
     shootPower_ = 0;
     return momentum;
 }
 void Projectile::applyPhysics(){
-    if(momentum_.y < -40)
-        momentum_.y = -40;
 
-    if(momentum_.x > 8)
-        momentum_.x = 8;
-    else if(momentum_.x < -8)
-        momentum_.x = -8;
     Entity::applyPhysics();
 }
 void Projectile::move(){
-    sprite_.setOrigin({(float)texture_.getSize().x/2,(float)texture_.getSize().y});
     Entity::move();
 }
 void Projectile::getMovement(const InputHandler& input){
