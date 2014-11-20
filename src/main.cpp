@@ -10,16 +10,6 @@ int main() {
     while (window.isOpen()){
         sf::Event event;
         while (window.pollEvent(event)) {
-           // if (event.type == sf::Event::KeyPressed) {
-           //     game.keyPressed(event.key.code);
-           // } else if (event.type == sf::Event::KeyReleased) {
-           //     game.keyReleased(event.key.code);
-           // } else if (event.type == sf::Event::MouseButtonPressed) {
-           //     game.mousePressed(event.mouseButton.button);
-           // } else if (event.type == sf::Event::MouseButtonReleased) {
-           //     game.mouseReleased(event.mouseButton.button);
-           // }
-
             if (event.type == sf::Event::Closed) {
                 window.close();
             }
@@ -31,8 +21,9 @@ int main() {
 
         game.update();
         window.clear();
-        game.drawCamera();
-        game.drawMinimap();
+        game.draw();
+        // game.drawCamera();
+        // game.drawMinimap();
         window.display();
     }
 

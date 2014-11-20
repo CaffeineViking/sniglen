@@ -19,15 +19,16 @@ class GameWorld {
         Environment environment_;
         InputHandler input;
         sf::View camera_;
-        sf::View minimap_;
+        // sf::View minimap_;
         Unit* currentUnit;
+        bool zoomed{false};
 
     public:
         GameWorld(sf::RenderWindow&);
         void update();
         void draw();
-        void drawCamera();
-        void drawMinimap();
+        // void drawCamera();
+        // void drawMinimap();
 };
 
 #endif // GAMEWORLD_HPP
