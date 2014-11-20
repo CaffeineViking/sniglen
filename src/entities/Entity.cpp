@@ -108,8 +108,6 @@ void Projectile::applyPhysics(){
     if(momentum_.y < -40)
         momentum_.y = -40;
 
-    momentum_.y += 1.5f;
-
     if(momentum_.x > 8)
         momentum_.x = 8;
     else if(momentum_.x < -8)
