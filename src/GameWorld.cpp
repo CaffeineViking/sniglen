@@ -6,8 +6,9 @@
 
 GameWorld::GameWorld(sf::RenderWindow& window) : gameWindow{&window} {
     camera_ = window.getDefaultView();
-    minimap_.setViewport(sf::FloatRect{0.75f, 0.00f, 0.25f, 0.25f});
-    minimap_.zoom(4.00);
+    minimap_ = window.getDefaultView();
+    minimap_.setSize(2560, 720); // Change if terrain size has changed.
+    minimap_.setViewport({1.0f - 0.25f * 16/9, 0.0f, 0.25f * 16/9, 0.25f * 9/16});
 
     playerVector.push_back(std::unique_ptr<Player>{new Player{{255,0,0}}});
     playerVector.push_back(std::unique_ptr<Player>{new Player{{0,0,255}}});
