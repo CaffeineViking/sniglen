@@ -5,7 +5,7 @@
 
 float toRadians(float degrees);
 void Entity::move(){
-    sprite_.setOrigin({(float)texture_.getSize().x/2,(float)texture_.getSize().y/2}); // Set origin to middle of sprite
+    sprite_.setOrigin({(float)texture_.getSize().x/2, (float)texture_.getSize().y/2}); // Set origin to middle of sprite
     sprite_.move(momentum_); // Use sf::Sprite::move to move the sprite
     position_ = sprite_.getPosition(); // Get new position
 }

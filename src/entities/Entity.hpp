@@ -23,6 +23,7 @@ class Entity{
             texture_{tex}, position_{pos}, mass_{mass}, speed_{spd}{
                 sprite_.setTexture(texture_);
                 sprite_.setPosition(pos);
+                sprite_.setOrigin({(float)texture_.getSize().x/2, (float)texture_.getSize().y/2});
             }
         bool lookLeft_{true};
         virtual void getMovement(const InputHandler&); // Reads input and sets what movements should be done
