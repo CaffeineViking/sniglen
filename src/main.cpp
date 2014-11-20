@@ -31,7 +31,8 @@ int main() {
 
         game.update();
         window.clear();
-        game.draw();
+        game.drawCamera();
+        game.drawMinimap();
         window.display();
     }
 

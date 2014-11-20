@@ -6,7 +6,9 @@
 
 GameWorld::GameWorld(sf::RenderWindow& window) : gameWindow{&window} {
     camera_ = window.getDefaultView();
-    
+    minimap_.setViewport(sf::FloatRect{0.75f, 0.00f, 0.25f, 0.25f});
+    minimap_.zoom(4.00);
+
     playerVector.push_back(std::unique_ptr<Player>{new Player{{255,0,0}}});
     playerVector.push_back(std::unique_ptr<Player>{new Player{{0,0,255}}});
     for(auto& i : playerVector)
@@ -28,6 +30,7 @@ void GameWorld::update() {
     }
     currentUnit->update(input);
 
+
     for(std::unique_ptr<Projectile>& projectile : projectileVector)
         projectile->update(input);
     if(currentUnit->isShooting())
@@ -40,10 +43,11 @@ void GameWorld::update() {
     }
 
     if(input.mouseReleased())
-        environment_.getTerrain().destroy(sf::Mouse::getPosition(*gameWindow), 64.0);
+        environment_.getTerrain().destroy(sf::Mouse::getPosition(*gameWindow) + static_cast<sf::Vector2i>(camera_.getCenter()) - sf::Vector2i{640, 360}, 64.0);
+
+    camera_.setCenter(currentUnit->getPosition());
 }
 void GameWorld::draw() {
-    gameWindow->setView(camera_);
     environment_.getTerrain().draw(*gameWindow);
     for(std::unique_ptr<Player>& player : playerVector){
         for(auto ent : player->getTeam())
@@ -52,26 +56,16 @@ void GameWorld::draw() {
     for(std::unique_ptr<Projectile>& projectile : projectileVector)
         projectile->draw(*gameWindow);
 }
-//
-//void GameWorld::keyPressed(const sf::Keyboard::Key & keyEvent) {
-//    if (keyEvent == sf::Keyboard::Key::A) {
-//        camera_.move(-100, 0);
-//    } else if (keyEvent == sf::Keyboard::Key::D) {
-//        camera_.move(100, 0);
-//    }
-//}
-//
-//void GameWorld::keyReleased(const sf::Keyboard::Key & keyEvent) {
-//    if (keyEvent == sf::Keyboard::Key::A)
-//        std::cout << "bokstaven a var släppt" << std::endl;
-//}
-//
-//void GameWorld::mousePressed(const sf::Mouse::Button & mouseEvent) {
-//    environment_.getTerrain().destroy(sf::Mouse::getPosition(*gameWindow), 32.0);
-//}
-//
-//void GameWorld::mouseReleased(const sf::Mouse::Button & mouseEvent) {
-//}
+
+void GameWorld::drawCamera() {
+    gameWindow->setView(camera_);
+    draw();
+}
+
+void GameWorld::drawMinimap() {
+    gameWindow->setView(minimap_);
+    draw();
+}
 
 sf::Texture loadTexture(const std::string& fileName) {
     sf::Texture temp;

@@ -19,16 +19,15 @@ class GameWorld {
         Environment environment_;
         InputHandler input;
         sf::View camera_;
+        sf::View minimap_;
         Unit* currentUnit;
 
     public:
         GameWorld(sf::RenderWindow&);
         void update();
         void draw();
-       // void keyPressed(const sf::Keyboard::Key & keyEvent);
-       // void keyReleased(const sf::Keyboard::Key & keyEvent);
-       // void mousePressed(const sf::Mouse::Button & mouseEvent);
-       // void mouseReleased(const sf::Mouse::Button & mouseEvent);
+        void drawCamera();
+        void drawMinimap();
 };
 
 #endif // GAMEWORLD_HPP
