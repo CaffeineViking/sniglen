@@ -22,7 +22,6 @@ private:
     sf::Sprite sprite_;
     sf::Texture texture_;
     sf::Image image_;
-    std::vector<double> data_;
 };
 
 #endif

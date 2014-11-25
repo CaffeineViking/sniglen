@@ -10,7 +10,6 @@
 #include "environment/Environment.hpp"
 #include "utilities/InputHandler.hpp"
 
-sf::Texture loadTexture(const std::string&);
 class GameWorld {
     private:
         sf::RenderWindow* gameWindow;

@@ -15,17 +15,17 @@ Terrain::Terrain(unsigned size) {
 
     // A texture will overlay the generated terrain, load this.
     sf::Image terrainTexture;
-    terrainTexture.loadFromFile("share/terrain.png");
+    terrainTexture.loadFromFile("share/images/terrain.png");
 
     // For every pixel in width, generate a noise "height".
     for (size_t x{0}; x < image_.getSize().x; ++x) {
         const double noise{(perlin.octaveNoise(x / frequencyX, 3) + 1.0) / 2.0};
-        data_.push_back(noise * image_.getSize().y);
 
         // Also, copy pixels from the terrain overlay to every area below the generated height.
         for (size_t y = noise * image_.getSize().y; y < image_.getSize().y; ++y) {
             size_t xMod{x % terrainTexture.getSize().x};
             size_t yMod{y % terrainTexture.getSize().y};
+
             sf::Color pix{terrainTexture.getPixel(xMod, yMod).r,
                 terrainTexture.getPixel(xMod, yMod).g,
                 terrainTexture.getPixel(xMod, yMod).b};

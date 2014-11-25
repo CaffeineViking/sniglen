@@ -10,7 +10,7 @@ program_OBJS := $(program_C_OBJS) $(program_CXX_OBJS)
 
 program_INCLUDE_DIRS :=
 program_LIBRARY_DIRS :=
-program_LIBRARIES := sfml-graphics sfml-window sfml-system
+program_LIBRARIES := sfml-graphics sfml-window sfml-audio sfml-system
 
 CPPFLAGS += $(foreach includedir, $(program_INCLUDE_DIRS), -I$(includedir))
 LDFLAGS += $(foreach librarydir, $(program_LIBRARY_DIRS), -L$(librarydir))

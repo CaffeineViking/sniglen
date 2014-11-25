@@ -3,6 +3,7 @@
 #include <memory>
 #include "GameWorld.hpp"
 #include "utilities/Random.hpp"
+#include "utilities/Assets.hpp"
 
 GameWorld::GameWorld(sf::RenderWindow& window) : gameWindow{&window} {
     camera_ = window.getDefaultView();
@@ -15,13 +16,13 @@ GameWorld::GameWorld(sf::RenderWindow& window) : gameWindow{&window} {
     playerVector.push_back(std::unique_ptr<Player>{new Player{{255,0,0}}});
     playerVector.push_back(std::unique_ptr<Player>{new Player{{0,0,255}}});
     for(auto& i : playerVector)
-        i->insertUnit((new Unit{loadTexture("share/test.png"), loadTexture("share/testa.png"), {0, 0}, 2, 150}));
+        i->insertUnit((new Unit{Assets::LOAD_TEXTURE("test.png"), Assets::LOAD_TEXTURE("testa.png"), {0, 0}, 2, 150}));
     for(auto& i : playerVector)
-        i->insertUnit((new Unit{loadTexture("share/test2.jpg"), loadTexture("share/testa.png"), {0, 0}, 2, 150}));
+        i->insertUnit((new Unit{Assets::LOAD_TEXTURE("test2.jpg"), Assets::LOAD_TEXTURE("testa.png"), {0, 0}, 2, 150}));
     for(auto& i : playerVector)
-        i->insertUnit((new Unit{loadTexture("share/test3.jpg"), loadTexture("share/testa.png"), {0, 0}, 2, 150}));
+        i->insertUnit((new Unit{Assets::LOAD_TEXTURE("test3.jpg"), Assets::LOAD_TEXTURE("testa.png"), {0, 0}, 2, 150}));
     for(auto& i : playerVector)
-        i->insertUnit((new Unit{loadTexture("share/test4.jpg"), loadTexture("share/testa.png"), {0, 0}, 2, 150}));
+        i->insertUnit((new Unit{Assets::LOAD_TEXTURE("test4.jpg"), Assets::LOAD_TEXTURE("testa.png"), {0, 0}, 2, 150}));
     currentUnit = (*playerVector.begin())->getNextUnit();
 }
 
@@ -37,7 +38,7 @@ void GameWorld::update() {
     for(std::unique_ptr<Projectile>& projectile : projectileVector)
         projectile->update(input);
     if(currentUnit->isShooting())
-        projectileVector.push_back(std::unique_ptr<Projectile>{new Projectile{loadTexture("share/bullet.png"), currentUnit->getPosition(), 0.0f, 10, currentUnit->getShootMomentum(*gameWindow), currentUnit->getShootAngle()}});
+        projectileVector.push_back(std::unique_ptr<Projectile>{new Projectile{Assets::LOAD_TEXTURE("bullet.png"), currentUnit->getPosition(), 0.0f, 10, currentUnit->getShootMomentum(*gameWindow), currentUnit->getShootAngle()}});
     if(input.isKeyReleased(sf::Keyboard::Key::Return) && currentUnit->inControl()){
         ++currentPlayer;
         if(currentPlayer == playerVector.end())
