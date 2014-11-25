@@ -1,5 +1,6 @@
 #include "Terrain.hpp"
 
+#include "../utilities/Assets.hpp"
 #include "../utilities/Random.hpp"
 #include "../perlinnoise/PerlinNoise.hpp"
 #include <cmath>
@@ -14,8 +15,7 @@ Terrain::Terrain(unsigned size) {
     const double frequencyX{image_.getSize().x / frequency};
 
     // A texture will overlay the generated terrain, load this.
-    sf::Image terrainTexture;
-    terrainTexture.loadFromFile("share/images/terrain.png");
+    sf::Image terrainTexture{Assets::LOAD_TEXTURE("terrain.png").copyToImage()};
 
     // For every pixel in width, generate a noise "height".
     for (size_t x{0}; x < image_.getSize().x; ++x) {
