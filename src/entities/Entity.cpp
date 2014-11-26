@@ -22,7 +22,7 @@ void Entity::getMovement(const InputHandler& input){
     if(input.isKeyPressed(sf::Keyboard::Key::Space))
         goto xkcd;
 xkcd:
-    ;
+    return;
 }
 void Entity::draw(sf::RenderWindow& window){
     window.draw(sprite_);
@@ -30,7 +30,7 @@ void Entity::draw(sf::RenderWindow& window){
 void Entity::collide(){
 }
 void Unit::getMovement(const InputHandler& input){
-    shoot = false;
+    shoot_ = false;
     if(state_ != unitState::falling){
         if(input.isKeyPressed(sf::Keyboard::Key::Space))
             state_ = unitState::shooting;
@@ -80,7 +80,7 @@ void Unit::getMovement(const InputHandler& input){
             state_ = unitState::idle;
     }
     if(state_ != unitState::shooting && shootPower_ != 0){
-        shoot = true;
+        shoot_ = true;
     }
 }
 void Unit::applyPhysics(){

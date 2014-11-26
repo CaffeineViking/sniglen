@@ -48,7 +48,7 @@ class Unit: public Entity{
         float aimAngle_ = 90;
         sf::Sprite crosshair_;
         int shootPower_{0}; // Release power of shots
-        bool shoot = false;
+        bool shoot_ = false;
         void getMovement(const InputHandler&) override;
         void applyPhysics() override;
         void move() override;
@@ -69,7 +69,8 @@ class Unit: public Entity{
         sf::Vector2f getShootMomentum(sf::RenderWindow&);
         sf::Vector2f getPosition(){return sprite_.getPosition();};
         void setColor(sf::Color color){sprite_.setColor(color);}
-        bool isShooting(){return shoot;};
+        bool isShooting(){return shoot_;};
+        bool isDead(){return false;};
         void draw(sf::RenderWindow&) override;
         ~Unit() = default;
 };
