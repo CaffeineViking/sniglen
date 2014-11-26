@@ -44,24 +44,17 @@ void GameWorld::update() {
         environment_.getTerrain().destroy(sf::Mouse::getPosition(*gameWindow) + static_cast<sf::Vector2i>(camera_.getCenter()) - sf::Vector2i{640, 360}, 64.0);
 
     if(currentUnit->getPosition().x - camera_.getSize().x/2 < 0){
-        std::cout << " slkdf" << std::endl;
         camera_.setCenter(camera_.getSize().x/2, currentUnit->getPosition().y);
     }
     else if(currentUnit->getPosition().x + camera_.getSize().x/2 > environment_.getTerrainSize()){
-        std::cout << " 222222222222222" << std::endl;
         if(!zoomed){
-            std::cout << " weeuuuuweeeuuuooii" << std::endl;
             camera_.setCenter(camera_.getSize().x/2 + environment_.getTerrainSize()/2, currentUnit->getPosition().y);
         }else
              camera_.setCenter(environment_.getTerrainSize()/2, currentUnit->getPosition().y);
-    } else { //(currentUnit->getPosition().x > environment_.getTerrainSize() - camera_.getCenter().x){
+    } else {
        camera_.setCenter(currentUnit->getPosition());
-       // camera_.setCenter(currentUnit->getPosition().x + currentUnit->getPosition().x - camera_.getCenter().x, currentUnit->getPosition().y);
-        std::cout << " inte askjdl " << std::endl;
     }
-    std::cout << environment_.getTerrainSize() << std::endl;
-    //camera_.setCenter(currentUnit->getPosition());
-    if (input.isKeyReleased(sf::Keyboard::Key::Tab)) {
+    if (input->isKeyReleased(sf::Keyboard::Key::Tab)) {
         if (zoomed) {
             camera_.zoom(0.50f);
             zoomed = false;

@@ -33,18 +33,14 @@ int main() {
 
         if(state == gameState::game){
             game.update();
-            std::cout << "game is updating yes" << std::endl;
         }
         else if(state == gameState::menu){
-            std::cout << "meny is updating yes" << std::endl;
         }
         window.clear();
         if(state == gameState::game){
             game.draw();
-            std::cout << "game is drawing yes" << std::endl;
         }
         else if(state == gameState::menu){
-            std::cout << "meny is drawing yes" << std::endl;
         }
         // game.drawCamera();
         // game.drawMinimap();
