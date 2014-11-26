@@ -7,11 +7,6 @@
 
 GameWorld::GameWorld(sf::RenderWindow& window) : gameWindow{&window} {
     camera_ = window.getDefaultView();
-    // minimap_ = window.getDefaultView();
-    // minimap_.move(0.25*1280, 0);
-    // minimap_.setSize(2560, 720); // Change if terrain size has changed.
-    // minimap_.setViewport({1.0f - 0.25f * 16.0f/9.0f, 0.0f, 0.25f * 16.0f/9.0f, 0.25f * 9.0f/16.0f});
-    // minimap_.zoom(4.00);
 
     playerVector.push_back(std::unique_ptr<Player>{new Player{{255,0,0}}});
     playerVector.push_back(std::unique_ptr<Player>{new Player{{0,0,255}}});
@@ -34,7 +29,6 @@ void GameWorld::update() {
     }
     currentUnit->update(input);
 
-
     for(std::unique_ptr<Projectile>& projectile : projectileVector)
         projectile->update(input);
     if(currentUnit->isShooting())
@@ -48,8 +42,24 @@ void GameWorld::update() {
 
     if(input.mouseReleased())
         environment_.getTerrain().destroy(sf::Mouse::getPosition(*gameWindow) + static_cast<sf::Vector2i>(camera_.getCenter()) - sf::Vector2i{640, 360}, 64.0);
-
-    camera_.setCenter(currentUnit->getPosition());
+    if(currentUnit->getPosition().x - camera_.getSize().x/2 < 0){
+        std::cout << " slkdf" << std::endl;
+        camera_.setCenter(camera_.getSize().x/2, currentUnit->getPosition().y);
+    }
+    else if(currentUnit->getPosition().x + camera_.getSize().x/2 > environment_.getTerrainSize()){
+        std::cout << " 222222222222222" << std::endl;
+        if(!zoomed){
+            std::cout << " weeuuuuweeeuuuooii" << std::endl;
+            camera_.setCenter(camera_.getSize().x/2 + environment_.getTerrainSize()/2, currentUnit->getPosition().y);
+        }else
+             camera_.setCenter(environment_.getTerrainSize()/2, currentUnit->getPosition().y);
+    } else { //(currentUnit->getPosition().x > environment_.getTerrainSize() - camera_.getCenter().x){
+       camera_.setCenter(currentUnit->getPosition());
+       // camera_.setCenter(currentUnit->getPosition().x + currentUnit->getPosition().x - camera_.getCenter().x, currentUnit->getPosition().y);
+        std::cout << " inte askjdl " << std::endl;
+    }
+    std::cout << environment_.getTerrainSize() << std::endl;
+    //camera_.setCenter(currentUnit->getPosition());
     if (input.isKeyReleased(sf::Keyboard::Key::Tab)) {
         if (zoomed) {
             camera_.zoom(0.50f);
@@ -69,20 +79,4 @@ void GameWorld::draw() {
     for(std::unique_ptr<Projectile>& projectile : projectileVector)
         projectile->draw(*gameWindow);
     gameWindow->setView(camera_);
-}
-
-// void GameWorld::drawCamera() {
-//     gameWindow->setView(camera_);
-//     draw();
-// }
-// 
-// void GameWorld::drawMinimap() {
-//     gameWindow->setView(minimap_);
-//     draw();
-// }
-
-sf::Texture loadTexture(const std::string& fileName) {
-    sf::Texture temp;
-    temp.loadFromFile(fileName);
-    return temp;
 }

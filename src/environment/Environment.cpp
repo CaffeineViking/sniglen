@@ -16,3 +16,7 @@ float Environment::getGravity() const {
 Terrain& Environment::getTerrain() {
     return terrain_;
 }
+
+unsigned Environment::getTerrainSize() const {
+    return terrainSize_;
+}
