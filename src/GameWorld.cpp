@@ -23,15 +23,27 @@ GameWorld::GameWorld(sf::RenderWindow& window, InputHandler& inputhandler) : gam
 
 void GameWorld::update() {
     static auto currentPlayer = playerVector.begin();
-    if (environment_.getTerrain().isColliding(*currentUnit)) {
-        currentUnit->collide();
-    }
     //input.update(gameWindow);
-    currentUnit->update(*input);
+    currentUnit->update(*input, environment_.getTerrain().isColliding(*currentUnit));
 
-    for(std::unique_ptr<Projectile>& projectile : projectileVector)
-        projectile->update(*input);
-    if(currentUnit->isShooting())
+    for(std::unique_ptr<Projectile>& projectile : projectileVector){
+        projectile->update(*input, environment_.getTerrain().isColliding(*projectile));
+        if(environment_.getTerrain().isColliding(*projectile)){
+            environment_.getTerrain().destroy(projectile->explode());
+        }
+    }/*
+    int iteratedOver {0};
+    int removed {0};
+    while(iteratedOver + removed < projectileVector.size()-1){
+        if(environment_.getTerrain().isColliding(*projectileVector.at(iteratedOver))){
+            projectileVector.at(iteratedOver).swap(projectileVector.at(projectileVector.size()-1-(++removed)));
+        }
+        else
+            ++iteratedOver;
+    }
+    projectileVector.erase(projectileVector.begin() + (projectileVector.size()-1-removed), projectileVector.end());
+*/
+   if(currentUnit->isShooting())
         projectileVector.push_back(std::unique_ptr<Projectile>{new Projectile{Assets::LOAD_TEXTURE("bullet.png"), currentUnit->getPosition(), 0.0f, 10, currentUnit->getShootMomentum(*gameWindow), currentUnit->getShootAngle()}});
     if(input->isKeyReleased(sf::Keyboard::Key::Return) && currentUnit->inControl()){
         ++currentPlayer;
@@ -73,11 +85,11 @@ void GameWorld::update() {
         }
         else{
             //cameraY = currentUnit->getPosition().y;
-            
         }
     }
-    //if(cameraY < 0)
-      //  cameraY = 0;
+    if(cameraY > gameWindow->getSize().y/2)
+        cameraY = gameWindow->getSize().y/2;
+
     camera_.setCenter(cameraX, cameraY);
     if (input->isKeyReleased(sf::Keyboard::Key::Tab)) {
         if (zoomed) {

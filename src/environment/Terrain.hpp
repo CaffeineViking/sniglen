@@ -12,6 +12,7 @@
 class Terrain {
 public:
     Terrain(unsigned);
+    void destroy(const sf::CircleShape&); // Destroys part of the terrain.
     void destroy(sf::Vector2i, float); // Destroys part of the terrain.
     void draw(sf::RenderWindow&) const; // Draws the generated terrain sprite to the main window.
     bool isColliding(const Entity&) const; // Checks the generated Perlin Noise function if a
