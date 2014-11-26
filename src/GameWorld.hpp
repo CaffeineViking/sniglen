@@ -23,7 +23,7 @@ class GameWorld {
         bool zoomed{false};
 
     public:
-        GameWorld(sf::RenderWindow&);
+        GameWorld(sf::RenderWindow&, InputHandler&);
         void update();
         void draw();
         // void drawCamera();

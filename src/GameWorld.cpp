@@ -5,7 +5,7 @@
 #include "utilities/Random.hpp"
 #include "utilities/Assets.hpp"
 
-GameWorld::GameWorld(sf::RenderWindow& window) : gameWindow{&window} {
+GameWorld::GameWorld(sf::RenderWindow& window, InputHandler& inputhandler) : gameWindow{&window}, input{inputhandler}  {
     camera_ = window.getDefaultView();
     // minimap_ = window.getDefaultView();
     // minimap_.move(0.25*1280, 0);
@@ -28,7 +28,6 @@ GameWorld::GameWorld(sf::RenderWindow& window) : gameWindow{&window} {
 
 void GameWorld::update() {
     static auto currentPlayer = playerVector.begin();
-    input.update(gameWindow);
     if (environment_.getTerrain().isColliding(*currentUnit)) {
         currentUnit->collide();
     }
