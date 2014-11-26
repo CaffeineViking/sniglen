@@ -16,7 +16,7 @@ class GameWorld {
         std::vector<std::unique_ptr<Player>> playerVector;
         std::vector<std::unique_ptr<Projectile>> projectileVector;
         Environment environment_;
-        InputHandler input;
+        InputHandler* input;
         sf::View camera_;
         // sf::View minimap_;
         Unit* currentUnit;
