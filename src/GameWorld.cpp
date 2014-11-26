@@ -5,7 +5,7 @@
 #include "utilities/Random.hpp"
 #include "utilities/Assets.hpp"
 
-GameWorld::GameWorld(sf::RenderWindow& window) : gameWindow{&window} {
+GameWorld::GameWorld(sf::RenderWindow& window, InputHandler& inputhandler) : gameWindow{&window}, input{&inputhandler}  {
     camera_ = window.getDefaultView();
 
     playerVector.push_back(std::unique_ptr<Player>{new Player{{255,0,0}}});
@@ -23,25 +23,26 @@ GameWorld::GameWorld(sf::RenderWindow& window) : gameWindow{&window} {
 
 void GameWorld::update() {
     static auto currentPlayer = playerVector.begin();
-    input.update(gameWindow);
     if (environment_.getTerrain().isColliding(*currentUnit)) {
         currentUnit->collide();
     }
-    currentUnit->update(input);
+    //input.update(gameWindow);
+    currentUnit->update(*input);
 
     for(std::unique_ptr<Projectile>& projectile : projectileVector)
-        projectile->update(input);
+        projectile->update(*input);
     if(currentUnit->isShooting())
         projectileVector.push_back(std::unique_ptr<Projectile>{new Projectile{Assets::LOAD_TEXTURE("bullet.png"), currentUnit->getPosition(), 0.0f, 10, currentUnit->getShootMomentum(*gameWindow), currentUnit->getShootAngle()}});
-    if(input.isKeyReleased(sf::Keyboard::Key::Return) && currentUnit->inControl()){
+    if(input->isKeyReleased(sf::Keyboard::Key::Return) && currentUnit->inControl()){
         ++currentPlayer;
         if(currentPlayer == playerVector.end())
             currentPlayer = playerVector.begin();
         currentUnit = (*currentPlayer)->getNextUnit();
     }
 
-    if(input.mouseReleased())
+    if(input->mouseReleased())
         environment_.getTerrain().destroy(sf::Mouse::getPosition(*gameWindow) + static_cast<sf::Vector2i>(camera_.getCenter()) - sf::Vector2i{640, 360}, 64.0);
+
     if(currentUnit->getPosition().x - camera_.getSize().x/2 < 0){
         std::cout << " slkdf" << std::endl;
         camera_.setCenter(camera_.getSize().x/2, currentUnit->getPosition().y);
