@@ -104,6 +104,17 @@ void InputHandler::keyboardUpdate(){
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape)){ //500 To be changed to variable y coords
         pressedKeys_.insert(sf::Keyboard::Key::Escape);
     }
+
+    // Num1
+    if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num1) && pressedKeys_.find(sf::Keyboard::Key::Num1) != pressedKeys_.end()){
+        releasedKeys_.insert(sf::Keyboard::Key::Num1);
+    }
+    if(!sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num1)){
+        pressedKeys_.erase(sf::Keyboard::Key::Num1);
+    }
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num1)){ //500 To be changed to variable y coords
+        pressedKeys_.insert(sf::Keyboard::Key::Num1);
+    }
 }
 bool InputHandler::isKeyPressed(sf::Keyboard::Key key) const{
     return pressedKeys_.find(key) != pressedKeys_.end();

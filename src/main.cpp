@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include "GameWorld.hpp"
+#include "MenuScreen.hpp"
 #include "entities/Entity.hpp"
 #include "utilities/InputHandler.hpp"
 
@@ -23,12 +24,31 @@ int main() {
         if (input.isKeyPressed(sf::Keyboard::Key::Escape)) {
             window.close();
         }
+        if(input.isKeyReleased(sf::Keyboard::Key::Num1)){
+            if(state == gameState::menu)
+                state = gameState::game;
+            else
+                state = gameState::menu;
+        }
 
-        game.update();
+        if(state == gameState::game){
+            game.update();
+            std::cout << "game is updating yes" << std::endl;
+        }
+        else if(state == gameState::menu){
+            std::cout << "meny is updating yes" << std::endl;
+        }
         window.clear();
-        game.draw();
+        if(state == gameState::game){
+            game.draw();
+            std::cout << "game is drawing yes" << std::endl;
+        }
+        else if(state == gameState::menu){
+            std::cout << "meny is drawing yes" << std::endl;
+        }
         // game.drawCamera();
         // game.drawMinimap();
+
         window.display();
     }
 
