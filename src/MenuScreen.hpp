@@ -17,8 +17,8 @@ class MenuScreen{
     public:
         MenuScreen(sf::RenderWindow& screen, InputHandler& handler): window{&screen}, input{&handler} {
             buttonVector.push_back(new sf::Sprite(Assets::LOAD_TEXTURE("test2.jpg")));
-            buttonVector.back()->setPosition({window->getSize().x/2, window->getSize().y/2});
             buttonVector.back()->setOrigin(buttonVector.back()->getTexture()->getSize().x/2, buttonVector.back()->getTexture()->getSize().y/2);
+            buttonVector.back()->setPosition({window->getSize().x/2, window->getSize().y/2});
         };
         void update();
         void draw();
