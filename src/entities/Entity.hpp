@@ -80,11 +80,13 @@ class Projectile: public Entity{
         float radius_{64};
         Weapon* type_; // Variable to keep track of what kind of weapon it is
         float angle_;
+        bool removed_{false};
         void getMovement(const InputHandler&);
         void applyPhysics(bool) override;
         void move();
     public:
         bool deleted_ = false;
+        bool isRemoved() const { return removed_; }
         Projectile(sf::Texture tex, sf::Vector2f pos, float spd, int mass, sf::Vector2f inMom, float angle, Weapon* weapon = nullptr ):
             Entity(tex, {pos.x, pos.y-1}, spd, mass), type_{weapon}, angle_{angle}{
                 momentum_ = inMom;

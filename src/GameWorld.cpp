@@ -31,19 +31,21 @@ void GameWorld::update() {
         if(environment_.getTerrain().isColliding(*projectile)){
             environment_.getTerrain().destroy(projectile->explode());
         }
-    }/*
+    }
     int iteratedOver {0};
     int removed {0};
-    while(iteratedOver + removed < projectileVector.size()-1){
-        if(environment_.getTerrain().isColliding(*projectileVector.at(iteratedOver))){
-            projectileVector.at(iteratedOver).swap(projectileVector.at(projectileVector.size()-1-(++removed)));
+    if(!projectileVector.empty()){
+        while(iteratedOver + removed < projectileVector.size()){
+            if(projectileVector.at(iteratedOver)->isRemoved()){
+                projectileVector.at(iteratedOver).swap(projectileVector.at(projectileVector.size()-(++removed)));
+            }
+            else
+                ++iteratedOver;
         }
-        else
-            ++iteratedOver;
+        projectileVector.erase(projectileVector.begin() + (projectileVector.size()-removed), projectileVector.end());
     }
-    projectileVector.erase(projectileVector.begin() + (projectileVector.size()-1-removed), projectileVector.end());
-*/
-   if(currentUnit->isShooting())
+
+    if(currentUnit->isShooting())
         projectileVector.push_back(std::unique_ptr<Projectile>{new Projectile{Assets::LOAD_TEXTURE("bullet.png"), currentUnit->getPosition(), 0.0f, 10, currentUnit->getShootMomentum(*gameWindow), currentUnit->getShootAngle()}});
     if(input->isKeyReleased(sf::Keyboard::Key::Return) && currentUnit->inControl()){
         ++currentPlayer;
