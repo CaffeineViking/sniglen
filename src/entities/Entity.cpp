@@ -1,5 +1,5 @@
-#include "Entity.hpp"
-#include "../utilities/InputHandler.hpp"
+#include "Entity.hpp" 
+#include "../utilities/InputHandler.hpp" 
 #include <vector>
 #include <cmath>
 #include <string>
@@ -14,7 +14,7 @@ void Entity::applyPhysics(bool colliding){
     if (!colliding) {
         momentum_.y += 1.5f;
     } else {
-        momentum_ = {0, 0};
+        momentum_ = {0, -1};
     }
 }
 void Entity::getMovement(const InputHandler& input){
@@ -42,9 +42,9 @@ void Unit::getMovement(const InputHandler& input){
         if(input.isKeyPressed(sf::Keyboard::Key::Down)){
             aimAngle_ += 5;
         }
-        if (input.isKeyPressed(sf::Keyboard::Key::BackSpace) && position_.y >= 400){ // To be changed to variable y coords
+        if (input.isKeyPressed(sf::Keyboard::Key::BackSpace)){ // To be changed to variable y coords
             state_ = unitState::falling;
-            momentum_.y = -60.0f;
+            momentum_.y = -6.0f;
             if(lookLeft_)
                 momentum_.x = -10.0f;
             else
@@ -83,6 +83,9 @@ void Unit::getMovement(const InputHandler& input){
     }
 }
 void Unit::applyPhysics(bool colliding){
+    if(colliding)
+        state_ = unitState::idle;
+
     Entity::applyPhysics(colliding);
 }
 void Unit::move(){
