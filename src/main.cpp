@@ -36,6 +36,7 @@ int main() {
             game.update();
         }
         else if(state == gameState::menu){
+            window.setView(window.getDefaultView());
             menu.update();
             if(menu.getGameStart())
                 state = gameState::game;

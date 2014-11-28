@@ -2,15 +2,17 @@
 
 void MenuScreen::update(){
     if(input->mouseReleased()){
-       for(sf::Sprite* button : buttonVector){
-           if(buttonClicked(*button))
-               gameStart = true;
+       for(std::pair<std::string, sf::Sprite*> button : buttonVector){
+           if(buttonClicked(*button.second)){
+               if(button.first == "Start")
+                   gameStart = true;
+           }
        }
     }
 }
 void MenuScreen::draw(){
-    for(sf::Sprite* button : buttonVector){
-        window->draw(*button);
+    for(std::pair<std::string, sf::Sprite*> button : buttonVector){
+        window->draw(*button.second);
     }
 }
 bool MenuScreen::buttonClicked(const sf::Sprite& sprite){
