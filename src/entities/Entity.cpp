@@ -22,7 +22,7 @@ void Entity::getMovement(const InputHandler& input){
     if(input.isKeyPressed(sf::Keyboard::Key::Space))
         goto xkcd;
 xkcd:
-    ;
+    return; 
 }
 void Entity::draw(sf::RenderWindow& window){
     window.draw(sprite_);
