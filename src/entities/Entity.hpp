@@ -27,7 +27,7 @@ class Entity{
             }
         bool lookLeft_{true};
         virtual void getMovement(const InputHandler&); // Reads input and sets what movements should be done
-        virtual void applyPhysics(); // Applies friction and gravity to the movements that should be done
+        virtual void applyPhysics(bool); // Applies friction and gravity to the movements that should be done
         virtual void move(); // Applies movement to the entity
     public:
         const sf::Sprite& getSprite() const {return sprite_;};
@@ -35,7 +35,7 @@ class Entity{
         void setTexture(const sf::Texture& texture){sprite_.setTexture(texture);};
         bool doUnitLookLeft(){return lookLeft_;};
         virtual ~Entity() = default;
-        virtual void update(const InputHandler& input){getMovement(input); applyPhysics(); move();};
+        virtual void update(const InputHandler& input, bool colliding){getMovement(input); applyPhysics(colliding); move();};
         virtual void collide();
         virtual void draw(sf::RenderWindow&); // Standardise draw functions
 };
@@ -48,9 +48,9 @@ class Unit: public Entity{
         float aimAngle_ = 90;
         sf::Sprite crosshair_;
         int shootPower_{0}; // Release power of shots
-        bool shoot = false;
+        bool shoot_ = false;
         void getMovement(const InputHandler&) override;
-        void applyPhysics() override;
+        void applyPhysics(bool) override;
         void move() override;
         void updateCrosshair();
 
@@ -62,24 +62,26 @@ class Unit: public Entity{
                 crosshair_.setOrigin({(float)crosshair_.getTexture()->getSize().x/2, (float)crosshair_.getTexture()->getSize().y/2});
                 //crosshair_.setOrigin({(float)crosshair_.getTexture().getSize().x/2, (float)crosshair_.getTexture().getSize().y/2});
             }
-        void update(const InputHandler& input){getMovement(input); updateCrosshair(); applyPhysics(); move();};
+        void update(const InputHandler& input, bool colliding) override {getMovement(input); updateCrosshair(); applyPhysics(colliding); move();};
         void collide();
         bool inControl(){return (state_ != unitState::falling);};
         float getShootAngle(){return aimAngle_;};
         sf::Vector2f getShootMomentum(sf::RenderWindow&);
         sf::Vector2f getPosition(){return sprite_.getPosition();};
         void setColor(sf::Color color){sprite_.setColor(color);}
-        bool isShooting(){return shoot;};
+        bool isShooting(){return shoot_;};
+        bool isDead(){return false;};
         void draw(sf::RenderWindow&) override;
         ~Unit() = default;
 };
 
 class Projectile: public Entity{
     private:
+        float radius_{64};
         Weapon* type_; // Variable to keep track of what kind of weapon it is
         float angle_;
         void getMovement(const InputHandler&);
-        void applyPhysics() override;
+        void applyPhysics(bool) override;
         void move();
     public:
         bool deleted_ = false;
@@ -91,7 +93,6 @@ class Projectile: public Entity{
                     angle = angle;
             }
         sf::CircleShape explode();
-        void update(const InputHandler& input){getMovement(input); applyPhysics(); move();};
 
         ~Projectile() = default;
 };

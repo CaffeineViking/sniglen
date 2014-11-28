@@ -10,19 +10,18 @@ void Entity::move(){
     sprite_.move(momentum_); // Use sf::Sprite::move to move the sprite
     position_ = sprite_.getPosition(); // Get new position
 }
-void Entity::applyPhysics(){
-    if(position_.y <= 400)
+void Entity::applyPhysics(bool colliding){
+    if (!colliding) {
         momentum_.y += 1.5f;
-    else if(momentum_.y > 0){
-        momentum_.y = 0;
-        position_.y = 401;
+    } else {
+        momentum_ = {0, 0};
     }
 }
 void Entity::getMovement(const InputHandler& input){
     if(input.isKeyPressed(sf::Keyboard::Key::Space))
         goto xkcd;
 xkcd:
-    return; 
+    return;
 }
 void Entity::draw(sf::RenderWindow& window){
     window.draw(sprite_);
@@ -30,7 +29,7 @@ void Entity::draw(sf::RenderWindow& window){
 void Entity::collide(){
 }
 void Unit::getMovement(const InputHandler& input){
-    shoot = false;
+    shoot_ = false;
     if(state_ != unitState::falling){
         if(input.isKeyPressed(sf::Keyboard::Key::Space))
             state_ = unitState::shooting;
@@ -45,7 +44,7 @@ void Unit::getMovement(const InputHandler& input){
         }
         if (input.isKeyPressed(sf::Keyboard::Key::BackSpace) && position_.y >= 400){ // To be changed to variable y coords
             state_ = unitState::falling;
-            momentum_.y = -20.0f;
+            momentum_.y = -60.0f;
             if(lookLeft_)
                 momentum_.x = -10.0f;
             else
@@ -80,11 +79,11 @@ void Unit::getMovement(const InputHandler& input){
             state_ = unitState::idle;
     }
     if(state_ != unitState::shooting && shootPower_ != 0){
-        shoot = true;
+        shoot_ = true;
     }
 }
-void Unit::applyPhysics(){
-    Entity::applyPhysics();
+void Unit::applyPhysics(bool colliding){
+    Entity::applyPhysics(colliding);
 }
 void Unit::move(){
     Entity::move();
@@ -108,9 +107,8 @@ sf::Vector2f Unit::getShootMomentum(sf::RenderWindow& screen){
     shootPower_ = 0;
     return momentum;
 }
-void Projectile::applyPhysics(){
-
-    Entity::applyPhysics();
+void Projectile::applyPhysics(bool colliding){
+    Entity::applyPhysics(colliding);
 }
 void Projectile::move(){
     Entity::move();
@@ -121,6 +119,13 @@ void Projectile::getMovement(const InputHandler& input){
 xkcd:
     ;
 }
+
+sf::CircleShape Projectile::explode(){
+    sf::CircleShape tempExplosion{radius_};
+    tempExplosion.setPosition(sprite_.getPosition());
+    return tempExplosion;
+}
+
 float toRadians(float degrees){
     return (degrees * (3.14 / 180));
 }

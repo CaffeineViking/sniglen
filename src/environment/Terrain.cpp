@@ -48,6 +48,10 @@ void Terrain::refresh() {
     sprite_.setTexture(texture_);
 }
 
+void Terrain::destroy(const sf::CircleShape& explosion) {
+    destroy(static_cast<sf::Vector2i>(explosion.getPosition()), explosion.getRadius());
+}
+
 void Terrain::destroy(sf::Vector2i position, float radius) {
     // These variables will be used to check if the bounds of the terrain have been crossed.
     int terrainMaxY = sprite_.getPosition().y + sprite_.getTexture()->getSize().y;

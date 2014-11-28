@@ -11,6 +11,7 @@ int main() {
     window.setFramerateLimit(60);
     InputHandler input;
     GameWorld game{window, input};
+    MenuScreen menu{window, input};
     gameState state = gameState::menu;
 
     while (window.isOpen()){
@@ -35,12 +36,16 @@ int main() {
             game.update();
         }
         else if(state == gameState::menu){
+            menu.update();
+            if(menu.getGameStart())
+                state = gameState::game;
         }
         window.clear();
         if(state == gameState::game){
             game.draw();
         }
         else if(state == gameState::menu){
+            menu.draw();
         }
         // game.drawCamera();
         // game.drawMinimap();

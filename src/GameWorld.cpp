@@ -23,15 +23,27 @@ GameWorld::GameWorld(sf::RenderWindow& window, InputHandler& inputhandler) : gam
 
 void GameWorld::update() {
     static auto currentPlayer = playerVector.begin();
-    if (environment_.getTerrain().isColliding(*currentUnit)) {
-        currentUnit->collide();
-    }
     //input.update(gameWindow);
-    currentUnit->update(*input);
+    currentUnit->update(*input, environment_.getTerrain().isColliding(*currentUnit));
 
-    for(std::unique_ptr<Projectile>& projectile : projectileVector)
-        projectile->update(*input);
-    if(currentUnit->isShooting())
+    for(std::unique_ptr<Projectile>& projectile : projectileVector){
+        projectile->update(*input, environment_.getTerrain().isColliding(*projectile));
+        if(environment_.getTerrain().isColliding(*projectile)){
+            environment_.getTerrain().destroy(projectile->explode());
+        }
+    }/*
+    int iteratedOver {0};
+    int removed {0};
+    while(iteratedOver + removed < projectileVector.size()-1){
+        if(environment_.getTerrain().isColliding(*projectileVector.at(iteratedOver))){
+            projectileVector.at(iteratedOver).swap(projectileVector.at(projectileVector.size()-1-(++removed)));
+        }
+        else
+            ++iteratedOver;
+    }
+    projectileVector.erase(projectileVector.begin() + (projectileVector.size()-1-removed), projectileVector.end());
+*/
+   if(currentUnit->isShooting())
         projectileVector.push_back(std::unique_ptr<Projectile>{new Projectile{Assets::LOAD_TEXTURE("bullet.png"), currentUnit->getPosition(), 0.0f, 10, currentUnit->getShootMomentum(*gameWindow), currentUnit->getShootAngle()}});
     if(input->isKeyReleased(sf::Keyboard::Key::Return) && currentUnit->inControl()){
         ++currentPlayer;
@@ -42,18 +54,43 @@ void GameWorld::update() {
 
     if(input->mouseReleased())
         environment_.getTerrain().destroy(sf::Mouse::getPosition(*gameWindow) + static_cast<sf::Vector2i>(camera_.getCenter()) - sf::Vector2i{640, 360}, 64.0);
-
-    if(currentUnit->getPosition().x - camera_.getSize().x/2 < 0){
-        camera_.setCenter(camera_.getSize().x/2, currentUnit->getPosition().y);
-    }
-    else if(currentUnit->getPosition().x + camera_.getSize().x/2 > environment_.getTerrainSize()){
-        if(!zoomed){
-            camera_.setCenter(camera_.getSize().x/2 + environment_.getTerrainSize()/2, currentUnit->getPosition().y);
-        }else
-             camera_.setCenter(environment_.getTerrainSize()/2, currentUnit->getPosition().y);
+    
+    float cameraX {camera_.getCenter().x};
+    float cameraY {camera_.getCenter().y};
+    if(zoomed){
+        cameraX = environment_.getTerrainSize()/2;
+        cameraY = 0;
     } else {
-       camera_.setCenter(currentUnit->getPosition());
+        if(currentUnit->getPosition().x - camera_.getSize().x/4 < 0){
+            //Check slut vänster
+            cameraX = camera_.getSize().x/2;
+        }
+        else if(currentUnit->getPosition().x + camera_.getSize().x/4 > environment_.getTerrainSize()){
+            //Check slut höger
+            cameraX = camera_.getSize().x/2 + environment_.getTerrainSize()/2;
+        }
+        else if(currentUnit->getPosition().x > camera_.getCenter().x + camera_.getSize().x/4){
+            //Check går höger
+            cameraX = currentUnit->getPosition().x - camera_.getSize().x/4;
+        }
+        else if(currentUnit->getPosition().x < camera_.getCenter().x - camera_.getSize().x/4){
+            //Check går vänster
+            cameraX = currentUnit->getPosition().x + camera_.getSize().x/4;
+        }
+        if(currentUnit->getPosition().y > camera_.getCenter().y + camera_.getSize().y/4){
+            cameraY = currentUnit->getPosition().y - camera_.getSize().y/4;
+        }
+        else if(currentUnit->getPosition().y < camera_.getCenter().y - camera_.getSize().y/4){
+            cameraY = currentUnit->getPosition().y + camera_.getSize().y/4;
+        }
+        else{
+            //cameraY = currentUnit->getPosition().y;
+        }
     }
+    if(cameraY > gameWindow->getSize().y/2)
+        cameraY = gameWindow->getSize().y/2;
+
+    camera_.setCenter(cameraX, cameraY);
     if (input->isKeyReleased(sf::Keyboard::Key::Tab)) {
         if (zoomed) {
             camera_.zoom(0.50f);
