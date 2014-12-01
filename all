@@ -19,8 +19,4 @@ public:
     Bazooka() : Weapon{10, 20.0} {}
 };
 
-class MiniBaz: public Weapon {
-public:
-    MiniBaz(): Weapon{50, 5.0} {}
-};
 #endif

@@ -12,9 +12,15 @@ Unit* Player::getNextUnit(){
 Weapon* Player::selectWeapon(int weaponID){
     if (weaponID > (int)weaponList_.size()-1) // Make sure weapon selected is within bounds
         weaponID = 1; // Increment as more weapons gets implemented
+    currentWeapon_ = weaponID; // Save the current weapon in the pointer variable
     return weaponList_[weaponID].first; // Return weapon
 }
 void Player::insertUnit(Unit* unit){
     unit->setColor(color_);
     team_.push_back(unit);
 }
+
+int Player::getCurrentWeapon(){
+    return currentWeapon_;
+}
+
