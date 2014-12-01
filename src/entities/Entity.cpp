@@ -125,7 +125,7 @@ xkcd:
 
 sf::CircleShape Projectile::explode(){
     removed_ = true;
-    sf::CircleShape tempExplosion{radius_};
+    sf::CircleShape tempExplosion{type_->getExplosionRadius()};
     tempExplosion.setPosition(sprite_.getPosition());
     return tempExplosion;
 }

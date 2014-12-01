@@ -77,7 +77,6 @@ class Unit: public Entity{
 
 class Projectile: public Entity{
     private:
-        float radius_{64};
         Weapon* type_; // Variable to keep track of what kind of weapon it is
         float angle_;
         bool removed_{false};
