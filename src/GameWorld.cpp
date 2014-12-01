@@ -5,9 +5,7 @@
 #include "utilities/Random.hpp"
 #include "utilities/Assets.hpp"
 
-GameWorld::GameWorld(sf::RenderWindow& window, InputHandler& inputhandler) : gameWindow{&window}, input{&inputhandler}  {
-    camera_ = window.getDefaultView();
-
+GameWorld::GameWorld(sf::RenderWindow& window, InputHandler& inputhandler) : gameWindow{&window}, input{&inputhandler}, camera_{window}  {
     playerVector.push_back(std::unique_ptr<Player>{new Player{{255,0,0}}});
     playerVector.push_back(std::unique_ptr<Player>{new Player{{0,0,255}}});
     for(auto& i : playerVector)
@@ -54,62 +52,29 @@ void GameWorld::update() {
         currentUnit = (*currentPlayer)->getNextUnit();
     }
 
-    if(input->mouseReleased())
-        environment_.getTerrain().destroy(sf::Mouse::getPosition(*gameWindow) + static_cast<sf::Vector2i>(camera_.getCenter()) - sf::Vector2i{640, 360}, 64.0);
-    
-    float cameraX {camera_.getCenter().x};
-    float cameraY {camera_.getCenter().y};
-    if(zoomed){
-        cameraX = environment_.getTerrainSize()/2;
-        cameraY = 0;
-    } else {
-        if(currentUnit->getPosition().x - camera_.getSize().x/4 < 0){
-            //Check slut vänster
-            cameraX = camera_.getSize().x/2;
-        }
-        else if(currentUnit->getPosition().x + camera_.getSize().x/4 > environment_.getTerrainSize()){
-            //Check slut höger
-            cameraX = camera_.getSize().x/2 + environment_.getTerrainSize()/2;
-        }
-        else if(currentUnit->getPosition().x > camera_.getCenter().x + camera_.getSize().x/4){
-            //Check går höger
-            cameraX = currentUnit->getPosition().x - camera_.getSize().x/4;
-        }
-        else if(currentUnit->getPosition().x < camera_.getCenter().x - camera_.getSize().x/4){
-            //Check går vänster
-            cameraX = currentUnit->getPosition().x + camera_.getSize().x/4;
-        }
-        if(currentUnit->getPosition().y > camera_.getCenter().y + camera_.getSize().y/4){
-            cameraY = currentUnit->getPosition().y - camera_.getSize().y/4;
-        }
-        else if(currentUnit->getPosition().y < camera_.getCenter().y - camera_.getSize().y/4){
-            cameraY = currentUnit->getPosition().y + camera_.getSize().y/4;
-        }
-        else{
-            //cameraY = currentUnit->getPosition().y;
-        }
-    }
-    if(cameraY > gameWindow->getSize().y/2)
-        cameraY = gameWindow->getSize().y/2;
-
-    camera_.setCenter(cameraX, cameraY);
-    if (input->isKeyReleased(sf::Keyboard::Key::Tab)) {
-        if (zoomed) {
-            camera_.zoom(0.50f);
-            zoomed = false;
-        } else {
-            camera_.zoom(2.0f);
-            zoomed = true;
-        }
+    // The given parameters passed to the camera update function will be used to
+    // detemine how the currentUnit will be followed, thus it is also required to pass
+    // in environment and the window size to make sure the player is always looking within game bounds.
+    camera_.update(*currentUnit, environment_, gameWindow->getSize().y / 2.0f);
+    if (input->isKeyReleased(sf::Keyboard::Key::Tab) || input->isKeyReleased(sf::Keyboard::Key::M)) {
+        camera_.toggleZoom();
     }
 }
+
 void GameWorld::draw() {
+    // Draw the terrain to the game window.
     environment_.getTerrain().draw(*gameWindow);
+
+    // Draw all units to the game window.
     for(std::unique_ptr<Player>& player : playerVector){
-        for(auto ent : player->getTeam())
+        for(auto& ent : player->getTeam())
             ent->draw(*gameWindow);
     }
+
+    // Draw all projectiles to the game window.
     for(std::unique_ptr<Projectile>& projectile : projectileVector)
         projectile->draw(*gameWindow);
-    gameWindow->setView(camera_);
+
+    // Set the current camera state to be drawn on the game window.
+    camera_.draw(*gameWindow);
 }

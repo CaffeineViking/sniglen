@@ -9,6 +9,7 @@
 #include "entities/Entity.hpp"
 #include "environment/Environment.hpp"
 #include "utilities/InputHandler.hpp"
+#include "utilities/Camera.hpp"
 
 class GameWorld {
     private:
@@ -17,17 +18,13 @@ class GameWorld {
         std::vector<std::unique_ptr<Projectile>> projectileVector;
         Environment environment_;
         InputHandler* input;
-        sf::View camera_;
-        // sf::View minimap_;
+        Camera camera_;
         Unit* currentUnit;
-        bool zoomed{false};
 
     public:
         GameWorld(sf::RenderWindow&, InputHandler&);
         void update();
         void draw();
-        // void drawCamera();
-        // void drawMinimap();
 };
 
 #endif // GAMEWORLD_HPP
