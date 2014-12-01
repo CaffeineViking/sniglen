@@ -41,15 +41,16 @@ int main() {
             if(menu.getGameStart())
                 state = gameState::game;
         }
-        window.clear();
+
+        const sf::Color CLEAR_COLOR{0x30, 0x30, 0x30};
+        window.clear(CLEAR_COLOR); // Jättefint.
+
         if(state == gameState::game){
             game.draw();
         }
         else if(state == gameState::menu){
             menu.draw();
         }
-        // game.drawCamera();
-        // game.drawMinimap();
 
         window.display();
     }
