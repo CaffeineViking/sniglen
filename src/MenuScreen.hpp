@@ -13,6 +13,7 @@ class MenuScreen{
         enum class MenuState{main = 0, setup, option};
         sf::RenderWindow* window_;
         InputHandler* input_;
+        sf::Vector2f windowSize_;
         MenuState state_ = MenuState::main;
         std::vector<std::pair<std::string, sf::Sprite*>> buttonVector_;
         bool gameStart_ = false;

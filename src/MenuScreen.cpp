@@ -1,24 +1,25 @@
 #include "MenuScreen.hpp"
 
 MenuScreen::MenuScreen(sf::RenderWindow& screen, InputHandler& handler): window_{&screen}, input_{&handler} {
-    createButton("test2.jpg", "Start", {(float)window_->getSize().x/2, (float)window_->getSize().y/2});
-    createButton("test3.jpg", "Options", {(float)window_->getSize().x/2 + 100, (float)window_->getSize().y/2});
+    windowSize_ = (sf::Vector2f)window_->getSize();
+    createButton("test2.jpg", "Start", {windowSize_.x/2, windowSize_.y/2});
+    createButton("test3.jpg", "Options", {windowSize_.x/2 + 100, windowSize_.y/2});
 }
 
 void MenuScreen::update(){
     if(redraw_){
         if(state_ == MenuState::main){
             buttonVector_.clear();
-            createButton("test2.jpg", "Start", {(float)window_->getSize().x/2, (float)window_->getSize().y/2});
-            createButton("test3.jpg", "Options", {(float)window_->getSize().x/2 + 100, (float)window_->getSize().y/2});
+            createButton("test2.jpg", "Start", {windowSize_.x/2, windowSize_.y/2});
+            createButton("test3.jpg", "Options", {windowSize_.x/2 + 100, windowSize_.y/2});
         }
         else if(state_ == MenuState::setup){
             buttonVector_.clear();
-            createButton("test2.jpg", "Back", {(float)window_->getSize().x/2, (float)window_->getSize().y-100});
+            createButton("test2.jpg", "Back", {windowSize_.x/2, windowSize_.y-100});
         }
         else if(state_ == MenuState::option){
             buttonVector_.clear();
-            createButton("test2.jpg", "Back", {(float)window_->getSize().x/2, (float)window_->getSize().y-100});
+            createButton("test2.jpg", "Back", {windowSize_.x/2, windowSize_.y-100});
         } else {
         }
         redraw_ = false;
@@ -54,9 +55,9 @@ void MenuScreen::createButton(const std::string& filename, const std::string& la
 
 bool MenuScreen::buttonClicked(const sf::Sprite& sprite){
     if(input_->mousePosition().x > sprite.getPosition().x - sprite.getTexture()->getSize().x/2 &&
-            input_->mousePosition().x < sprite.getPosition().x + sprite.getTexture()->getSize().x/2 &&
-            input_->mousePosition().y > sprite.getPosition().y - sprite.getTexture()->getSize().y/2 &&
-            input_->mousePosition().y < sprite.getPosition().y + sprite.getTexture()->getSize().y/2)
+       input_->mousePosition().x < sprite.getPosition().x + sprite.getTexture()->getSize().x/2 &&
+       input_->mousePosition().y > sprite.getPosition().y - sprite.getTexture()->getSize().y/2 &&
+       input_->mousePosition().y < sprite.getPosition().y + sprite.getTexture()->getSize().y/2)
         return true;
     return false;
 }
