@@ -16,12 +16,12 @@ public:
 
 class Bazooka: public Weapon {
 public:
-    Bazooka() : Weapon{10, 40.0} {}
+    Bazooka() : Weapon{10, 48.0} {}
 };
 
 class MiniBaz: public Weapon {
 public:
-    MiniBaz(): Weapon{50, 5.0} {}
+    MiniBaz(): Weapon{30, 24.0} {}
 };
 
 class Nuke: public Weapon {

@@ -14,6 +14,14 @@ void Entity::applyPhysics(bool colliding){
     if (!colliding) {
         momentum_.y += 1.5f;
     } else {
+        /*momentum_.y = 0;
+        if(momentum_.x > 0.2)
+            momentum_.x = momentum_.x - 0.5;
+        else if(momentum_.x < -0.2)
+            momentum_.x = momentum_.x + 0.5;
+        else
+            momentum_.x = 0;
+            */
         momentum_ = {0, -1};
     }
 }
@@ -85,11 +93,6 @@ void Unit::getMovement(const InputHandler& input){
         }
         else if (input.isKeyPressed(sf::Keyboard::Key::Right) && momentum_.x <= maxMomentum_.x)
             momentum_.x = maxMomentum_.x;
-        if(!(position_.y < 400)){
-            momentum_.x = momentum_.x * 0.85f;
-            if(abs(momentum_.x) < 0.10f)
-                momentum_.x = 0;
-        }
     }
 }
 void Unit::applyPhysics(bool colliding){
@@ -108,6 +111,15 @@ void Unit::collide(){
     state_ = unitState::idle;
     Entity::collide();
 }
+void Unit::checkExplosion(const sf::CircleShape& expl) {
+    float distanceX{expl.getPosition().x - getPos().x};
+    float distanceY{expl.getPosition().y - getPos().y};
+    float distance{std::sqrt(std::pow(distanceX, 2.0f) + std::pow(distanceY, 2.0f))};
+    if (distance <= expl.getRadius()) {
+        momentum_.x -= (distanceX * 32) / distance;
+        momentum_.y -= (distanceY * 32) / distance;
+    }
+}
 void Unit::draw(sf::RenderWindow& window){
     window.draw(sprite_);
     window.draw(crosshair_);
@@ -121,6 +133,7 @@ sf::Vector2f Unit::getShootMomentum(sf::RenderWindow& screen){
     return momentum;
 }
 void Projectile::applyPhysics(bool colliding){
+    momentum_.x += wind_;
     Entity::applyPhysics(colliding);
 }
 void Projectile::move(){

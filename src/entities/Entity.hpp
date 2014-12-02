@@ -65,6 +65,7 @@ class Unit: public Entity{
             }
         void update(const InputHandler& input, bool colliding) override {getInput(input); getMovement(input); updateCrosshair(); applyPhysics(colliding); move();};
         void collide();
+        void checkExplosion(const sf::CircleShape&);
         bool inControl(){return (state_ != unitState::falling);};
         float getShootAngle(){return aimAngle_;};
         sf::Vector2f getShootMomentum(sf::RenderWindow&);
@@ -78,6 +79,7 @@ class Unit: public Entity{
 
 class Projectile: public Entity{
     private:
+        float wind_;
         Weapon* type_; // Variable to keep track of what kind of weapon it is
         float angle_;
         bool removed_{false};
@@ -87,8 +89,8 @@ class Projectile: public Entity{
     public:
         bool deleted_ = false;
         bool isRemoved() const { return removed_; }
-        Projectile(sf::Texture tex, sf::Vector2f pos, float spd, int mass, sf::Vector2f inMom, float angle, Weapon* weapon = nullptr ):
-            Entity(tex, {pos.x, pos.y-1}, spd, mass), type_{weapon}, angle_{angle}{
+        Projectile(const sf::Texture& tex, const sf::Vector2f& pos, float spd, int mass, const sf::Vector2f& inMom, float wind, float angle, Weapon* weapon = nullptr ):
+            Entity(tex, {pos.x, pos.y-1}, spd, mass), wind_{wind}, type_{weapon}, angle_{angle}{
                 momentum_ = inMom;
                 sprite_.setPosition(position_);
                 if(angle == angle)

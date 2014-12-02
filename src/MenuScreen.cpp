@@ -2,24 +2,24 @@
 
 MenuScreen::MenuScreen(sf::RenderWindow& screen, InputHandler& handler): window_{&screen}, input_{&handler} {
     windowSize_ = (sf::Vector2f)window_->getSize();
-    createButton("test2.jpg", "Start", {windowSize_.x/2, windowSize_.y/2});
-    createButton("test3.jpg", "Options", {windowSize_.x/2 + 100, windowSize_.y/2});
+    createButton("test2.png", "Start", {windowSize_.x/2, windowSize_.y/2});
+    createButton("test3.png", "Options", {windowSize_.x/2 + 100, windowSize_.y/2});
 }
 
 void MenuScreen::update(){
     if(redraw_){
         if(state_ == MenuState::main){
             buttonVector_.clear();
-            createButton("test2.jpg", "Start", {windowSize_.x/2, windowSize_.y/2});
-            createButton("test3.jpg", "Options", {windowSize_.x/2 + 100, windowSize_.y/2});
+            createButton("test2.png", "Start", {windowSize_.x/2, windowSize_.y/2});
+            createButton("test3.png", "Options", {windowSize_.x/2 + 100, windowSize_.y/2});
         }
         else if(state_ == MenuState::setup){
             buttonVector_.clear();
-            createButton("test2.jpg", "Back", {windowSize_.x/2, windowSize_.y-100});
+            createButton("test2.png", "Back", {windowSize_.x/2, windowSize_.y-100});
         }
         else if(state_ == MenuState::option){
             buttonVector_.clear();
-            createButton("test2.jpg", "Back", {windowSize_.x/2, windowSize_.y-100});
+            createButton("test2.png", "Back", {windowSize_.x/2, windowSize_.y-100});
         } else {
         }
         redraw_ = false;
