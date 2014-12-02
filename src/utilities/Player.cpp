@@ -9,18 +9,22 @@ Unit* Player::getNextUnit(){
     }
     return team_[++unitCounter_]; // Return next unit
 }
-Weapon* Player::selectWeapon(int weaponID){
-    if (weaponID > (int)weaponList_.size()-1) // Make sure weapon selected is within bounds
-        weaponID = 1; // Increment as more weapons gets implemented
-    currentWeapon_ = weaponID; // Save the current weapon in the pointer variable
-    return weaponList_[weaponID].first; // Return weapon
+void Player::selectWeapon(int weaponID){
+    std::cerr << "Hej?" << std::endl;
+    if(!weaponList_.empty()){
+        if (weaponID > (int)weaponList_.size()-1) // Make sure weapon selected is within bounds
+            weaponID = 0; // Reset if selcected been to large */
+        std::cerr << "asd" << std::endl;
+        currentWeapon_ = weaponID; // Save the current weapon in the pointer variable
+    }
 }
 void Player::insertUnit(Unit* unit){
     unit->setColor(color_);
     team_.push_back(unit);
 }
 
-int Player::getCurrentWeapon(){
-    return currentWeapon_;
+Weapon* Player::getCurrentWeapon(){
+    std::cerr << "Hej!?" << std::endl;
+    return weaponList_[currentWeapon_].first;
 }
 

@@ -43,8 +43,15 @@ void GameWorld::update() {
         projectileVector.erase(projectileVector.begin() + (projectileVector.size()-removed), projectileVector.end());
     }
 
-    if(currentUnit->isShooting())
-        projectileVector.push_back(std::unique_ptr<Projectile>{new Projectile{Assets::LOAD_TEXTURE("bullet.png"), currentUnit->getPosition(), 0.0f, 10, currentUnit->getShootMomentum(*gameWindow), currentUnit->getShootAngle(), new Bazooka()}});
+    if(currentUnit->isShooting()) {
+        projectileVector.push_back(std::unique_ptr<Projectile>{
+                new Projectile{Assets::LOAD_TEXTURE("bullet.png"), currentUnit->getPosition(), 0.0f, 10, 
+                    currentUnit->getShootMomentum(*gameWindow), 
+                    currentUnit->getShootAngle(), 
+                    (*currentPlayer)->getCurrentWeapon()
+                    }
+                });
+    }
     if(input->isKeyReleased(sf::Keyboard::Key::Return) && currentUnit->inControl()){
         ++currentPlayer;
         if(currentPlayer == playerVector.end())

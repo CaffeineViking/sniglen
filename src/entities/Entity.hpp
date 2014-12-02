@@ -50,6 +50,7 @@ class Unit: public Entity{
         int shootPower_{0}; // Release power of shots
         bool shoot_ = false;
         void getMovement(const InputHandler&) override;
+        void getInput(const InputHandler&);
         void applyPhysics(bool) override;
         void move() override;
         void updateCrosshair();
@@ -62,7 +63,7 @@ class Unit: public Entity{
                 crosshair_.setOrigin({(float)crosshair_.getTexture()->getSize().x/2, (float)crosshair_.getTexture()->getSize().y/2});
                 //crosshair_.setOrigin({(float)crosshair_.getTexture().getSize().x/2, (float)crosshair_.getTexture().getSize().y/2});
             }
-        void update(const InputHandler& input, bool colliding) override {getMovement(input); updateCrosshair(); applyPhysics(colliding); move();};
+        void update(const InputHandler& input, bool colliding) override {getInput(input); getMovement(input); updateCrosshair(); applyPhysics(colliding); move();};
         void collide();
         bool inControl(){return (state_ != unitState::falling);};
         float getShootAngle(){return aimAngle_;};

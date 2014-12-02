@@ -28,20 +28,38 @@ void Entity::draw(sf::RenderWindow& window){
 }
 void Entity::collide(){
 }
-void Unit::getMovement(const InputHandler& input){
+void Unit::getInput(const InputHandler& input){
     shoot_ = false;
-    if(state_ != unitState::falling){
-        if(input.isKeyPressed(sf::Keyboard::Key::Space))
-            state_ = unitState::shooting;
-        else if(input.isKeyReleased(sf::Keyboard::Key::Space))
+    if(input.isKeyPressed(sf::Keyboard::Key::Space))
+        state_ = unitState::shooting;
+    else if(input.isKeyReleased(sf::Keyboard::Key::Space))
+        state_ = unitState::idle;
+    if(input.isKeyPressed(sf::Keyboard::Key::Up)){
+        aimAngle_ -= 5;
+    }
+    if(input.isKeyPressed(sf::Keyboard::Key::Down)){
+        aimAngle_ += 5;
+    }
+    if(state_ == unitState::shooting){
+        ++shootPower_;
+        if(shootPower_ > 100)
             state_ = unitState::idle;
+    }
+    if(state_ != unitState::shooting && shootPower_ != 0){
+        shoot_ = true;
+    }
 
-        if(input.isKeyPressed(sf::Keyboard::Key::Up)){
-            aimAngle_ -= 5;
-        }
-        if(input.isKeyPressed(sf::Keyboard::Key::Down)){
-            aimAngle_ += 5;
-        }
+    if(input.isKeyPressed(sf::Keyboard::Key::Num1))
+        owner_->selectWeapon(0);
+    if(input.isKeyPressed(sf::Keyboard::Key::Num2))
+        owner_->selectWeapon(1);
+    if(input.isKeyPressed(sf::Keyboard::Key::Num3))
+        owner_->selectWeapon(2);
+
+}
+void Unit::getMovement(const InputHandler& input){
+    if(state_ != unitState::falling){
+
         if (input.isKeyPressed(sf::Keyboard::Key::BackSpace)){ // To be changed to variable y coords
             state_ = unitState::falling;
             momentum_.y = -6.0f;
@@ -72,14 +90,6 @@ void Unit::getMovement(const InputHandler& input){
             if(abs(momentum_.x) < 0.10f)
                 momentum_.x = 0;
         }
-    }
-    if(state_ == unitState::shooting){
-        ++shootPower_;
-        if(shootPower_ > 100)
-            state_ = unitState::idle;
-    }
-    if(state_ != unitState::shooting && shootPower_ != 0){
-        shoot_ = true;
     }
 }
 void Unit::applyPhysics(bool colliding){
