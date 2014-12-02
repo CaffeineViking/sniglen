@@ -10,11 +10,16 @@
 
 class MenuScreen{
     private:
-        sf::RenderWindow* window;
-        InputHandler* input;
-        std::vector<std::pair<std::string, sf::Sprite*>> buttonVector;
-        bool gameStart = false;
+        enum class MenuState{main = 0, setup, option};
+        sf::RenderWindow* window_;
+        InputHandler* input_;
+        sf::Vector2f windowSize_;
+        MenuState state_ = MenuState::main;
+        std::vector<std::pair<std::string, sf::Sprite*>> buttonVector_;
+        bool gameStart_ = false;
+        bool redraw_ = false;
         bool buttonClicked(const sf::Sprite&);
+        void createButton(const std::string&, const std::string&, const sf::Vector2f&);
     public:
         MenuScreen(sf::RenderWindow& screen, InputHandler& handler);
         void update();
