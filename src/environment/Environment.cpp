@@ -2,7 +2,7 @@
 #include "../utilities/Random.hpp"
 
 void Environment::randomizeWind() {
-    windForce_ = Random::GENERATE_MINMAX(-100, 100) / 100.0f;
+    windForce_ = Random::GENERATE_MINMAX(-100, 100) / 150.0f;
 }
 
 float Environment::getWindForce() const {
