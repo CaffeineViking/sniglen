@@ -3,13 +3,13 @@
 Camera::Camera(const sf::RenderWindow& window)
     : view_{window.getDefaultView()} {}
 
-void Camera::toggleZoom() {
+void Camera::toggleZoom(const Environment& environment) {
     zoomed_ = !zoomed_;
 
     if (zoomed_) {
-        view_.zoom(2.0f);
+        view_.zoom(environment.getTerrainSize() / 1280.0f);
     } else {
-        view_.zoom(0.5f);
+        view_.zoom(1280.0f / environment.getTerrainSize());
     }
 }
 

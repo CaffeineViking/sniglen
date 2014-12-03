@@ -65,7 +65,7 @@ class Unit: public Entity{
             }
         void update(const InputHandler& input, bool colliding) override {getInput(input); getMovement(input); updateCrosshair(); applyPhysics(colliding); move();};
         void collide();
-        void checkExplosion(const sf::CircleShape&);
+        void checkExplosion(const sf::CircleShape&, float);
         bool inControl(){return (state_ != unitState::falling);};
         float getShootAngle(){return aimAngle_;};
         sf::Vector2f getShootMomentum(sf::RenderWindow&);
@@ -98,6 +98,7 @@ class Projectile: public Entity{
             }
         sf::CircleShape explode();
 
+        float getDamage() const { return type_->getDamage(); }
         ~Projectile() = default;
 };
 
