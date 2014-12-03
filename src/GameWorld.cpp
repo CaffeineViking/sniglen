@@ -11,7 +11,7 @@ GameWorld::GameWorld(sf::RenderWindow& window, InputHandler& inputhandler) : gam
 
 void GameWorld::initiate(short unsigned int players, short unsigned int units){
     for(int i{0}; i < players; ++i)
-        playerVector.push_back(std::unique_ptr<Player>{new Player{{Random::GENERATE(),Random::GENERATE(),Random::GENERATE()}}});
+        playerVector.push_back(std::unique_ptr<Player>{new Player{{(unsigned char)Random::GENERATE_MAX(255),(unsigned char)Random::GENERATE_MAX(255),(unsigned char)Random::GENERATE_MAX(255)}}});
     for(int i{0}; i < units; ++i){
         for(auto& i : playerVector)
             i->insertUnit((new Unit{Assets::LOAD_TEXTURE("test2.png"), Assets::LOAD_TEXTURE("testa.png"), {static_cast<float>(Random::GENERATE_MAX(environment_.getTerrainSize())), 180}, 2, 150, i.get()}));
