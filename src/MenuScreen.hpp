@@ -18,6 +18,8 @@ class MenuScreen{
         std::vector<std::pair<std::string, sf::Sprite*>> buttonVector_;
         bool gameStart_ = false;
         bool redraw_ = false;
+        short unsigned int teamSize_{4};
+        short unsigned int playerAmount_{2};
         bool buttonClicked(const sf::Sprite&);
         void createButton(const std::string&, const std::string&, const sf::Vector2f&);
     public:
@@ -25,5 +27,7 @@ class MenuScreen{
         void update();
         void draw();
         bool getGameStart();
+        short unsigned int getTeamSize(){return teamSize_;};
+        short unsigned int getPlayerAmount(){return playerAmount_;};
 };
 #endif

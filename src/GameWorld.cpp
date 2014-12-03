@@ -7,16 +7,15 @@
 
 GameWorld::GameWorld(sf::RenderWindow& window, InputHandler& inputhandler) : gameWindow{&window}, input{&inputhandler}, camera_{window}  {
     environment_.randomizeWind();
-    playerVector.push_back(std::unique_ptr<Player>{new Player{{255,0,0}}});
-    playerVector.push_back(std::unique_ptr<Player>{new Player{{0,0,255}}});
-    for(auto& i : playerVector)
-        i->insertUnit((new Unit{Assets::LOAD_TEXTURE("test.png"), Assets::LOAD_TEXTURE("testa.png"), {static_cast<float>(Random::GENERATE_MAX(environment_.getTerrainSize())), 180}, 2, 150, i.get()}));
-    for(auto& i : playerVector)
-        i->insertUnit((new Unit{Assets::LOAD_TEXTURE("test2.png"), Assets::LOAD_TEXTURE("testa.png"), {static_cast<float>(Random::GENERATE_MAX(environment_.getTerrainSize())), 180}, 2, 150, i.get()}));
-    for(auto& i : playerVector)
-        i->insertUnit((new Unit{Assets::LOAD_TEXTURE("test3.png"), Assets::LOAD_TEXTURE("testa.png"), {static_cast<float>(Random::GENERATE_MAX(environment_.getTerrainSize())), 180}, 2, 150, i.get()}));
-    for(auto& i : playerVector)
-        i->insertUnit((new Unit{Assets::LOAD_TEXTURE("test4.png"), Assets::LOAD_TEXTURE("testa.png"), {static_cast<float>(Random::GENERATE_MAX(environment_.getTerrainSize())), 180}, 2, 150, i.get()}));
+}
+
+void GameWorld::initiate(short unsigned int players, short unsigned int units){
+    for(int i{0}; i < players; ++i)
+        playerVector.push_back(std::unique_ptr<Player>{new Player{{Random::GENERATE(),Random::GENERATE(),Random::GENERATE()}}});
+    for(int i{0}; i < units; ++i){
+        for(auto& i : playerVector)
+            i->insertUnit((new Unit{Assets::LOAD_TEXTURE("test2.png"), Assets::LOAD_TEXTURE("testa.png"), {static_cast<float>(Random::GENERATE_MAX(environment_.getTerrainSize())), 180}, 2, 150, i.get()}));
+    }
     currentUnit = (*playerVector.begin())->getNextUnit();
 }
 
@@ -54,11 +53,11 @@ void GameWorld::update() {
     if(currentUnit->isShooting()) {
         projectileVector.push_back(std::unique_ptr<Projectile>{
                 new Projectile{Assets::LOAD_TEXTURE("bullet.png"), currentUnit->getPosition(), 0.0f, 10, 
-                    currentUnit->getShootMomentum(*gameWindow), 
-                    environment_.getWindForce(),
-                    currentUnit->getShootAngle(), 
-                    (*currentPlayer)->getCurrentWeapon()
-                    }
+                currentUnit->getShootMomentum(*gameWindow), 
+                environment_.getWindForce(),
+                currentUnit->getShootAngle(), 
+                (*currentPlayer)->getCurrentWeapon()
+                }
                 });
     }
     if(input->isKeyReleased(sf::Keyboard::Key::Return) && currentUnit->inControl()){

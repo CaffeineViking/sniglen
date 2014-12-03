@@ -20,11 +20,13 @@ class GameWorld {
         InputHandler* input;
         Camera camera_;
         Unit* currentUnit;
+        bool newGame_ = true;
 
     public:
         GameWorld(sf::RenderWindow&, InputHandler&);
         void update();
         void draw();
+        void initiate(short unsigned int players, short unsigned int units);
 };
 
 #endif // GAMEWORLD_HPP
