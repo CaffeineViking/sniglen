@@ -25,7 +25,7 @@ int main() {
         if (input.isKeyPressed(sf::Keyboard::Key::Escape)) {
             window.close();
         }
-        if(input.isKeyReleased(sf::Keyboard::Key::Num1)){
+        if(input.isKeyReleased(sf::Keyboard::Key::Delete)){
             if(state == gameState::menu)
                 state = gameState::game;
             else

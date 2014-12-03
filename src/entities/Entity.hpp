@@ -44,7 +44,7 @@ class Unit: public Entity{
     private:
         enum class unitState{idle=0, walking, falling, shooting};
         unitState state_; // Used to tell what the unit is currently doing
-        Player* owner_;  
+        Player* owner_;
         float aimAngle_ = 90;
         sf::Sprite crosshair_;
         int shootPower_{0}; // Release power of shots

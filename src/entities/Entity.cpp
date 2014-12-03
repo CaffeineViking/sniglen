@@ -116,8 +116,8 @@ void Unit::checkExplosion(const sf::CircleShape& expl) {
     float distanceY{expl.getPosition().y - getPos().y};
     float distance{std::sqrt(std::pow(distanceX, 2.0f) + std::pow(distanceY, 2.0f))};
     if (distance <= expl.getRadius()) {
-        momentum_.x -= (distanceX * 32) / distance;
-        momentum_.y -= (distanceY * 32) / distance;
+        momentum_.x -= (distanceX * (expl.getRadius() / 2.0f)) / distance;
+        momentum_.y -= (distanceY * (expl.getRadius() / 2.0f)) / distance;
     }
 }
 void Unit::draw(sf::RenderWindow& window){

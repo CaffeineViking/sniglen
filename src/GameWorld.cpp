@@ -10,13 +10,13 @@ GameWorld::GameWorld(sf::RenderWindow& window, InputHandler& inputhandler) : gam
     playerVector.push_back(std::unique_ptr<Player>{new Player{{255,0,0}}});
     playerVector.push_back(std::unique_ptr<Player>{new Player{{0,0,255}}});
     for(auto& i : playerVector)
-        i->insertUnit((new Unit{Assets::LOAD_TEXTURE("test.png"), Assets::LOAD_TEXTURE("testa.png"), {static_cast<float>(Random::GENERATE_MAX(environment_.getTerrainSize())), 180}, 2, 150}));
+        i->insertUnit((new Unit{Assets::LOAD_TEXTURE("test.png"), Assets::LOAD_TEXTURE("testa.png"), {static_cast<float>(Random::GENERATE_MAX(environment_.getTerrainSize())), 180}, 2, 150, i.get()}));
     for(auto& i : playerVector)
-        i->insertUnit((new Unit{Assets::LOAD_TEXTURE("test2.png"), Assets::LOAD_TEXTURE("testa.png"), {static_cast<float>(Random::GENERATE_MAX(environment_.getTerrainSize())), 180}, 2, 150}));
+        i->insertUnit((new Unit{Assets::LOAD_TEXTURE("test2.png"), Assets::LOAD_TEXTURE("testa.png"), {static_cast<float>(Random::GENERATE_MAX(environment_.getTerrainSize())), 180}, 2, 150, i.get()}));
     for(auto& i : playerVector)
-        i->insertUnit((new Unit{Assets::LOAD_TEXTURE("test3.png"), Assets::LOAD_TEXTURE("testa.png"), {static_cast<float>(Random::GENERATE_MAX(environment_.getTerrainSize())), 180}, 2, 150}));
+        i->insertUnit((new Unit{Assets::LOAD_TEXTURE("test3.png"), Assets::LOAD_TEXTURE("testa.png"), {static_cast<float>(Random::GENERATE_MAX(environment_.getTerrainSize())), 180}, 2, 150, i.get()}));
     for(auto& i : playerVector)
-        i->insertUnit((new Unit{Assets::LOAD_TEXTURE("test4.png"), Assets::LOAD_TEXTURE("testa.png"), {static_cast<float>(Random::GENERATE_MAX(environment_.getTerrainSize())), 180}, 2, 150}));
+        i->insertUnit((new Unit{Assets::LOAD_TEXTURE("test4.png"), Assets::LOAD_TEXTURE("testa.png"), {static_cast<float>(Random::GENERATE_MAX(environment_.getTerrainSize())), 180}, 2, 150, i.get()}));
     currentUnit = (*playerVector.begin())->getNextUnit();
 }
 

@@ -126,6 +126,26 @@ void InputHandler::keyboardUpdate(){
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num2)){ //500 To be changed to variable y coords
         pressedKeys_.insert(sf::Keyboard::Key::Num2);
     }
+    // Num3
+    if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num3) && pressedKeys_.find(sf::Keyboard::Key::Num3) != pressedKeys_.end()){
+        releasedKeys_.insert(sf::Keyboard::Key::Num3);
+    }
+    if(!sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num3)){
+        pressedKeys_.erase(sf::Keyboard::Key::Num3);
+    }
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num3)){ //500 To be changed to variable y coords
+        pressedKeys_.insert(sf::Keyboard::Key::Num3);
+    }
+    // Delete
+    if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Delete) && pressedKeys_.find(sf::Keyboard::Key::Delete) != pressedKeys_.end()){
+        releasedKeys_.insert(sf::Keyboard::Key::Delete);
+    }
+    if(!sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Delete)){
+        pressedKeys_.erase(sf::Keyboard::Key::Delete);
+    }
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Delete)){ //500 To be changed to variable y coords
+        pressedKeys_.insert(sf::Keyboard::Key::Delete);
+    }
 }
 bool InputHandler::isKeyPressed(sf::Keyboard::Key key) const{
     return pressedKeys_.find(key) != pressedKeys_.end();
