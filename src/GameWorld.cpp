@@ -32,7 +32,7 @@ void GameWorld::update() {
             environment_.getTerrain().destroy(explosion);
             for (auto& player : playerVector) {
                 for (Unit* unit : player->getTeam()) {
-                    unit->checkExplosion(explosion);
+                    unit->checkExplosion(explosion, projectile->getDamage());
                 }
             }
         }
@@ -81,7 +81,7 @@ void GameWorld::update() {
     // in environment and the window size to make sure the player is always looking within game bounds.
     camera_.update(*currentUnit, environment_, gameWindow->getSize().y / 2.0f);
     if (input->isKeyReleased(sf::Keyboard::Key::Tab) || input->isKeyReleased(sf::Keyboard::Key::M)) {
-        camera_.toggleZoom();
+        camera_.toggleZoom(environment_);
     }
 }
 
