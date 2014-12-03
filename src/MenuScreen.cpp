@@ -2,19 +2,26 @@
 
 MenuScreen::MenuScreen(sf::RenderWindow& screen, InputHandler& handler): window_{&screen}, input_{&handler} {
     windowSize_ = (sf::Vector2f)window_->getSize();
-    createButton("test2.png", "Start", {windowSize_.x/2, windowSize_.y/2});
+    createButton("test2.png", "Setup", {windowSize_.x/2, windowSize_.y/2});
     createButton("test3.png", "Options", {windowSize_.x/2 + 100, windowSize_.y/2});
+    createButton("test.png", "Exit", {windowSize_.x/2, windowSize_.y/2 + 100});
 }
 
 void MenuScreen::update(){
     if(redraw_){
         if(state_ == MenuState::main){
             buttonVector_.clear();
-            createButton("test2.png", "Start", {windowSize_.x/2, windowSize_.y/2});
+            createButton("test2.png", "Setup", {windowSize_.x/2, windowSize_.y/2});
             createButton("test3.png", "Options", {windowSize_.x/2 + 100, windowSize_.y/2});
+            createButton("test.png", "Exit", {windowSize_.x/2, windowSize_.y/2 + 100});
         }
         else if(state_ == MenuState::setup){
             buttonVector_.clear();
+            createButton("bullet.png", "incTeam", {windowSize_.x/2 - 50, windowSize_.y/2});
+            createButton("bullet.png", "decTeam", {windowSize_.x/2 + 50, windowSize_.y/2});
+            createButton("test3.png", "incPlayers", {windowSize_.x/2 - 50, windowSize_.y/2 - 50});
+            createButton("test3.png", "decPlayers", {windowSize_.x/2 + 50, windowSize_.y/2 - 50});
+            createButton("test.png", "StartGame", {windowSize_.x/2, windowSize_.y/2 + 100});
             createButton("test2.png", "Back", {windowSize_.x/2, windowSize_.y-100});
         }
         else if(state_ == MenuState::option){
@@ -27,12 +34,25 @@ void MenuScreen::update(){
     if(input_->mouseReleased()){
         for(std::pair<std::string, sf::Sprite*> button : buttonVector_){
             if(buttonClicked(*button.second)){
-                if(button.first == "Start")
+                if(button.first == "StartGame")
+                    gameStart_ = true;
+                if(button.first == "incTeam" && teamSize_ < 5)
+                    ++teamSize_;
+                if(button.first == "decTeam" && teamSize_ > 1)
+                    --teamSize_;
+                if(button.first == "incPlayers" && playerAmount_ < 5)
+                    ++playerAmount_;
+                if(button.first == "decPlayers" && playerAmount_ > 1)
+                    --playerAmount_;
+                if(button.first == "Setup")
                     state_ = MenuState::setup;
                 if(button.first == "Options")
                     state_ = MenuState::option;
                 if(button.first == "Back")
                     state_ = MenuState::main;
+                if(button.first == "Exit")
+                    window_->close();
+
             }
             redraw_ = true;
         }

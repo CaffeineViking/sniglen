@@ -38,8 +38,10 @@ int main() {
         else if(state == gameState::menu){
             window.setView(window.getDefaultView());
             menu.update();
-            if(menu.getGameStart())
+            if(menu.getGameStart()){
                 state = gameState::game;
+                game.initiate(menu.getPlayerAmount(), menu.getTeamSize());
+            }
         }
 
         const sf::Color CLEAR_COLOR{0x30, 0x30, 0x30};
