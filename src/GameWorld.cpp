@@ -8,15 +8,14 @@
 GameWorld::GameWorld(sf::RenderWindow& window, InputHandler& inputhandler) : gameWindow{&window}, input{&inputhandler}, camera_{window}  {}
 
 void GameWorld::initiate(short unsigned int players, short unsigned int units){
-    environment_ = std::unique_ptr<Environment>{new Environment{9.82, 2560 + (128 * players * units)}};
+    environment_ = std::unique_ptr<Environment>{new Environment{9.82, static_cast<unsigned>(2560 + (128 * players * units))}};
     environment_->randomizeWind();
-    std::cout << environment_->getTerrainSize() << std::endl;
 
     for(int i{0}; i < players; ++i)
         playerVector.push_back(std::unique_ptr<Player>{new Player{{(unsigned char)Random::GENERATE_MAX(255),(unsigned char)Random::GENERATE_MAX(255),(unsigned char)Random::GENERATE_MAX(255)}}});
     for(int i{0}; i < units; ++i){
         for(auto& i : playerVector)
-            i->insertUnit((new Unit{Assets::LOAD_TEXTURE("unit.png"), Assets::LOAD_TEXTURE("testa.png"), {static_cast<float>(Random::GENERATE_MAX(environment_.getTerrainSize())), 180}, 2, 150, i.get()}));
+            i->insertUnit((new Unit{Assets::LOAD_TEXTURE("unit.png"), Assets::LOAD_TEXTURE("testa.png"), {static_cast<float>(Random::GENERATE_MAX(environment_->getTerrainSize())), 180}, 2, 150, i.get()}));
     }
     currentUnit = (*playerVector.begin())->getNextUnit();
 }
