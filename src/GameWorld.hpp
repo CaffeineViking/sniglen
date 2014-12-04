@@ -16,7 +16,7 @@ class GameWorld {
         sf::RenderWindow* gameWindow;
         std::vector<std::unique_ptr<Player>> playerVector;
         std::vector<std::unique_ptr<Projectile>> projectileVector;
-        Environment environment_{9.82, 2560};
+        std::unique_ptr<Environment> environment_;
         InputHandler* input;
         Camera camera_;
         Unit* currentUnit;

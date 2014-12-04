@@ -5,16 +5,18 @@
 #include "utilities/Random.hpp"
 #include "utilities/Assets.hpp"
 
-GameWorld::GameWorld(sf::RenderWindow& window, InputHandler& inputhandler) : gameWindow{&window}, input{&inputhandler}, camera_{window}  {
-    environment_.randomizeWind();
-}
+GameWorld::GameWorld(sf::RenderWindow& window, InputHandler& inputhandler) : gameWindow{&window}, input{&inputhandler}, camera_{window}  {}
 
 void GameWorld::initiate(short unsigned int players, short unsigned int units){
+    environment_ = std::unique_ptr<Environment>{new Environment{9.82, 2560 + (128 * players * units)}};
+    environment_->randomizeWind();
+    std::cout << environment_->getTerrainSize() << std::endl;
+
     for(int i{0}; i < players; ++i)
         playerVector.push_back(std::unique_ptr<Player>{new Player{{(unsigned char)Random::GENERATE_MAX(255),(unsigned char)Random::GENERATE_MAX(255),(unsigned char)Random::GENERATE_MAX(255)}}});
     for(int i{0}; i < units; ++i){
         for(auto& i : playerVector)
-            i->insertUnit((new Unit{Assets::LOAD_TEXTURE("test2.png"), Assets::LOAD_TEXTURE("testa.png"), {static_cast<float>(Random::GENERATE_MAX(environment_.getTerrainSize())), 180}, 2, 150, i.get()}));
+            i->insertUnit((new Unit{Assets::LOAD_TEXTURE("test2.png"), Assets::LOAD_TEXTURE("testa.png"), {static_cast<float>(Random::GENERATE_MAX(environment_->getTerrainSize())), 180}, 2, 150, i.get()}));
     }
     currentUnit = (*playerVector.begin())->getNextUnit();
 }
@@ -22,13 +24,13 @@ void GameWorld::initiate(short unsigned int players, short unsigned int units){
 void GameWorld::update() {
     static auto currentPlayer = playerVector.begin();
     //input.update(gameWindow);
-    currentUnit->update(*input, environment_.getTerrain().isColliding(*currentUnit));
+    currentUnit->update(*input, environment_->getTerrain().isColliding(*currentUnit));
 
     for(std::unique_ptr<Projectile>& projectile : projectileVector){
-        projectile->update(*input, environment_.getTerrain().isColliding(*projectile));
-        if(environment_.getTerrain().isColliding(*projectile)){
+        projectile->update(*input, environment_->getTerrain().isColliding(*projectile));
+        if(environment_->getTerrain().isColliding(*projectile)){
             auto explosion = projectile->explode();
-            environment_.getTerrain().destroy(explosion);
+            environment_->getTerrain().destroy(explosion);
             for (auto& player : playerVector) {
                 for (Unit* unit : player->getTeam()) {
                     unit->checkExplosion(explosion, projectile->getDamage());
@@ -54,7 +56,7 @@ void GameWorld::update() {
         projectileVector.push_back(std::unique_ptr<Projectile>{
                 new Projectile{Assets::LOAD_TEXTURE("bullet.png"), currentUnit->getPosition(), 0.0f, 10, 
                 currentUnit->getShootMomentum(*gameWindow), 
-                environment_.getWindForce(),
+                environment_->getWindForce(),
                 currentUnit->getShootAngle(), 
                 (*currentPlayer)->getCurrentWeapon()
                 }
@@ -65,28 +67,28 @@ void GameWorld::update() {
         if(currentPlayer == playerVector.end())
             currentPlayer = playerVector.begin();
         currentUnit = (*currentPlayer)->getNextUnit();
-        environment_.randomizeWind();
+        environment_->randomizeWind();
     }
 
     for (auto& player : playerVector) {
         for (Unit* unit : player->getTeam()) {
             if (currentUnit != unit)
-                unit->update(InputHandler{}, environment_.getTerrain().isColliding(*unit));
+                unit->update(InputHandler{}, environment_->getTerrain().isColliding(*unit));
         }
     }
 
     // The given parameters passed to the camera update function will be used to
     // detemine how the currentUnit will be followed, thus it is also required to pass
     // in environment and the window size to make sure the player is always looking within game bounds.
-    camera_.update(*currentUnit, environment_, gameWindow->getSize().y / 2.0f);
+    camera_.update(*currentUnit, *environment_, gameWindow->getSize().y / 2.0f);
     if (input->isKeyReleased(sf::Keyboard::Key::Tab) || input->isKeyReleased(sf::Keyboard::Key::M)) {
-        camera_.toggleZoom(environment_);
+        camera_.toggleZoom(*environment_);
     }
 }
 
 void GameWorld::draw() {
     // Draw the terrain to the game window.
-    environment_.getTerrain().draw(*gameWindow);
+    environment_->getTerrain().draw(*gameWindow);
 
     // Draw all units to the game window.
     for(std::unique_ptr<Player>& player : playerVector){
