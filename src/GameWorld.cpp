@@ -8,6 +8,7 @@
 GameWorld::GameWorld(sf::RenderWindow& window, InputHandler& inputhandler) : gameWindow{&window}, input{&inputhandler}, camera_{window}  {}
 
 void GameWorld::initiate(short unsigned int players, short unsigned int units){
+    roundTime_ = gameTime_.getElapsedTime();
     playerVector.clear();
     projectileVector.clear();
     environment_ = std::unique_ptr<Environment>{new Environment{9.82, static_cast<unsigned>(2560 + (128 * players * units))}};
@@ -20,11 +21,11 @@ void GameWorld::initiate(short unsigned int players, short unsigned int units){
             i->insertUnit(new Unit{Assets::LOAD_TEXTURE("unit.png"), Assets::LOAD_TEXTURE("testa.png"), {static_cast<float>(Random::GENERATE_MAX(environment_->getTerrainSize())), 180}, 2, 150, i.get()});
     }
     currentUnit = (*playerVector.begin())->getNextUnit();
+    cameraTarget_ = currentUnit;
 }
 
 void GameWorld::update() {
     static auto currentPlayer = playerVector.begin();
-    //input.update(gameWindow);
     currentUnit->update(*input, environment_->getTerrain().isColliding(*currentUnit));
 
     for(std::unique_ptr<Projectile>& projectile : projectileVector){
@@ -47,6 +48,7 @@ void GameWorld::update() {
     if(!projectileVector.empty()){
         while(iteratedOver + removed < projectileVector.size()){
             if(projectileVector.at(iteratedOver)->isRemoved()){
+                projectileVector.at(iteratedOver) = nullptr;
                 projectileVector.at(iteratedOver).swap(projectileVector.at(projectileVector.size()-(++removed)));
             }
             else
@@ -64,13 +66,17 @@ void GameWorld::update() {
                 (*currentPlayer)->getCurrentWeapon().get()
                 }
                 }));
+        cameraTarget_ = projectileVector.back().get();
     }
-    if(input->isKeyReleased(sf::Keyboard::Key::Return) && currentUnit->inControl()){
+
+    if((gameTime_.getElapsedTime() - roundTime_).asSeconds() > 10.0 && currentUnit->inControl()){
         ++currentPlayer;
         if(currentPlayer == playerVector.end())
             currentPlayer = playerVector.begin();
         currentUnit = (*currentPlayer)->getNextUnit();
+        cameraTarget_ = currentUnit;
         environment_->randomizeWind();
+        roundTime_ = gameTime_.getElapsedTime();
     }
 
     for (auto& player : playerVector) {
@@ -83,7 +89,8 @@ void GameWorld::update() {
     // The given parameters passed to the camera update function will be used to
     // detemine how the currentUnit will be followed, thus it is also required to pass
     // in environment and the window size to make sure the player is always looking within game bounds.
-    camera_.update(*currentUnit, *environment_, gameWindow->getSize().y / 2.0f);
+    if (cameraTarget_ == nullptr) cameraTarget_ = currentUnit;
+    camera_.update(cameraTarget_, *environment_, gameWindow->getSize().y / 2.0f);
     if (input->isKeyReleased(sf::Keyboard::Key::Tab) || input->isKeyReleased(sf::Keyboard::Key::M)) {
         camera_.toggleZoom(*environment_);
     }
