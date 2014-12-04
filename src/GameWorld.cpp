@@ -17,7 +17,7 @@ void GameWorld::initiate(short unsigned int players, short unsigned int units){
         playerVector.push_back(std::unique_ptr<Player>{new Player{{(unsigned char)Random::GENERATE_MAX(255),(unsigned char)Random::GENERATE_MAX(255),(unsigned char)Random::GENERATE_MAX(255)}}});
     for(int i{0}; i < units; ++i){
         for(auto& i : playerVector)
-            i->insertUnit((new Unit{Assets::LOAD_TEXTURE("unit.png"), Assets::LOAD_TEXTURE("testa.png"), {static_cast<float>(Random::GENERATE_MAX(environment_->getTerrainSize())), 180}, 2, 150, i.get()}));
+            i->insertUnit(new Unit{Assets::LOAD_TEXTURE("unit.png"), Assets::LOAD_TEXTURE("testa.png"), {static_cast<float>(Random::GENERATE_MAX(environment_->getTerrainSize())), 180}, 2, 150, i.get()});
     }
     currentUnit = (*playerVector.begin())->getNextUnit();
 }
@@ -35,7 +35,7 @@ void GameWorld::update() {
             sound.play();
             environment_->getTerrain().destroy(explosion);
             for (auto& player : playerVector) {
-                for (Unit* unit : player->getTeam()) {
+                for (auto& unit : player->getTeam()) {
                     unit->checkExplosion(explosion, projectile->getDamage());
                 }
             }
@@ -56,14 +56,14 @@ void GameWorld::update() {
     }
 
     if(currentUnit->isShooting()) {
-        projectileVector.push_back(std::unique_ptr<Projectile>{
+        projectileVector.push_back(std::move(std::unique_ptr<Projectile>{
                 new Projectile{Assets::LOAD_TEXTURE("bullet.png"), currentUnit->getPosition(), 0.0f, 10, 
                 currentUnit->getShootMomentum(*gameWindow), 
                 environment_->getWindForce(),
                 currentUnit->getShootAngle(), 
-                (*currentPlayer)->getCurrentWeapon()
+                (*currentPlayer)->getCurrentWeapon().get()
                 }
-                });
+                }));
     }
     if(input->isKeyReleased(sf::Keyboard::Key::Return) && currentUnit->inControl()){
         ++currentPlayer;
@@ -74,7 +74,7 @@ void GameWorld::update() {
     }
 
     for (auto& player : playerVector) {
-        for (Unit* unit : player->getTeam()) {
+        for (auto& unit : player->getTeam()) {
             if (currentUnit != unit)
                 unit->update(InputHandler{}, environment_->getTerrain().isColliding(*unit));
         }

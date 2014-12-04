@@ -6,6 +6,7 @@
 #include "../utilities/Weapon.hpp"
 #include "../utilities/InputHandler.hpp"
 #include <iostream>
+#include <memory>
 #include <vector>
 
 class Player;
@@ -44,7 +45,7 @@ class Unit: public Entity{
     private:
         enum class unitState{idle=0, walking, falling, shooting};
         unitState state_; // Used to tell what the unit is currently doing
-        Player* owner_;
+        std::unique_ptr<Player> owner_;
         float aimAngle_ = 0;
         sf::Sprite crosshair_;
         int shootPower_{0}; // Release power of shots
@@ -89,7 +90,7 @@ class Projectile: public Entity{
     public:
         bool deleted_ = false;
         bool isRemoved() const { return removed_; }
-        Projectile(const sf::Texture& tex, const sf::Vector2f& pos, float spd, int mass, const sf::Vector2f& inMom, float wind, float angle, Weapon* weapon = nullptr ):
+        Projectile(const sf::Texture& tex, const sf::Vector2f& pos, float spd, int mass, const sf::Vector2f& inMom, float wind, float angle, Weapon* weapon):
             Entity(tex, {pos.x, pos.y-1}, spd, mass), wind_{wind}, type_{weapon}, angle_{angle}{
                 momentum_ = inMom;
                 sprite_.setPosition(position_);

@@ -1,8 +1,20 @@
 #include "Player.hpp"
 
+Player::Player(sf::Color col) : color_{col}{
+    weaponList_.push_back(std::make_pair<std::unique_ptr<Weapon>, int>(std::unique_ptr<Weapon>{new Bazooka()}, 25));
+    weaponList_.push_back(std::make_pair<std::unique_ptr<Weapon>, int>(std::unique_ptr<Weapon>{new MiniBaz()}, 5));
+    weaponList_.push_back(std::make_pair<std::unique_ptr<Weapon>, int>(std::unique_ptr<Weapon>{new Nuke()}, 2));
+}
+
+Player::~Player(){
+    for(Unit* unit : team_)
+        delete unit;
+}
+
 Unit* Player::getRandomUnit(){
     return team_[Random::GENERATE_MAX(team_.size()-1)]; // Return random unit from team
 }
+
 Unit* Player::getNextUnit(){
     if(unitCounter_+1 >= (int)team_.size()){ // Make sure that the unit counter is in bounds
         unitCounter_ = -1; 
@@ -21,7 +33,7 @@ void Player::insertUnit(Unit* unit){
     team_.push_back(unit);
 }
 
-Weapon* Player::getCurrentWeapon(){
+std::unique_ptr<Weapon>& Player::getCurrentWeapon(){
     return weaponList_[currentWeapon_].first;
 }
 
