@@ -33,7 +33,7 @@ void GameWorld::update() {
     if(!projectileVector.empty()){
         while(iteratedOver + removed < projectileVector.size()){
             if(projectileVector.at(iteratedOver)->isRemoved()){
-                cameraTarget_ = currentUnit;
+                // cameraTarget_ = currentUnit;
                 projectileVector.at(iteratedOver) = nullptr;
                 projectileVector.at(iteratedOver).swap(projectileVector.at(projectileVector.size()-(++removed)));
             }
@@ -66,6 +66,9 @@ void GameWorld::update() {
                 for (auto& unit : player->getTeam()) {
                     if (unit->checkExplosion(explosion, projectile->getDamage()))
                         cameraTarget_ = unit;
+                    else{
+                        cameraTarget_ = currentUnit;
+                    }
                 }
             }
         }
