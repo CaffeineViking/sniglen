@@ -105,7 +105,7 @@ void Unit::move(){
     Entity::move();
 }    
 void Unit::updateCrosshair(){
-    crosshair_.setPosition(sprite_.getPosition().x + shootPower_*cos(toRadians(aimAngle_)), sprite_.getPosition().y + shootPower_*sin(toRadians(aimAngle_)));
+    crosshair_.setPosition(sprite_.getPosition().x + 50*cos(toRadians(aimAngle_)), sprite_.getPosition().y + 50*sin(toRadians(aimAngle_)));
 }
 void Unit::collide(){
     state_ = unitState::idle;
