@@ -17,11 +17,11 @@ void MenuScreen::update(){
         }
         else if(state_ == MenuState::setup){
             buttonVector_.clear();
-            createButton("bullet.png", "incTeam", {windowSize_.x/2 - 50, windowSize_.y/2});
+            createButton("incTeam.png", "incTeam", {windowSize_.x/2 - 50, windowSize_.y/2});
             createButton("bullet.png", "decTeam", {windowSize_.x/2 + 50, windowSize_.y/2});
-            createButton("test3.png", "incPlayers", {windowSize_.x/2 - 50, windowSize_.y/2 - 50});
-            createButton("test3.png", "decPlayers", {windowSize_.x/2 + 50, windowSize_.y/2 - 50});
-            createButton("test.png", "StartGame", {windowSize_.x/2, windowSize_.y/2 + 100});
+            createButton("incPlayers.png", "incPlayers", {windowSize_.x/2 - 50, windowSize_.y/2 - 50});
+            createButton("decPlayers.png", "decPlayers", {windowSize_.x/2 + 50, windowSize_.y/2 - 50});
+            createButton("StartGame.png", "StartGame", {windowSize_.x/2, windowSize_.y/2 + 100});
             createButton("test2.png", "Back", {windowSize_.x/2, windowSize_.y-100});
         }
         else if(state_ == MenuState::option){
