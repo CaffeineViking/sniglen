@@ -38,15 +38,33 @@ void Entity::collide(){
 }
 void Unit::getInput(const InputHandler& input){
     shoot_ = false;
-    if(input.isKeyPressed(sf::Keyboard::Key::Space))
+    if(state_ != unitState::falling && input.isKeyPressed(sf::Keyboard::Key::Space))
         state_ = unitState::shooting;
-    else if(input.isKeyReleased(sf::Keyboard::Key::Space))
+    else if(state_ != unitState::falling && input.isKeyReleased(sf::Keyboard::Key::Space))
         state_ = unitState::idle;
     if(input.isKeyPressed(sf::Keyboard::Key::Up)){
-        aimAngle_ -= 5;
+        if(!lookLeft_){
+            aimAngle_ -= 5;
+            if(aimAngle_ < -90)
+                aimAngle_ = -90;
+        }
+        else if(lookLeft_){
+            aimAngle_ += 5;
+            if(aimAngle_ > 270)
+                aimAngle_ = 270;
+        }
     }
     if(input.isKeyPressed(sf::Keyboard::Key::Down)){
-        aimAngle_ += 5;
+        if(!lookLeft_){
+            aimAngle_ += 5;
+            if(aimAngle_ > 90)
+                aimAngle_ = 90;
+        }
+        else if(lookLeft_){
+            aimAngle_ -= 5;
+            if(aimAngle_ < 90)
+                aimAngle_ = 90;
+        }
     }
     if(state_ == unitState::shooting){
         ++shootPower_;
@@ -83,13 +101,19 @@ void Unit::getMovement(const InputHandler& input){
         }
         if (input.isKeyPressed(sf::Keyboard::Key::Left) && -momentum_.x <= maxMomentum_.x){
             momentum_.x += -speed_;
+            if(!lookLeft_)
+                aimAngle_ = (180 - aimAngle_);
             lookLeft_ = true; 
+            sprite_.setScale(-1, 1);
         }
         else if (input.isKeyPressed(sf::Keyboard::Key::Left))
             momentum_.x = -maxMomentum_.x;
         if (input.isKeyPressed(sf::Keyboard::Key::Right) && momentum_.x <= maxMomentum_.x){
             momentum_.x += speed_;
+            if(lookLeft_)
+                aimAngle_ = 0 - (aimAngle_ - 180);
             lookLeft_ = false;
+            sprite_.setScale(1, 1);
         }
         else if (input.isKeyPressed(sf::Keyboard::Key::Right) && momentum_.x <= maxMomentum_.x)
             momentum_.x = maxMomentum_.x;
@@ -126,8 +150,8 @@ void Unit::draw(sf::RenderWindow& window){
 }
 sf::Vector2f Unit::getShootMomentum(sf::RenderWindow& screen){ 
     sf::Vector2f momentum;
-    momentum.x = (crosshair_.getPosition().x - sprite_.getPosition().x);
-    momentum.y = (crosshair_.getPosition().y - sprite_.getPosition().y);
+    momentum.x = shootPower_ * cos(toRadians(aimAngle_));
+    momentum.y = shootPower_ * sin(toRadians(aimAngle_));
     screen.setTitle("x: " + std::to_string(momentum.x) + " - y: " + std::to_string(momentum.y));
     shootPower_ = 0;
     return momentum;

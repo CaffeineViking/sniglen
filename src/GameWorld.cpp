@@ -10,6 +10,8 @@ GameWorld::GameWorld(sf::RenderWindow& window, InputHandler& inputhandler) : gam
 }
 
 void GameWorld::initiate(short unsigned int players, short unsigned int units){
+    playerVector.clear();
+    projectileVector.clear();
     for(int i{0}; i < players; ++i)
         playerVector.push_back(std::unique_ptr<Player>{new Player{{(unsigned char)Random::GENERATE_MAX(255),(unsigned char)Random::GENERATE_MAX(255),(unsigned char)Random::GENERATE_MAX(255)}}});
     for(int i{0}; i < units; ++i){
@@ -29,6 +31,7 @@ void GameWorld::update() {
         if(environment_.getTerrain().isColliding(*projectile)){
             auto explosion = projectile->explode();
             environment_.getTerrain().destroy(explosion);
+            sound.play();
             for (auto& player : playerVector) {
                 for (Unit* unit : player->getTeam()) {
                     unit->checkExplosion(explosion, projectile->getDamage());

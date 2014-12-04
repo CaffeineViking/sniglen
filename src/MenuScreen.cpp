@@ -4,7 +4,7 @@ MenuScreen::MenuScreen(sf::RenderWindow& screen, InputHandler& handler): window_
     windowSize_ = (sf::Vector2f)window_->getSize();
     createButton("test2.png", "Setup", {windowSize_.x/2, windowSize_.y/2});
     createButton("test3.png", "Options", {windowSize_.x/2 + 100, windowSize_.y/2});
-    createButton("test.png", "Exit", {windowSize_.x/2, windowSize_.y/2 + 100});
+    createButton("quit.png", "Exit", {windowSize_.x/2, windowSize_.y/2 + 100});
 }
 
 void MenuScreen::update(){
@@ -13,20 +13,20 @@ void MenuScreen::update(){
             buttonVector_.clear();
             createButton("test2.png", "Setup", {windowSize_.x/2, windowSize_.y/2});
             createButton("test3.png", "Options", {windowSize_.x/2 + 100, windowSize_.y/2});
-            createButton("test.png", "Exit", {windowSize_.x/2, windowSize_.y/2 + 100});
+            createButton("quit.png", "Exit", {windowSize_.x/2, windowSize_.y/2 + 100});
         }
         else if(state_ == MenuState::setup){
             buttonVector_.clear();
-            createButton("incTeam.png", "incTeam", {windowSize_.x/2 - 50, windowSize_.y/2});
-            createButton("bullet.png", "decTeam", {windowSize_.x/2 + 50, windowSize_.y/2});
+            createButton("incUnit.png", "incTeam", {windowSize_.x/2 - 50, windowSize_.y/2});
+            createButton("decUnit.png", "decTeam", {windowSize_.x/2 + 50, windowSize_.y/2});
             createButton("incPlayers.png", "incPlayers", {windowSize_.x/2 - 50, windowSize_.y/2 - 50});
             createButton("decPlayers.png", "decPlayers", {windowSize_.x/2 + 50, windowSize_.y/2 - 50});
             createButton("StartGame.png", "StartGame", {windowSize_.x/2, windowSize_.y/2 + 100});
-            createButton("test2.png", "Back", {windowSize_.x/2, windowSize_.y-100});
+            createButton("back.png", "Back", {windowSize_.x/2, windowSize_.y-100});
         }
         else if(state_ == MenuState::option){
             buttonVector_.clear();
-            createButton("test2.png", "Back", {windowSize_.x/2, windowSize_.y-100});
+            createButton("back.png", "Back", {windowSize_.x/2, windowSize_.y-100});
         } else {
         }
         redraw_ = false;

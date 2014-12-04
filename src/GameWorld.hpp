@@ -2,9 +2,11 @@
 #define GAMEWORLD_HPP
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <iostream>
 #include <vector>
 #include <memory>
+#include "utilities/Assets.hpp"
 #include "utilities/Player.hpp"
 #include "entities/Entity.hpp"
 #include "environment/Environment.hpp"
@@ -21,6 +23,7 @@ class GameWorld {
         Camera camera_;
         Unit* currentUnit;
         bool newGame_ = true;
+        sf::Sound sound{Assets::LOAD_SOUND("explosion.wav")};
 
     public:
         GameWorld(sf::RenderWindow&, InputHandler&);

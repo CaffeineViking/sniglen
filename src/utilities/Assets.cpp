@@ -25,7 +25,7 @@ sf::Music& Assets::LOAD_MUSIC(const std::string& name) {
 }
 
 const std::string Assets::PATH{"share/"};
-const std::string Assets::AUDIO_PATH{"audio/"};
+const std::string Assets::AUDIO_PATH{PATH + "audio/"};
 const std::string Assets::IMAGES_PATH{PATH + "images/"};
 const std::string Assets::OTHERS_PATH{PATH + "others/"};
 

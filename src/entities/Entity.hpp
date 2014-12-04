@@ -25,7 +25,7 @@ class Entity{
                 sprite_.setPosition(pos);
                 sprite_.setOrigin({(float)texture_.getSize().x/2, (float)texture_.getSize().y/2});
             }
-        bool lookLeft_{true};
+        bool lookLeft_{false};
         virtual void getMovement(const InputHandler&); // Reads input and sets what movements should be done
         virtual void applyPhysics(bool); // Applies friction and gravity to the movements that should be done
         virtual void move(); // Applies movement to the entity
@@ -45,7 +45,7 @@ class Unit: public Entity{
         enum class unitState{idle=0, walking, falling, shooting};
         unitState state_; // Used to tell what the unit is currently doing
         Player* owner_;
-        float aimAngle_ = 90;
+        float aimAngle_ = 0;
         sf::Sprite crosshair_;
         int shootPower_{0}; // Release power of shots
         bool shoot_ = false;
