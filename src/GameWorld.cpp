@@ -28,26 +28,12 @@ void GameWorld::update() {
     static auto currentPlayer = playerVector.begin();
     currentUnit->update(*input, environment_->getTerrain().isColliding(*currentUnit));
 
-    for(std::unique_ptr<Projectile>& projectile : projectileVector){
-        projectile->update(*input, environment_->getTerrain().isColliding(*projectile));
-        if(environment_->getTerrain().isColliding(*projectile)){
-            auto explosion = projectile->explode();
-            environment_->getTerrain().destroy(explosion);
-            sound.play();
-            environment_->getTerrain().destroy(explosion);
-            for (auto& player : playerVector) {
-                for (auto& unit : player->getTeam()) {
-                    unit->checkExplosion(explosion, projectile->getDamage());
-                }
-            }
-        }
-    }
-
     unsigned iteratedOver {0};
     unsigned removed {0};
     if(!projectileVector.empty()){
         while(iteratedOver + removed < projectileVector.size()){
             if(projectileVector.at(iteratedOver)->isRemoved()){
+                cameraTarget_ = currentUnit;
                 projectileVector.at(iteratedOver) = nullptr;
                 projectileVector.at(iteratedOver).swap(projectileVector.at(projectileVector.size()-(++removed)));
             }
@@ -59,14 +45,30 @@ void GameWorld::update() {
 
     if(currentUnit->isShooting()) {
         projectileVector.push_back(std::move(std::unique_ptr<Projectile>{
-                new Projectile{Assets::LOAD_TEXTURE("bullet.png"), currentUnit->getPosition(), 0.0f, 10, 
-                currentUnit->getShootMomentum(*gameWindow), 
-                environment_->getWindForce(),
-                currentUnit->getShootAngle(), 
-                (*currentPlayer)->getCurrentWeapon().get()
-                }
-                }));
+            new Projectile{Assets::LOAD_TEXTURE("bullet.png"), currentUnit->getPosition(), 0.0f, 10, 
+            currentUnit->getShootMomentum(*gameWindow), 
+            environment_->getWindForce(),
+             currentUnit->getShootAngle(), 
+            (*currentPlayer)->getCurrentWeapon().get()
+        }
+        }));
         cameraTarget_ = projectileVector.back().get();
+    }
+
+    for(std::unique_ptr<Projectile>& projectile : projectileVector){
+        projectile->update(*input, environment_->getTerrain().isColliding(*projectile));
+        if(environment_->getTerrain().isColliding(*projectile)){
+            auto explosion = projectile->explode();
+            environment_->getTerrain().destroy(explosion);
+            sound.play();
+            environment_->getTerrain().destroy(explosion);
+            for (auto& player : playerVector) {
+                for (auto& unit : player->getTeam()) {
+                    if (unit->checkExplosion(explosion, projectile->getDamage()))
+                        cameraTarget_ = unit;
+                }
+            }
+        }
     }
 
     if((gameTime_.getElapsedTime() - roundTime_).asSeconds() > 10.0 && currentUnit->inControl()){

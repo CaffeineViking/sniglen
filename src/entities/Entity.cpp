@@ -135,14 +135,18 @@ void Unit::collide(){
     state_ = unitState::idle;
     Entity::collide();
 }
-void Unit::checkExplosion(const sf::CircleShape& expl, float damage) {
+bool Unit::checkExplosion(const sf::CircleShape& expl, float damage) {
     float distanceX{expl.getPosition().x - getPos().x};
     float distanceY{expl.getPosition().y - getPos().y};
     float distance{std::sqrt(std::pow(distanceX, 2.0f) + std::pow(distanceY, 2.0f))};
+
     if (distance <= expl.getRadius()) {
         momentum_.x -= (distanceX * ((expl.getRadius() * damage) / 32.0f)) / distance;
         momentum_.y -= (distanceY * ((expl.getRadius() * damage) / 32.0f)) / distance;
+        return true;
     }
+
+    return false;
 }
 void Unit::draw(sf::RenderWindow& window){
     window.draw(sprite_);
