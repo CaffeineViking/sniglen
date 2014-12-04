@@ -13,32 +13,31 @@ void Camera::toggleZoom(const Environment& environment) {
     }
 }
 
-void Camera::update(const Unit& currentUnit, const Environment& environment, float yBounds) {
+void Camera::update(const Entity* followTarget, const Environment& environment, float yBounds) {
     float newCameraX{getPosition().x};
     float newCameraY{getPosition().y};
-
     if (zoomed_) {
         newCameraX = environment.getTerrainSize() / 2.0f;
         newCameraY = 0.0f;
     } else {
-        if (currentUnit.getPosition().x - view_.getSize().x / 4.0f < 0.0f) {
-            // Keep the camera still when currentUnit has reached the left end of the terrain.
+        if (followTarget->getPos().x - view_.getSize().x / 4.0f < 0.0f) {
+            // Keep the camera still when followTarget has reached the left end of the terrain.
             newCameraX = view_.getSize().x / 2.0f;
-        } else if (currentUnit.getPosition().x + view_.getSize().x / 4.0f > environment.getTerrainSize()) {
-            // Keep the camera still when currentUnit has reached the right end of the terrain.
+        } else if (followTarget->getPos().x + view_.getSize().x / 4.0f > environment.getTerrainSize()) {
+            // Keep the camera still when followTarget has reached the right end of the terrain.
             newCameraX = environment.getTerrainSize() - view_.getSize().x/2;
-        } else if (currentUnit.getPosition().x > getPosition().x + view_.getSize().x / 4.0f) {
-            // The camera can move right when currentUnit is within the left bounds.
-            newCameraX = currentUnit.getPosition().x - view_.getSize().x/4;
-        } else if (currentUnit.getPosition().x < getPosition().x - view_.getSize().x / 4.0f) {
-            // The camera can move left when currentUnit is within the left bounds.
-            newCameraX = currentUnit.getPosition().x + view_.getSize().x / 4.0f;
+        } else if (followTarget->getPos().x > getPosition().x + view_.getSize().x / 4.0f) {
+            // The camera can move right when followTarget is within the left bounds.
+            newCameraX = followTarget->getPos().x - view_.getSize().x/4;
+        } else if (followTarget->getPos().x < getPosition().x - view_.getSize().x / 4.0f) {
+            // The camera can move left when followTarget is within the left bounds.
+            newCameraX = followTarget->getPos().x + view_.getSize().x / 4.0f;
         }
 
-        if (currentUnit.getPosition().y > getPosition().y + view_.getSize().y / 4.0f) {
-            newCameraY = currentUnit.getPosition().y - view_.getSize().y / 4.0f;
-        } else if (currentUnit.getPosition().y < getPosition().y - view_.getSize().y / 4.0f) {
-            newCameraY = currentUnit.getPosition().y + view_.getSize().y / 4.0f;
+        if (followTarget->getPos().y > getPosition().y + view_.getSize().y / 4.0f) {
+            newCameraY = followTarget->getPos().y - view_.getSize().y / 4.0f;
+        } else if (followTarget->getPos().y < getPosition().y - view_.getSize().y / 4.0f) {
+            newCameraY = followTarget->getPos().y + view_.getSize().y / 4.0f;
         }
     }
 

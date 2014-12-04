@@ -21,7 +21,10 @@ class GameWorld {
         std::unique_ptr<Environment> environment_;
         InputHandler* input;
         Camera camera_;
+        sf::Clock gameTime_;
+        sf::Time roundTime_;
         Unit* currentUnit;
+        Entity* cameraTarget_;
         bool newGame_ = true;
         sf::Sound sound{Assets::LOAD_SOUND("explosion.wav")};
 

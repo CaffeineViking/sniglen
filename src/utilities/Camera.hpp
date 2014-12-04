@@ -11,7 +11,7 @@ public:
     Camera(const sf::RenderWindow&);
 
     void toggleZoom(const Environment&);
-    void update(const Unit&, const Environment&, float);
+    void update(const Entity*, const Environment&, float);
     const sf::Vector2f& getPosition() const;
     void draw(sf::RenderWindow&) const;
 
