@@ -26,7 +26,7 @@ void Camera::update(const Unit& currentUnit, const Environment& environment, flo
             newCameraX = view_.getSize().x / 2.0f;
         } else if (currentUnit.getPosition().x + view_.getSize().x / 4.0f > environment.getTerrainSize()) {
             // Keep the camera still when currentUnit has reached the right end of the terrain.
-            newCameraX = view_.getSize().x / 2.0f + environment.getTerrainSize() / 2.0f;
+            newCameraX = environment.getTerrainSize() - view_.getSize().x/2;
         } else if (currentUnit.getPosition().x > getPosition().x + view_.getSize().x / 4.0f) {
             // The camera can move right when currentUnit is within the left bounds.
             newCameraX = currentUnit.getPosition().x - view_.getSize().x/4;
