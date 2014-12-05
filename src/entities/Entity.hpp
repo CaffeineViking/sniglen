@@ -49,6 +49,7 @@ class Unit: public Entity{
         std::unique_ptr<Player> owner_;
         float aimAngle_ = 0;
         sf::Sprite crosshair_;
+        sf::Sprite tombstone_;
         int shootPower_{0}; // Release power of shots
         bool shoot_ = false;
         void getMovement(const InputHandler&) override;

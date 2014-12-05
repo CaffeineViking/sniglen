@@ -1,5 +1,6 @@
 #include "Entity.hpp" 
-#include "../utilities/InputHandler.hpp" 
+#include "../utilities/InputHandler.hpp"
+#include "../utilities/Assets.hpp"
 #include <vector>
 #include <cmath>
 #include <string>
@@ -127,7 +128,7 @@ void Unit::applyPhysics(bool colliding){
 }
 void Unit::move(){
     Entity::move();
-}    
+}
 void Unit::updateCrosshair(){
     crosshair_.setPosition(sprite_.getPosition().x + 50*cos(toRadians(aimAngle_)), sprite_.getPosition().y + 50*sin(toRadians(aimAngle_)));
 }
@@ -142,6 +143,11 @@ bool Unit::checkExplosion(const sf::CircleShape& expl, float damage) {
 
     if (distance <= expl.getRadius()) {
         health_ -= damage * (distance / expl.getRadius());
+        if (isDead()) {
+            sprite_.setTexture(Assets::LOAD_TEXTURE("RIP.png"));
+            crosshair_.setColor({0, 0, 0, 0});
+        }
+
         momentum_.x -= (distanceX * ((expl.getRadius() * damage) / 32.0f)) / distance;
         momentum_.y -= (distanceY * ((expl.getRadius() * damage) / 32.0f)) / distance;
         return true;
