@@ -65,7 +65,7 @@ void GameWorld::update() {
         }
     }
 
-    createText(windForceText, "BebasNeue.otf", {camera_.getPosition().x, camera_.getPosition().y}, 150);
+    createText(windForceText, "BebasNeue.otf", {camera_.getPosition().x, camera_.getPosition().y - Assets::WINDOW_SIZE.y / 2 + 50}, 150);
     static auto currentPlayer = playerVector.begin();
     if (!currentUnit->isDead()) {
         currentUnit->update(*input, environment_->getTerrain().isColliding(*currentUnit), *environment_);
