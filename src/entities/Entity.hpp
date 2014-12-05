@@ -8,6 +8,7 @@
 //#include "../environment/Environment.hpp"
 #include "../utilities/InputHandler.hpp"
 #include <iostream>
+#include <memory>
 #include <vector>
 
 //class Terrain;
@@ -46,11 +47,13 @@ class Entity{
 
 class Unit: public Entity{
     private:
+        float health_{10.0f};
         enum class unitState{idle=0, walking, falling, shooting};
         unitState state_; // Used to tell what the unit is currently doing
-        Player* owner_;
+        std::unique_ptr<Player> owner_;
         float aimAngle_ = 0;
         sf::Sprite crosshair_;
+        sf::Sprite tombstone_;
         int shootPower_{0}; // Release power of shots
         bool shoot_ = false;
         void getMovement(const InputHandler&) override;
@@ -69,14 +72,14 @@ class Unit: public Entity{
             }
         void update(const InputHandler& input, bool colliding, Environment& environment) override {getInput(input); getMovement(input); updateCrosshair(); applyPhysics(colliding, environment); move();};
         void collide();
-        void checkExplosion(const sf::CircleShape&, float);
+        bool isDead() const { return health_ <= 0.0; }
+        bool checkExplosion(const sf::CircleShape&, float);
         bool inControl(){return (state_ != unitState::falling);};
         float getShootAngle(){return aimAngle_;};
         sf::Vector2f getShootMomentum(sf::RenderWindow&);
         sf::Vector2f getPosition() const {return sprite_.getPosition();}; // Kanske måste tas bort då vi redan har getPos sen förut!?
         void setColor(sf::Color color){sprite_.setColor(color);}
         bool isShooting(){return shoot_;};
-        bool isDead(){return false;};
         void draw(sf::RenderWindow&) override;
         ~Unit() = default;
 };
@@ -93,7 +96,7 @@ class Projectile: public Entity{
     public:
         bool deleted_ = false;
         bool isRemoved() const { return removed_; }
-        Projectile(const sf::Texture& tex, const sf::Vector2f& pos, float spd, int mass, const sf::Vector2f& inMom, float wind, float angle, Weapon* weapon = nullptr ):
+        Projectile(const sf::Texture& tex, const sf::Vector2f& pos, float spd, int mass, const sf::Vector2f& inMom, float wind, float angle, Weapon* weapon):
             Entity(tex, {pos.x, pos.y-1}, spd, mass), wind_{wind}, type_{weapon}, angle_{angle}{
                 momentum_ = inMom;
                 sprite_.setPosition(position_);

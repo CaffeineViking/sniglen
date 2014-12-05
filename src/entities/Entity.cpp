@@ -1,7 +1,10 @@
 #include "Entity.hpp" 
+
 #include "../utilities/InputHandler.hpp" 
 #include "../environment/Terrain.hpp"
 #include "../environment/Environment.hpp"
+#include "../utilities/Assets.hpp"
+
 #include <vector>
 #include <cmath>
 #include <string>
@@ -13,12 +16,12 @@ void Entity::move(){
     position_ = sprite_.getPosition(); // Get new position
 }
 void Entity::applyPhysics(bool colliding, Environment& environment){
-    /*if (!colliding) {
+    if (!colliding) {
         momentum_.y += 1.5f;
     } else {
 
         momentum_ = {0, -1};
-    }*/
+    }
 }
 void Entity::getMovement(const InputHandler&){
 }
@@ -115,17 +118,20 @@ void Unit::applyPhysics(bool colliding, Environment& environment){
 	Unit* temp = new Unit{*sprite_.getTexture(), *crosshair_.getTexture(), sprite_.getPosition(), 2, 150, nullptr};
     temp->momentum_ = momentum_;
 	if(colliding){
-		temp->sprite_.move({0, momentum_.y});
+		/*temp->sprite_.move({0, momentum_.y});
 		if(environment.getTerrain().isColliding(*temp)){
 			while(environment.getTerrain().isColliding(*temp)){
 				temp->sprite_.move({0, -1});
 				++timesMovedUp;
 			}
 			sprite_.move({0, momentum_.y - static_cast<float>(timesMovedUp)});
-		}
-
-		temp->sprite_.move({momentum_.x, 0});
+		}*/
+		temp->sprite_.move({0, -1});
 		timesMovedUp = 0;
+		if(momentum_.x < 0)
+			temp->sprite_.move({momentum_.x, 0});
+		else if(momentum_.x > 0)
+			temp->sprite_.move({momentum_.x, 0});
 		while(environment.getTerrain().isColliding(*temp)){
 			temp->sprite_.move({0, -1});
 			++timesMovedUp;
@@ -138,24 +144,24 @@ void Unit::applyPhysics(bool colliding, Environment& environment){
 			momentum_.x = 0;
 			momentum_.y = 0;
 		}
-		if(momentum_.x < -0.4)
-			momentum_.x += 0.4;
-		else if(momentum_.x > 0.4)
-			momentum_.x -= 0.4;
+		if(momentum_.x < -0.2)
+			momentum_.x *= 0.6;
+		else if(momentum_.x > 0.2)
+			momentum_.x *= 0.6;
 		else
-			momentum_.x = 0;
+			momentum_.x = 0;	
+		state_ = unitState::idle;
 	}
 	else{
 		momentum_.y += 1.5;
 		
 	}
-    state_ = unitState::idle;
 	delete temp;
-    Entity::applyPhysics(colliding, environment);
+ //   Entity::applyPhysics(colliding, environment);
 }
 void Unit::move(){
     Entity::move();
-}    
+}
 void Unit::updateCrosshair(){
     crosshair_.setPosition(sprite_.getPosition().x + 50*cos(toRadians(aimAngle_)), sprite_.getPosition().y + 50*sin(toRadians(aimAngle_)));
 }
@@ -163,14 +169,24 @@ void Unit::collide(){
     state_ = unitState::idle;
     Entity::collide();
 }
-void Unit::checkExplosion(const sf::CircleShape& expl, float damage) {
+bool Unit::checkExplosion(const sf::CircleShape& expl, float damage) {
     float distanceX{expl.getPosition().x - getPos().x};
     float distanceY{expl.getPosition().y - getPos().y};
     float distance{std::sqrt(std::pow(distanceX, 2.0f) + std::pow(distanceY, 2.0f))};
+
     if (distance <= expl.getRadius()) {
+        health_ -= damage * (distance / expl.getRadius());
+        if (isDead()) {
+            sprite_.setTexture(Assets::LOAD_TEXTURE("RIP.png"));
+            crosshair_.setColor({0, 0, 0, 0});
+        }
+
         momentum_.x -= (distanceX * ((expl.getRadius() * damage) / 32.0f)) / distance;
         momentum_.y -= (distanceY * ((expl.getRadius() * damage) / 32.0f)) / distance;
+        return true;
     }
+
+    return false;
 }
 void Unit::draw(sf::RenderWindow& window){
     window.draw(sprite_);

@@ -33,6 +33,7 @@ class GameWorld {
         void update();
         void draw();
         void initiate(short unsigned int players, short unsigned int units);
+        void nextRound(std::vector<std::unique_ptr<Player>>::iterator&); // Rickard, du hade rätt!
 };
 
 #endif // GAMEWORLD_HPP

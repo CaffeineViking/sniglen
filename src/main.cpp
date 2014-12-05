@@ -1,14 +1,17 @@
 #include <SFML/Graphics.hpp>
+#include "utilities/Assets.hpp"
 #include "GameWorld.hpp"
 #include "MenuScreen.hpp"
 #include "entities/Entity.hpp"
 #include "utilities/InputHandler.hpp"
+#include <iostream>
 
 enum class gameState{menu = 0, game, pause};
 
 int main() {
     sf::RenderWindow window{sf::VideoMode{1280, 720}, "TDDI02 - Made in Vim", sf::Style::Close};
     window.setFramerateLimit(60);
+    Assets::LOAD_FONT("BebasNeue.otf");
     InputHandler input;
     GameWorld game{window, input};
     MenuScreen menu{window, input};
