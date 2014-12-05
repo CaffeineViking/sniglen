@@ -2,7 +2,7 @@
 #include <string>
 
 MenuScreen::MenuScreen(sf::RenderWindow& screen, InputHandler& handler): window_{&screen}, input_{&handler} {
-    createText("Sniglen: the Game: the Movie: Reloaded: Limited Limited Edition!", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 - 150});
+    createText("™Sniglen: the Game: the Movie: Reloaded: Limited Limited Edition!™", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 - 150});
     createButton("setupGame.png", "Setup", {Assets::WINDOW_SIZE.x/2 - 50, Assets::WINDOW_SIZE.y/2});
     createButton("options.png", "Options", {Assets::WINDOW_SIZE.x/2 + 50, Assets::WINDOW_SIZE.y/2});
     createButton("quit.png", "Exit", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 + 100});
@@ -13,7 +13,7 @@ void MenuScreen::update(){
         buttonVector_.clear();
         textVector_.clear();
         if(state_ == MenuState::main){
-            createText("Sniglen: the Game: the Movie: Reloaded: Limited Limited Edition!", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 - 150});
+            createText("™Sniglen: the Game: the Movie: Reloaded: Limited Limited Edition!™", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 - 150});
             createButton("setupGame.png", "Setup", {Assets::WINDOW_SIZE.x/2 - 50, Assets::WINDOW_SIZE.y/2});
             createButton("options.png", "Options", {Assets::WINDOW_SIZE.x/2 + 50, Assets::WINDOW_SIZE.y/2});
             createButton("quit.png", "Exit", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 + 100});
@@ -29,6 +29,7 @@ void MenuScreen::update(){
             createButton("back.png", "Back", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y-100});
         }
         else if(state_ == MenuState::option){
+            createText("™", "BebasNeue.otf", {0,0}, 10000, {255,173,248});
             createText("THIS IS OPTIONAL", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 - 150}, 250);
             createButton("back.png", "Back", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y-100});
         } else {
@@ -63,11 +64,11 @@ void MenuScreen::update(){
     }
 }
 void MenuScreen::draw(){
-    for(std::pair<std::string, sf::Sprite*> button : buttonVector_){
-        window_->draw(*button.second);
-    }
     for(std::unique_ptr<sf::Text>& text : textVector_){
         window_->draw(*text);
+    }
+    for(std::pair<std::string, sf::Sprite*> button : buttonVector_){
+        window_->draw(*button.second);
     }
 }
 

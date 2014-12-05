@@ -9,7 +9,7 @@
 enum class gameState{menu = 0, game, pause};
 
 int main() {
-    sf::RenderWindow window{sf::VideoMode(Assets::WINDOW_SIZE.x, Assets::WINDOW_SIZE.y), "Sniglen: the Game: the Movie: Reloaded: Limited Limited Edition™", sf::Style::Close};
+    sf::RenderWindow window{sf::VideoMode(Assets::WINDOW_SIZE.x, Assets::WINDOW_SIZE.y), "Sniglen: the Game: the Movie: Reloaded: Limited Limited Edition! - Made by ~xX|Azzazzin98|Xx~, .-:Sup3r1337k1ll4|c4p4c0p:-. and rumpnisse", sf::Style::Close};
     window.setFramerateLimit(60);
     Assets::LOAD_FONT("BebasNeue.otf");
     InputHandler input;
