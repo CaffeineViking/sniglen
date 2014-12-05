@@ -72,9 +72,9 @@ void GameWorld::update() {
                 for (auto& unit : player->getTeam()) {
                     if (unit->checkExplosion(explosion, projectile->getDamage()))
                         cameraTarget_ = unit;
-                    /* else{
+                    else{
                         cameraTarget_ = currentUnit;
-                    } */
+                    }
                 }
             }
         }
