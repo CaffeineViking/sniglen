@@ -51,7 +51,7 @@ class Entity{
 class Unit: public Entity{
     private:
         float health_{10.0f};
-        enum class unitState{idle=0, walking, falling, shooting, colliding};
+        enum class unitState{idle=0, walking, falling, shooting};
         unitState state_ = unitState::falling; // Used to tell what the unit is currently doing
         Player* owner_;
         float aimAngle_ = 0;

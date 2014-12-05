@@ -119,11 +119,11 @@ void Unit::applyPhysics(bool colliding, Environment& environment){
 	Unit* temp = new Unit{*sprite_.getTexture(), *crosshair_.getTexture(), sprite_.getPosition(), 2, 150, nullptr};
     temp->momentum_ = momentum_;
 	if(state_ != unitState::falling){
-		temp->sprite_.move({0, -1});
+		temp->sprite_.move({0.0f, -1.0f});
 		timesMovedUp = 0;
-		temp->sprite_.move({momentum_.x, 0});
+		temp->sprite_.move({momentum_.x, 0.0f});
 		while(environment.getTerrain().isColliding(*temp)){
-			temp->sprite_.move({0, -1});
+			temp->sprite_.move({0.0f, -1.0f});
 			++timesMovedUp;
 		}
 
@@ -131,32 +131,39 @@ void Unit::applyPhysics(bool colliding, Environment& environment){
 			this->sprite_.setPosition(temp->sprite_.getPosition());
 		}
 		else{
-			momentum_.x = 0;
-			momentum_.y = 0;
+			momentum_.x = 0.0f;
+			momentum_.y = 0.0f;
 		}
-		if(momentum_.x < -0.2)
-			momentum_.x *= 0.6;
-		else if(momentum_.x > 0.2)
-			momentum_.x *= 0.6;
+		
+		if(momentum_.x < -0.2f)
+			momentum_.x *= 0.6f;
+		else if(momentum_.x > 0.2f)
+			momentum_.x *= 0.6f;
 		else
-			momentum_.x = 0;
+			momentum_.x = 0.0f;
+		
 		if(!colliding)
-			momentum_.y += 1.5;
-		state_ = unitState::idle;
+			momentum_.y += 1.5f;
+		else
+			state_ = unitState::idle;
+
 	} else {
-		float distance = std::sqrt(std::pow(momentum_.x, 2) + std::pow(momentum_.y, 2));
-		temp->sprite_.move({momentum_.x, momentum_.y});
-		while(environment.getTerrain().isColliding(*temp)){
-			temp->sprite_.move({-momentum_.x/distance, -momentum_.y/distance});
-			if(!environment.getTerrain().isColliding(*temp)){
-				momentum_.y = 0;
-				state_ = unitState::idle;
-			}	
+		float distance = std::sqrt(std::pow(momentum_.x, 2.0f) + std::pow(momentum_.y, 2.0f));
+		if(environment.getTerrain().isColliding(*temp)){
+			temp->sprite_.move({momentum_.x, momentum_.y});
+			while(environment.getTerrain().isColliding(*temp)){
+				temp->sprite_.move({-momentum_.x/distance, -momentum_.y/distance});
+				if(!environment.getTerrain().isColliding(*temp)){
+					momentum_.y = -1.5f;
+					state_ = unitState::idle;
+				}	
+			}
 		}
 		momentum_.y += 1.5;
 		this->sprite_.setPosition(temp->sprite_.getPosition());	
 	}
 	delete temp;
+
 }
 void Unit::move(){
     Entity::move();
