@@ -23,9 +23,11 @@ class GameWorld {
         Camera camera_;
         sf::Clock gameTime_;
         sf::Time roundTime_;
+        sf::Time delayTime_;
         Unit* currentUnit;
         Entity* cameraTarget_;
         bool newGame_ = true;
+        bool shot_ = false;
         sf::Sound sound{Assets::LOAD_SOUND("explosion.wav")};
 
     public:

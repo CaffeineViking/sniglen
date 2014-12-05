@@ -17,10 +17,14 @@ void GameWorld::initiate(short unsigned int players, short unsigned int units){
     for(int i{0}; i < players; ++i)
         playerVector.push_back(std::unique_ptr<Player>{new Player{{(unsigned char)Random::GENERATE_MAX(255),(unsigned char)Random::GENERATE_MAX(255),(unsigned char)Random::GENERATE_MAX(255)}}});
     for(int i{0}; i < units; ++i){
-        for(auto& i : playerVector)
+        for(auto& i : playerVector){
             i->insertUnit(new Unit{Assets::LOAD_TEXTURE("unit.png"), Assets::LOAD_TEXTURE("testa.png"), {static_cast<float>(Random::GENERATE_MAX(environment_->getTerrainSize())), 180}, 2, 150, i.get()});
+        i->getTeam().back()->disableCrosshair();
+        }
     }
+
     currentUnit = (*playerVector.begin())->getNextUnit();
+    currentUnit->enableCrosshair();
     cameraTarget_ = currentUnit;
 }
 
@@ -29,6 +33,15 @@ void GameWorld::nextRound(std::vector<std::unique_ptr<Player>>::iterator& curren
     if(currentPlayer == playerVector.end())
         currentPlayer = playerVector.begin();
     currentUnit = (*currentPlayer)->getNextUnit();
+    currentUnit->enableCrosshair();
+
+    for (auto& player : playerVector) {
+        for (auto& unit : player->getTeam()) {
+            if (currentUnit != unit)
+                unit->disableCrosshair();
+        }
+    }
+
     cameraTarget_ = currentUnit;
     environment_->randomizeWind();
     roundTime_ = gameTime_.getElapsedTime();
@@ -57,9 +70,10 @@ void GameWorld::update() {
         projectileVector.erase(projectileVector.begin() + (projectileVector.size()-removed), projectileVector.end());
     }
 
-    if(currentUnit->isShooting()) {
+    if(currentUnit->isShooting() && !shot_) {
+        shot_ = true;
         projectileVector.push_back(std::move(std::unique_ptr<Projectile>{
-            new Projectile{Assets::LOAD_TEXTURE("bullet.png"), currentUnit->getPosition(), 0.0f, 10, 
+            new Projectile{Assets::LOAD_TEXTURE("bullet.png"), currentUnit->getCrosshairPosition(), 0.0f, 10, 
             currentUnit->getShootMomentum(*gameWindow), 
             environment_->getWindForce(),
              currentUnit->getShootAngle(), 
@@ -67,7 +81,8 @@ void GameWorld::update() {
         }
         }));
 
-        nextRound(currentPlayer);
+        // nextRound(currentPlayer);
+        delayTime_ = gameTime_.getElapsedTime();
         cameraTarget_ = projectileVector.back().get();
     }
 
@@ -78,19 +93,24 @@ void GameWorld::update() {
             environment_->getTerrain().destroy(explosion);
             sound.play();
             environment_->getTerrain().destroy(explosion);
+
+            bool hit{false};
             for (auto& player : playerVector) {
                 for (auto& unit : player->getTeam()) {
-                    if (unit->checkExplosion(explosion, projectile->getDamage()))
+                    if (unit->checkExplosion(explosion, projectile->getDamage()) && unit != currentUnit) {
                         cameraTarget_ = unit;
-                    else{
-                        cameraTarget_ = currentUnit;
+                        hit = true;
                     }
                 }
             }
+
+            if (!hit) cameraTarget_ = currentUnit;
         }
     }
 
-    if((gameTime_.getElapsedTime() - roundTime_).asSeconds() > 10.0 && currentUnit->inControl()){
+    if(((gameTime_.getElapsedTime() - roundTime_).asSeconds() > 25.0 && currentUnit->inControl()) ||
+        (shot_ && ((gameTime_.getElapsedTime() - delayTime_).asSeconds()) > 5.0)){
+        shot_ = false;
         nextRound(currentPlayer);
     }
 

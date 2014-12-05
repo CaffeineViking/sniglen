@@ -72,8 +72,14 @@ class Unit: public Entity{
                 crosshair_.setOrigin({(float)crosshair_.getTexture()->getSize().x/2, (float)crosshair_.getTexture()->getSize().y/2});
                 //crosshair_.setOrigin({(float)crosshair_.getTexture().getSize().x/2, (float)crosshair_.getTexture().getSize().y/2});
             }
+
+        const sf::Vector2f& getCrosshairPosition() const { return crosshair_.getPosition(); }
+        void enableCrosshair() { crosshair_.setColor({crosshair_.getColor().r, crosshair_.getColor().g, crosshair_.getColor().b, 255}); }
+        void disableCrosshair() {crosshair_.setColor({crosshair_.getColor().r, crosshair_.getColor().g, crosshair_.getColor().b, 0}); }
+
         void update(const InputHandler& input, bool colliding, Environment& environment) override {getInput(input); getMovement(input); updateCrosshair(); applyPhysics(colliding, environment); move();};
         void collide();
+        float getHealth() const { return health_; }
         bool isDead() const { return health_ <= 0.0; }
         bool checkExplosion(const sf::CircleShape&, float);
         bool inControl(){return (state_ != unitState::falling);};
