@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <utility>
+#include <memory>
 #include "utilities/InputHandler.hpp"
 #include "utilities/Assets.hpp"
 #include "utilities/Button.hpp"
@@ -16,7 +17,7 @@ class MenuScreen{
         sf::Vector2f windowSize_;
         MenuState state_ = MenuState::main;
         std::vector<std::pair<std::string, sf::Sprite*>> buttonVector_;
-        std::vector<sf::Text*> textVector_;
+        std::vector<std::unique_ptr<sf::Text>> textVector_;
         bool gameStart_ = false;
         bool redraw_ = false;
         short unsigned int teamSize_{4};

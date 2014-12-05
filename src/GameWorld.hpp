@@ -18,6 +18,7 @@ class GameWorld {
         sf::RenderWindow* gameWindow;
         std::vector<std::unique_ptr<Player>> playerVector;
         std::vector<std::unique_ptr<Projectile>> projectileVector;
+        std::vector<std::unique_ptr<sf::Text>> textVector_;
         std::unique_ptr<Environment> environment_;
         InputHandler* input;
         Camera camera_;
@@ -29,6 +30,7 @@ class GameWorld {
         bool newGame_ = true;
         bool shot_ = false;
         sf::Sound sound{Assets::LOAD_SOUND("explosion.wav")};
+        void createText(const std::string&, const std::string&, const sf::Vector2f&, int = 30, const sf::Color& = sf::Color::White, sf::Text::Style = sf::Text::Regular);
 
     public:
         GameWorld(sf::RenderWindow&, InputHandler&);

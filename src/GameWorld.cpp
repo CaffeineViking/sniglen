@@ -9,6 +9,7 @@ GameWorld::GameWorld(sf::RenderWindow& window, InputHandler& inputhandler) : gam
 
 void GameWorld::initiate(short unsigned int players, short unsigned int units){
     roundTime_ = gameTime_.getElapsedTime();
+    textVector_.clear();
     playerVector.clear();
     projectileVector.clear();
     environment_ = std::unique_ptr<Environment>{new Environment{9.82, static_cast<unsigned>(2560 + (128 * players * units))}};
@@ -48,6 +49,23 @@ void GameWorld::nextRound(std::vector<std::unique_ptr<Player>>::iterator& curren
 }
 
 void GameWorld::update() {
+    textVector_.clear();
+    std::string windForceText;
+    float tempWind = environment_->getWindForce();
+    if(tempWind < 0){
+        while(tempWind + 0.1 < 0){
+            windForceText += "<";
+            tempWind += 0.1;
+        }
+    }
+    else if(tempWind - 0.1 > 0){
+        while(tempWind - 0.1 > 0){
+            windForceText += ">";
+            tempWind -= 0.1;
+        }
+    }
+
+    createText(windForceText, "BebasNeue.otf", {camera_.getPosition().x, camera_.getPosition().y}, 150);
     static auto currentPlayer = playerVector.begin();
     if (!currentUnit->isDead()) {
         currentUnit->update(*input, environment_->getTerrain().isColliding(*currentUnit), *environment_);
@@ -135,6 +153,8 @@ void GameWorld::draw() {
     // Draw the terrain to the game window.
     environment_->getTerrain().draw(*gameWindow);
 
+    for(std::unique_ptr<sf::Text>& text : textVector_)
+        gameWindow->draw(*text);
     // Draw all units to the game window.
     for(std::unique_ptr<Player>& player : playerVector){
         for(auto& ent : player->getTeam())
@@ -147,4 +167,11 @@ void GameWorld::draw() {
 
     // Set the current camera state to be drawn on the game window.
     camera_.draw(*gameWindow);
+}
+void GameWorld::createText(const std::string& text, const std::string& font, const sf::Vector2f& position, int size, const sf::Color& color, sf::Text::Style style){
+    textVector_.push_back(std::move(std::unique_ptr<sf::Text>{new sf::Text(text, Assets::LOAD_FONT(font), size)}));
+    textVector_.back()->setOrigin({textVector_.back()->getLocalBounds().width/2, textVector_.back()->getLocalBounds().height/2});
+    textVector_.back()->setPosition(position);
+    textVector_.back()->setStyle(style);
+    textVector_.back()->setColor(color);
 }

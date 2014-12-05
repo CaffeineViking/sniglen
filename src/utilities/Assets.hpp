@@ -14,6 +14,7 @@ public:
     static const sf::SoundBuffer& LOAD_SOUND(const std::string&);
     static sf::Music& LOAD_MUSIC(const std::string&);
     static const sf::Font& LOAD_FONT(const std::string&);
+    static const sf::Vector2f WINDOW_SIZE;
 
 private:
     static const std::string PATH;
