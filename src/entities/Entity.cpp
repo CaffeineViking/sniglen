@@ -31,6 +31,7 @@ void Entity::draw(sf::RenderWindow& window){
 void Entity::collide(){
 }
 void Unit::getInput(const InputHandler& input){
+	
     shoot_ = false;
     if(state_ != unitState::falling && input.isKeyPressed(sf::Keyboard::Key::Space))
         state_ = unitState::shooting;
@@ -117,21 +118,10 @@ void Unit::applyPhysics(bool colliding, Environment& environment){
 	int timesMovedUp = 0;	
 	Unit* temp = new Unit{*sprite_.getTexture(), *crosshair_.getTexture(), sprite_.getPosition(), 2, 150, nullptr};
     temp->momentum_ = momentum_;
-	if(colliding){
-		/*temp->sprite_.move({0, momentum_.y});
-		if(environment.getTerrain().isColliding(*temp)){
-			while(environment.getTerrain().isColliding(*temp)){
-				temp->sprite_.move({0, -1});
-				++timesMovedUp;
-			}
-			sprite_.move({0, momentum_.y - static_cast<float>(timesMovedUp)});
-		}*/
+	if(state_ != unitState::falling){
 		temp->sprite_.move({0, -1});
 		timesMovedUp = 0;
-		if(momentum_.x < 0)
-			temp->sprite_.move({momentum_.x, 0});
-		else if(momentum_.x > 0)
-			temp->sprite_.move({momentum_.x, 0});
+		temp->sprite_.move({momentum_.x, 0});
 		while(environment.getTerrain().isColliding(*temp)){
 			temp->sprite_.move({0, -1});
 			++timesMovedUp;
@@ -149,15 +139,24 @@ void Unit::applyPhysics(bool colliding, Environment& environment){
 		else if(momentum_.x > 0.2)
 			momentum_.x *= 0.6;
 		else
-			momentum_.x = 0;	
+			momentum_.x = 0;
+		if(!colliding)
+			momentum_.y += 1.5;
 		state_ = unitState::idle;
-	}
-	else{
+	} else {
+		float distance = std::sqrt(std::pow(momentum_.x, 2) + std::pow(momentum_.y, 2));
+		temp->sprite_.move({momentum_.x, momentum_.y});
+		while(environment.getTerrain().isColliding(*temp)){
+			temp->sprite_.move({-momentum_.x/distance, -momentum_.y/distance});
+			if(!environment.getTerrain().isColliding(*temp)){
+				momentum_.y = 0;
+				state_ = unitState::idle;
+			}	
+		}
 		momentum_.y += 1.5;
-		
+		this->sprite_.setPosition(temp->sprite_.getPosition());	
 	}
 	delete temp;
- //   Entity::applyPhysics(colliding, environment);
 }
 void Unit::move(){
     Entity::move();
