@@ -37,7 +37,7 @@ void GameWorld::nextRound(std::vector<std::unique_ptr<Player>>::iterator& curren
 void GameWorld::update() {
     static auto currentPlayer = playerVector.begin();
     if (!currentUnit->isDead()) {
-        currentUnit->update(*input, environment_->getTerrain().isColliding(*currentUnit));
+        currentUnit->update(*input, environment_->getTerrain().isColliding(*currentUnit), *environment_);
     } else {
         nextRound(currentPlayer);
     }
@@ -72,7 +72,7 @@ void GameWorld::update() {
     }
 
     for(std::unique_ptr<Projectile>& projectile : projectileVector){
-        projectile->update(*input, environment_->getTerrain().isColliding(*projectile));
+        projectile->update(*input, environment_->getTerrain().isColliding(*projectile), *environment_);
         if(environment_->getTerrain().isColliding(*projectile)){
             auto explosion = projectile->explode();
             environment_->getTerrain().destroy(explosion);
@@ -96,9 +96,8 @@ void GameWorld::update() {
 
     for (auto& player : playerVector) {
         for (auto& unit : player->getTeam()) {
-            if (currentUnit != unit) {
-                unit->update(InputHandler{}, environment_->getTerrain().isColliding(*unit));
-            }
+            if (currentUnit != unit)
+                unit->update(InputHandler{}, environment_->getTerrain().isColliding(*unit), *environment_);
         }
     }
 

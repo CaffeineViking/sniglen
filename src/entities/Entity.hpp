@@ -4,11 +4,15 @@
 #include <SFML/Graphics.hpp>
 #include "../utilities/Player.hpp"
 #include "../utilities/Weapon.hpp"
+#include "../environment/Terrain.hpp"
+//#include "../environment/Environment.hpp"
 #include "../utilities/InputHandler.hpp"
 #include <iostream>
 #include <memory>
 #include <vector>
 
+//class Terrain;
+class Environment;
 class Player;
 class Entity{
     protected:
@@ -29,17 +33,17 @@ class Entity{
             }
         bool lookLeft_{false};
         virtual void getMovement(const InputHandler&); // Reads input and sets what movements should be done
-        virtual void applyPhysics(bool); // Applies friction and gravity to the movements that should be done
+        virtual void applyPhysics(bool, Environment&); // Applies friction and gravity to the movements that should be done
         virtual void move(); // Applies movement to the entity
     public:
         void remove() { removed_ = true; }
         bool isRemoved() const { return removed_; }
         const sf::Sprite& getSprite() const {return sprite_;};
-        const sf::Vector2f& getPos() const {return position_;};
+        const sf::Vector2f& getPos() const {return sprite_.getPosition();};
         void setTexture(const sf::Texture& texture){sprite_.setTexture(texture);};
         bool doUnitLookLeft(){return lookLeft_;};
         virtual ~Entity() = default;
-        virtual void update(const InputHandler& input, bool colliding){getMovement(input); applyPhysics(colliding); move();};
+        virtual void update(const InputHandler& input, bool colliding, Environment& environment){getMovement(input); applyPhysics(colliding, environment); move();};
         virtual void collide();
         virtual void draw(sf::RenderWindow&); // Standardise draw functions
 };
@@ -56,7 +60,7 @@ class Unit: public Entity{
         bool shoot_ = false;
         void getMovement(const InputHandler&) override;
         void getInput(const InputHandler&);
-        void applyPhysics(bool) override;
+        void applyPhysics(bool, Environment&) override;
         void move() override;
         void updateCrosshair();
 
@@ -68,7 +72,7 @@ class Unit: public Entity{
                 crosshair_.setOrigin({(float)crosshair_.getTexture()->getSize().x/2, (float)crosshair_.getTexture()->getSize().y/2});
                 //crosshair_.setOrigin({(float)crosshair_.getTexture().getSize().x/2, (float)crosshair_.getTexture().getSize().y/2});
             }
-        void update(const InputHandler& input, bool colliding) override {getInput(input); getMovement(input); updateCrosshair(); applyPhysics(colliding); move();};
+        void update(const InputHandler& input, bool colliding, Environment& environment) override {getInput(input); getMovement(input); updateCrosshair(); applyPhysics(colliding, environment); move();};
         void collide();
         bool isDead() const { return health_ <= 0.0; }
         bool checkExplosion(const sf::CircleShape&, float);
@@ -87,7 +91,7 @@ class Projectile: public Entity{
         Weapon* type_; // Variable to keep track of what kind of weapon it is
         float angle_;
         void getMovement(const InputHandler&);
-        void applyPhysics(bool) override;
+        void applyPhysics(bool, Environment&) override;
         void move();
     public:
         Projectile(const sf::Texture& tex, const sf::Vector2f& pos, float spd, int mass, const sf::Vector2f& inMom, float wind, float angle, Weapon* weapon):

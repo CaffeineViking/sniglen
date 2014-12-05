@@ -1,8 +1,7 @@
 #ifndef ENVIRONMENT_HPP
 #define ENVIRONMENT_HPP
-
+//class Terrain;
 #include "Terrain.hpp"
-
 class Environment {
 public:
     Environment() = default;

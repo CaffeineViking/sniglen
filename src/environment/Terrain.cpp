@@ -92,9 +92,9 @@ bool Terrain::isColliding(const Entity& entity) const {
 
     for (int y{startY}; y < endY; ++y) {
         // Make sure we are within bounds.
-        if (y < 0 || y > static_cast<int>(sprite_.getTexture()->getSize().y)) continue;
+        if (y < 0 || y >= static_cast<int>(sprite_.getTexture()->getSize().y)) continue;
         for (int x{startX}; x < endX; ++x) {
-            if (x < 0 || x > static_cast<int>(sprite_.getTexture()->getSize().x)) continue;
+            if (x < 0 || x >= static_cast<int>(sprite_.getTexture()->getSize().x)) continue;
             // If both (terrain and entity) pixel colors are NOT transparent, we have a collision.
             if (image_.getPixel(x, y).a != 0 && entityImage.getPixel(x - startX, y - startY).a != 0) return true;
         }
