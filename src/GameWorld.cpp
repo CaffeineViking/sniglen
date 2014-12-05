@@ -24,9 +24,23 @@ void GameWorld::initiate(short unsigned int players, short unsigned int units){
     cameraTarget_ = currentUnit;
 }
 
+void GameWorld::nextRound(std::vector<std::unique_ptr<Player>>::iterator& currentPlayer) {
+    ++currentPlayer;
+    if(currentPlayer == playerVector.end())
+        currentPlayer = playerVector.begin();
+    currentUnit = (*currentPlayer)->getNextUnit();
+    cameraTarget_ = currentUnit;
+    environment_->randomizeWind();
+    roundTime_ = gameTime_.getElapsedTime();
+}
+
 void GameWorld::update() {
     static auto currentPlayer = playerVector.begin();
-    currentUnit->update(*input, environment_->getTerrain().isColliding(*currentUnit));
+    if (!currentUnit->isDead()) {
+        currentUnit->update(*input, environment_->getTerrain().isColliding(*currentUnit));
+    } else {
+        nextRound(currentPlayer);
+    }
 
     unsigned iteratedOver {0};
     unsigned removed {0};
@@ -52,13 +66,9 @@ void GameWorld::update() {
             (*currentPlayer)->getCurrentWeapon().get()
         }
         }));
+
+        nextRound(currentPlayer);
         cameraTarget_ = projectileVector.back().get();
-        ++currentPlayer;
-        if(currentPlayer == playerVector.end())
-            currentPlayer = playerVector.begin();
-        currentUnit = (*currentPlayer)->getNextUnit();
-        environment_->randomizeWind();
-        roundTime_ = gameTime_.getElapsedTime();
     }
 
     for(std::unique_ptr<Projectile>& projectile : projectileVector){
@@ -81,19 +91,14 @@ void GameWorld::update() {
     }
 
     if((gameTime_.getElapsedTime() - roundTime_).asSeconds() > 10.0 && currentUnit->inControl()){
-        ++currentPlayer;
-        if(currentPlayer == playerVector.end())
-            currentPlayer = playerVector.begin();
-        currentUnit = (*currentPlayer)->getNextUnit();
-        cameraTarget_ = currentUnit;
-        environment_->randomizeWind();
-        roundTime_ = gameTime_.getElapsedTime();
+        nextRound(currentPlayer);
     }
 
     for (auto& player : playerVector) {
         for (auto& unit : player->getTeam()) {
-            if (currentUnit != unit)
+            if (currentUnit != unit) {
                 unit->update(InputHandler{}, environment_->getTerrain().isColliding(*unit));
+            }
         }
     }
 
