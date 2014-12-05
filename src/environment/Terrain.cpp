@@ -58,9 +58,9 @@ void Terrain::destroy(sf::Vector2i position, float radius) {
     int terrainMaxX = sprite_.getPosition().x + sprite_.getTexture()->getSize().x;
 
     for (int y = position.y - radius; y <= position.y + radius; ++y) {
-        if (y < sprite_.getPosition().y || y > terrainMaxY) continue;
+        if (y < sprite_.getPosition().y || y >= terrainMaxY) continue;
         for (int x = position.x - radius; x <= position.x + radius; ++x) {
-            if (x < sprite_.getPosition().x || x > terrainMaxX) continue;
+            if (x < sprite_.getPosition().x || x >= terrainMaxX) continue;
             // Determine distance between origin and current checked pixel.
             unsigned distance = std::sqrt(std::pow(x - position.x, 2) + std::pow(y - position.y, 2));
 

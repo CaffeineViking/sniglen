@@ -2,11 +2,10 @@
 #include <string>
 
 MenuScreen::MenuScreen(sf::RenderWindow& screen, InputHandler& handler): window_{&screen}, input_{&handler} {
-    windowSize_ = (sf::Vector2f)window_->getSize();
-    createText("Sniglen: the Game: the Movie: Reloaded: Limited Limited Edition!", "BebasNeue.otf", {windowSize_.x/2, windowSize_.y/2 - 150});
-    createButton("setupGame.png", "Setup", {windowSize_.x/2 - 50, windowSize_.y/2});
-    createButton("options.png", "Options", {windowSize_.x/2 + 50, windowSize_.y/2});
-    createButton("quit.png", "Exit", {windowSize_.x/2, windowSize_.y/2 + 100});
+    createText("™Sniglen: the Game: the Movie: Reloaded: Limited Limited Edition!™", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 - 150});
+    createButton("setupGame.png", "Setup", {Assets::WINDOW_SIZE.x/2 - 50, Assets::WINDOW_SIZE.y/2});
+    createButton("options.png", "Options", {Assets::WINDOW_SIZE.x/2 + 50, Assets::WINDOW_SIZE.y/2});
+    createButton("quit.png", "Exit", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 + 100});
 }
 
 void MenuScreen::update(){
@@ -14,24 +13,25 @@ void MenuScreen::update(){
         buttonVector_.clear();
         textVector_.clear();
         if(state_ == MenuState::main){
-            createText("Sniglen: the Game: the Movie: Reloaded: Limited Limited Edition!", "BebasNeue.otf", {windowSize_.x/2, windowSize_.y/2 - 150});
-            createButton("setupGame.png", "Setup", {windowSize_.x/2 - 50, windowSize_.y/2});
-            createButton("options.png", "Options", {windowSize_.x/2 + 50, windowSize_.y/2});
-            createButton("quit.png", "Exit", {windowSize_.x/2, windowSize_.y/2 + 100});
+            createText("™Sniglen: the Game: the Movie: Reloaded: Limited Limited Edition!™", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 - 150});
+            createButton("setupGame.png", "Setup", {Assets::WINDOW_SIZE.x/2 - 50, Assets::WINDOW_SIZE.y/2});
+            createButton("options.png", "Options", {Assets::WINDOW_SIZE.x/2 + 50, Assets::WINDOW_SIZE.y/2});
+            createButton("quit.png", "Exit", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 + 100});
         }
         else if(state_ == MenuState::setup){
-            createText(std::to_string(teamSize_), "BebasNeue.otf", {windowSize_.x/2, windowSize_.y/2 - 5}, 15);
-            createText(std::to_string(playerAmount_), "BebasNeue.otf", {windowSize_.x/2, windowSize_.y/2 - 55}, 15);
-            createButton("incUnit.png", "incTeam", {windowSize_.x/2 + 50, windowSize_.y/2});
-            createButton("decUnit.png", "decTeam", {windowSize_.x/2 - 50, windowSize_.y/2});
-            createButton("incPlayers.png", "incPlayers", {windowSize_.x/2 + 50, windowSize_.y/2 - 50});
-            createButton("decPlayers.png", "decPlayers", {windowSize_.x/2 - 50, windowSize_.y/2 - 50});
-            createButton("StartGame.png", "StartGame", {windowSize_.x/2, windowSize_.y/2 + 100});
-            createButton("back.png", "Back", {windowSize_.x/2, windowSize_.y-100});
+            createText(std::to_string(teamSize_), "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 - 5}, 15);
+            createText(std::to_string(playerAmount_), "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 - 55}, 15);
+            createButton("incUnit.png", "incTeam", {Assets::WINDOW_SIZE.x/2 + 50, Assets::WINDOW_SIZE.y/2});
+            createButton("decUnit.png", "decTeam", {Assets::WINDOW_SIZE.x/2 - 50, Assets::WINDOW_SIZE.y/2});
+            createButton("incPlayers.png", "incPlayers", {Assets::WINDOW_SIZE.x/2 + 50, Assets::WINDOW_SIZE.y/2 - 50});
+            createButton("decPlayers.png", "decPlayers", {Assets::WINDOW_SIZE.x/2 - 50, Assets::WINDOW_SIZE.y/2 - 50});
+            createButton("StartGame.png", "StartGame", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 + 100});
+            createButton("back.png", "Back", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y-100});
         }
         else if(state_ == MenuState::option){
-            createText("THIS IS OPTIONAL", "BebasNeue.otf", {windowSize_.x/2, windowSize_.y/2 - 150}, 250);
-            createButton("back.png", "Back", {windowSize_.x/2, windowSize_.y-100});
+            createText("™", "BebasNeue.otf", {0,0}, 10000, {255,173,248});
+            createText("THIS IS OPTIONAL", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 - 150}, 250);
+            createButton("back.png", "Back", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y-100});
         } else {
         }
         redraw_ = false;
@@ -64,11 +64,11 @@ void MenuScreen::update(){
     }
 }
 void MenuScreen::draw(){
+    for(std::unique_ptr<sf::Text>& text : textVector_){
+        window_->draw(*text);
+    }
     for(std::pair<std::string, sf::Sprite*> button : buttonVector_){
         window_->draw(*button.second);
-    }
-    for(sf::Text* text : textVector_){
-        window_->draw(*text);
     }
 }
 
@@ -82,7 +82,7 @@ void MenuScreen::createButton(const std::string& filename, const std::string& la
 }
 
 void MenuScreen::createText(const std::string& text, const std::string& font, const sf::Vector2f& position, int size, const sf::Color& color, sf::Text::Style style){
-    textVector_.push_back(new sf::Text(text, Assets::LOAD_FONT(font), size));
+    textVector_.push_back(std::move(std::unique_ptr<sf::Text>{new sf::Text(text, Assets::LOAD_FONT(font), size)}));
     textVector_.back()->setOrigin({textVector_.back()->getLocalBounds().width/2, textVector_.back()->getLocalBounds().height/2});
     textVector_.back()->setPosition(position);
     textVector_.back()->setStyle(style);
