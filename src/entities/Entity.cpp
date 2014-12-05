@@ -1,5 +1,7 @@
 #include "Entity.hpp" 
 #include "../utilities/InputHandler.hpp" 
+#include "../environment/Terrain.hpp"
+#include "../environment/Environment.hpp"
 #include <vector>
 #include <cmath>
 #include <string>
@@ -10,26 +12,15 @@ void Entity::move(){
     sprite_.move(momentum_); // Use sf::Sprite::move to move the sprite
     position_ = sprite_.getPosition(); // Get new position
 }
-void Entity::applyPhysics(bool colliding){
-    if (!colliding) {
+void Entity::applyPhysics(bool colliding, Environment& environment){
+    /*if (!colliding) {
         momentum_.y += 1.5f;
     } else {
-        /*momentum_.y = 0;
-        if(momentum_.x > 0.2)
-            momentum_.x = momentum_.x - 0.5;
-        else if(momentum_.x < -0.2)
-            momentum_.x = momentum_.x + 0.5;
-        else
-            momentum_.x = 0;
-            */
+
         momentum_ = {0, -1};
-    }
+    }*/
 }
-void Entity::getMovement(const InputHandler& input){
-    if(input.isKeyPressed(sf::Keyboard::Key::Space))
-        goto xkcd;
-xkcd:
-    return;
+void Entity::getMovement(const InputHandler&){
 }
 void Entity::draw(sf::RenderWindow& window){
     window.draw(sprite_);
@@ -119,11 +110,48 @@ void Unit::getMovement(const InputHandler& input){
             momentum_.x = maxMomentum_.x;
     }
 }
-void Unit::applyPhysics(bool colliding){
-    if(colliding)
-        state_ = unitState::idle;
+void Unit::applyPhysics(bool colliding, Environment& environment){
+	int timesMovedUp = 0;	
+	Unit* temp = new Unit{*sprite_.getTexture(), *crosshair_.getTexture(), sprite_.getPosition(), 2, 150, nullptr};
+    temp->momentum_ = momentum_;
+	if(colliding){
+		temp->sprite_.move({0, momentum_.y});
+		if(environment.getTerrain().isColliding(*temp)){
+			while(environment.getTerrain().isColliding(*temp)){
+				temp->sprite_.move({0, -1});
+				++timesMovedUp;
+			}
+			sprite_.move({0, momentum_.y - static_cast<float>(timesMovedUp)});
+		}
 
-    Entity::applyPhysics(colliding);
+		temp->sprite_.move({momentum_.x, 0});
+		timesMovedUp = 0;
+		while(environment.getTerrain().isColliding(*temp)){
+			temp->sprite_.move({0, -1});
+			++timesMovedUp;
+		}
+
+		if(timesMovedUp < 30){
+			this->sprite_.setPosition(temp->sprite_.getPosition());
+		}
+		else{
+			momentum_.x = 0;
+			momentum_.y = 0;
+		}
+		if(momentum_.x < -0.4)
+			momentum_.x += 0.4;
+		else if(momentum_.x > 0.4)
+			momentum_.x -= 0.4;
+		else
+			momentum_.x = 0;
+	}
+	else{
+		momentum_.y += 1.5;
+		
+	}
+    state_ = unitState::idle;
+	delete temp;
+    Entity::applyPhysics(colliding, environment);
 }
 void Unit::move(){
     Entity::move();
@@ -156,18 +184,14 @@ sf::Vector2f Unit::getShootMomentum(sf::RenderWindow& screen){
     shootPower_ = 0;
     return momentum;
 }
-void Projectile::applyPhysics(bool colliding){
+void Projectile::applyPhysics(bool colliding, Environment& environment){
     momentum_.x += wind_;
-    Entity::applyPhysics(colliding);
+    Entity::applyPhysics(colliding, environment);
 }
 void Projectile::move(){
     Entity::move();
 }
-void Projectile::getMovement(const InputHandler& input){
-    if(input.isKeyPressed(sf::Keyboard::Key::Space))
-        goto xkcd;
-xkcd:
-    ;
+void Projectile::getMovement(const InputHandler&){
 }
 
 sf::CircleShape Projectile::explode(){

@@ -9,6 +9,7 @@
 // using Perlin Noise. Additionaly, collision between
 // Terrain and Entity can be checked (via pixel collision).
 
+class Entity;
 class Terrain {
 public:
     Terrain(unsigned);

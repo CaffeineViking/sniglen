@@ -26,10 +26,10 @@ void GameWorld::initiate(short unsigned int players, short unsigned int units){
 
 void GameWorld::update() {
     static auto currentPlayer = playerVector.begin();
-    currentUnit->update(*input, environment_->getTerrain().isColliding(*currentUnit));
+    currentUnit->update(*input, environment_->getTerrain().isColliding(*currentUnit), *environment_);
 
     for(std::unique_ptr<Projectile>& projectile : projectileVector){
-        projectile->update(*input, environment_->getTerrain().isColliding(*projectile));
+        projectile->update(*input, environment_->getTerrain().isColliding(*projectile), *environment_);
         if(environment_->getTerrain().isColliding(*projectile)){
             auto explosion = projectile->explode();
             environment_->getTerrain().destroy(explosion);
@@ -82,7 +82,7 @@ void GameWorld::update() {
     for (auto& player : playerVector) {
         for (Unit* unit : player->getTeam()) {
             if (currentUnit != unit)
-                unit->update(InputHandler{}, environment_->getTerrain().isColliding(*unit));
+                unit->update(InputHandler{}, environment_->getTerrain().isColliding(*unit), *environment_);
         }
     }
 
