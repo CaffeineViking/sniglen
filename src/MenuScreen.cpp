@@ -30,6 +30,7 @@ void MenuScreen::update(){
             createButton("back.png", "Back", {windowSize_.x/2, windowSize_.y-100});
         }
         else if(state_ == MenuState::option){
+            createText("THIS IS OPTIONAL", "BebasNeue.otf", {windowSize_.x/2, windowSize_.y/2 - 150}, 250);
             createButton("back.png", "Back", {windowSize_.x/2, windowSize_.y-100});
         } else {
         }
