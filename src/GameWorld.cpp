@@ -53,6 +53,12 @@ void GameWorld::update() {
         }
         }));
         cameraTarget_ = projectileVector.back().get();
+        ++currentPlayer;
+        if(currentPlayer == playerVector.end())
+            currentPlayer = playerVector.begin();
+        currentUnit = (*currentPlayer)->getNextUnit();
+        environment_->randomizeWind();
+        roundTime_ = gameTime_.getElapsedTime();
     }
 
     for(std::unique_ptr<Projectile>& projectile : projectileVector){
