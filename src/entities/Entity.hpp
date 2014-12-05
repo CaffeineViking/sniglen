@@ -43,6 +43,7 @@ class Entity{
 
 class Unit: public Entity{
     private:
+        float health_{10.0f};
         enum class unitState{idle=0, walking, falling, shooting};
         unitState state_; // Used to tell what the unit is currently doing
         std::unique_ptr<Player> owner_;
@@ -66,6 +67,7 @@ class Unit: public Entity{
             }
         void update(const InputHandler& input, bool colliding) override {getInput(input); getMovement(input); updateCrosshair(); applyPhysics(colliding); move();};
         void collide();
+        bool isDead() const { return health_ <= 0.0; }
         bool checkExplosion(const sf::CircleShape&, float);
         bool inControl(){return (state_ != unitState::falling);};
         float getShootAngle(){return aimAngle_;};
@@ -73,7 +75,6 @@ class Unit: public Entity{
         sf::Vector2f getPosition() const {return sprite_.getPosition();}; // Kanske måste tas bort då vi redan har getPos sen förut!?
         void setColor(sf::Color color){sprite_.setColor(color);}
         bool isShooting(){return shoot_;};
-        bool isDead(){return false;};
         void draw(sf::RenderWindow&) override;
         ~Unit() = default;
 };

@@ -72,9 +72,9 @@ void GameWorld::update() {
                 for (auto& unit : player->getTeam()) {
                     if (unit->checkExplosion(explosion, projectile->getDamage()))
                         cameraTarget_ = unit;
-                    /* else{
+                    else{
                         cameraTarget_ = currentUnit;
-                    } */
+                    }
                 }
             }
         }
@@ -92,8 +92,9 @@ void GameWorld::update() {
 
     for (auto& player : playerVector) {
         for (auto& unit : player->getTeam()) {
-            if (currentUnit != unit)
+            if (currentUnit != unit) {
                 unit->update(InputHandler{}, environment_->getTerrain().isColliding(*unit));
+            }
         }
     }
 
