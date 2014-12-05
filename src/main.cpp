@@ -3,6 +3,7 @@
 #include "MenuScreen.hpp"
 #include "entities/Entity.hpp"
 #include "utilities/InputHandler.hpp"
+#include <iostream>
 
 enum class gameState{menu = 0, game, pause};
 

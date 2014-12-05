@@ -9,6 +9,7 @@ Player::Player(sf::Color col) : color_{col}{
 Player::~Player(){
     for(Unit* unit : team_)
         delete unit;
+    team_.clear();
 }
 
 Unit* Player::getRandomUnit(){
