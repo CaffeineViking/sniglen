@@ -118,10 +118,15 @@ void Unit::getMovement(const InputHandler& input){
 }
 void Unit::applyPhysics(bool colliding, Environment& environment){
     int timesMoved = 0;	
+    // Make a copy of unit to check collision on next frame
     Unit* temp = new Unit{*sprite_.getTexture(), *crosshair_.getTexture(), sprite_.getPosition(), speed_, mass_, nullptr};
     temp->momentum_ = momentum_;
+
+    // Move one pixel at a time on y-axis until you have moved for what it should move
     while(timesMoved < abs(momentum_.y)){
+        // Check for collision each of those times
         if(!environment.getTerrain().isColliding(*temp)){
+            // If not colliding, move in the appropriate direction one pixel, set unit to be falling and increment variable for amount of movement done
             if(momentum_.y > 0)
                 temp->sprite_.move({0.0f, 1.0f});
             else 
@@ -129,6 +134,7 @@ void Unit::applyPhysics(bool colliding, Environment& environment){
             ++timesMoved;
             state_ = unitState::falling;
         } else {
+            // If collision is detected, move one pixel back and remove momentum in y-axis, then set state to idle and break
             if(momentum_.y < 0)
                 temp->sprite_.move({0.0f, 1.0f});
             else 
@@ -138,36 +144,51 @@ void Unit::applyPhysics(bool colliding, Environment& environment){
             break;
         }
     }
+
+    // Check pixel below if we should fall or not
     temp->sprite_.move({0.0f, 1.0f});
     if(!environment.getTerrain().isColliding(*temp))
         state_ = unitState::falling;
     temp->sprite_.move({0.0f, -1.0f});
+
+    // Apply gravity if falling
     if(state_ == unitState::falling)
         momentum_.y += 1.5;
+
+    // Reset move counter
     timesMoved = 0;
+
+    // Move one pixel at a time on x-axis until you have moved for what it should move
     while(timesMoved < abs(momentum_.x)){
+        // Check for collision each of those times
         if(!environment.getTerrain().isColliding(*temp)){
+            // If not colliding, move in the appropriate direction one pixel, increment variable for amount of movement done
             if(momentum_.x > 0)
                 temp->sprite_.move({1.0f, 0.0f});
             else 
                 temp->sprite_.move({-1.0f, 0.0f});
             ++timesMoved;
         } else {
+            // If collision is detected, check if the slope is small enough
             timesMoved = 0;
             while(environment.getTerrain().isColliding(*temp)){
                 temp->sprite_.move({0.0f, -1.0f});
                 ++timesMoved;
             }
+            // If it's too high, shove it back on the x-axis
             if(timesMoved > 30){
                 if(momentum_.x < 0)
                     temp->sprite_.move({1.0f, 0.0f});
                 else 
                     temp->sprite_.move({-1.0f, 0.0f});
             } else {
+                // If it low enough, push him upwards to be on top of the pixels
                 momentum_.x = 0.0f;
                 momentum_.y = 0.0f;
                 temp->sprite_.move({timesMoved, 0});
             }
+
+            // Apply friction and stop if momentum is too low
             if(momentum_.x < -0.2f)
                 momentum_.x *= 0.6f;
             else if(momentum_.x > 0.2f)
@@ -221,7 +242,9 @@ void Unit::applyPhysics(bool colliding, Environment& environment){
     //    }
     //    momentum_.y += 1.5;
     //}
-    this->sprite_.setPosition(temp->sprite_.getPosition());	
+
+    // Apply the changes done onto the real unit
+    this->sprite_.setPosition(temp->sprite_.getPosition());
     delete temp;
 }
 void Unit::move(){
