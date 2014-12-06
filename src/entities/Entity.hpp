@@ -28,8 +28,8 @@ class Entity{
         Entity(const sf::Texture& tex, sf::Vector2f pos, float spd, int mass):
             texture_{tex}, position_{pos}, mass_{mass}, speed_{spd}{
                 sprite_.setTexture(texture_);
-                sprite_.setPosition(pos);
                 sprite_.setOrigin({(float)texture_.getSize().x/2, (float)texture_.getSize().y/2});
+                sprite_.setPosition(pos);
             }
         bool lookLeft_{false};
         virtual void getMovement(const InputHandler&); // Reads input and sets what movements should be done
@@ -68,8 +68,8 @@ class Unit: public Entity{
         Unit(const sf::Texture& tex, const sf::Texture& crosshair, sf::Vector2f pos, float spd, int mass, Player* player = nullptr):
             Entity(tex, pos, spd, mass), owner_{player}, crosshair_(crosshair){ 
                 sprite_.setPosition(position_);
-                crosshair_.setPosition(sprite_.getOrigin());
                 crosshair_.setOrigin({(float)crosshair_.getTexture()->getSize().x/2, (float)crosshair_.getTexture()->getSize().y/2});
+                crosshair_.setPosition(sprite_.getOrigin());
                 //crosshair_.setOrigin({(float)crosshair_.getTexture().getSize().x/2, (float)crosshair_.getTexture().getSize().y/2});
             }
 

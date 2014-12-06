@@ -9,6 +9,8 @@
 #include <cmath>
 #include <string>
 
+#include <iostream>
+
 float toRadians(float degrees);
 void Entity::move(){
     sprite_.setOrigin({(float)texture_.getSize().x/2, (float)texture_.getSize().y/2}); // Set origin to middle of sprite
@@ -31,7 +33,7 @@ void Entity::draw(sf::RenderWindow& window){
 void Entity::collide(){
 }
 void Unit::getInput(const InputHandler& input){
-	
+
     shoot_ = false;
     if(state_ != unitState::falling && input.isKeyPressed(sf::Keyboard::Key::Space))
         state_ = unitState::shooting;
@@ -115,55 +117,112 @@ void Unit::getMovement(const InputHandler& input){
     }
 }
 void Unit::applyPhysics(bool colliding, Environment& environment){
-	int timesMovedUp = 0;	
-	Unit* temp = new Unit{*sprite_.getTexture(), *crosshair_.getTexture(), sprite_.getPosition(), 2, 150, nullptr};
+    int timesMoved = 0;	
+    Unit* temp = new Unit{*sprite_.getTexture(), *crosshair_.getTexture(), sprite_.getPosition(), speed_, mass_, nullptr};
     temp->momentum_ = momentum_;
-	if(state_ != unitState::falling){
-		temp->sprite_.move({0.0f, -1.0f});
-		timesMovedUp = 0;
-		temp->sprite_.move({momentum_.x, 0.0f});
-		while(environment.getTerrain().isColliding(*temp)){
-			temp->sprite_.move({0.0f, -1.0f});
-			++timesMovedUp;
-		}
+    while(timesMoved < abs(momentum_.y)){
+        if(!environment.getTerrain().isColliding(*temp)){
+            if(momentum_.y > 0)
+                temp->sprite_.move({0.0f, 1.0f});
+            else 
+                temp->sprite_.move({0.0f, -1.0f});
+            ++timesMoved;
+            state_ = unitState::falling;
+        } else {
+            if(momentum_.y < 0)
+                temp->sprite_.move({0.0f, 1.0f});
+            else 
+                temp->sprite_.move({0.0f, -1.0f});
+            momentum_.y = 0;
+            state_ = unitState::idle;
+            break;
+        }
+    }
+    temp->sprite_.move({0.0f, 1.0f});
+    if(!environment.getTerrain().isColliding(*temp))
+        state_ = unitState::falling;
+    temp->sprite_.move({0.0f, -1.0f});
+    if(state_ == unitState::falling)
+        momentum_.y += 1.5;
+    timesMoved = 0;
+    while(timesMoved < abs(momentum_.x)){
+        if(!environment.getTerrain().isColliding(*temp)){
+            if(momentum_.x > 0)
+                temp->sprite_.move({1.0f, 0.0f});
+            else 
+                temp->sprite_.move({-1.0f, 0.0f});
+            ++timesMoved;
+        } else {
+            timesMoved = 0;
+            while(environment.getTerrain().isColliding(*temp)){
+                temp->sprite_.move({0.0f, -1.0f});
+                ++timesMoved;
+            }
+            if(timesMoved > 30){
+                if(momentum_.x < 0)
+                    temp->sprite_.move({1.0f, 0.0f});
+                else 
+                    temp->sprite_.move({-1.0f, 0.0f});
+            } else {
+                momentum_.x = 0.0f;
+                momentum_.y = 0.0f;
+                temp->sprite_.move({timesMoved, 0});
+            }
+            if(momentum_.x < -0.2f)
+                momentum_.x *= 0.6f;
+            else if(momentum_.x > 0.2f)
+                momentum_.x *= 0.6f;
+            else
+                momentum_.x = 0.0f;
+            break;
+        }
+    }
+    //if(state_ != unitState::falling){
+    //if(momentum_.x != 0 && colliding){
+    //	temp->sprite_.move({0.0f, -1.0f});
+    //	timesMoved = 0;
+    //	temp->sprite_.move({momentum_.x, 0.0f});
+    //	while(environment.getTerrain().isColliding(*temp)){
+    //		temp->sprite_.move({0.0f, -1.0f});
+    //		++timesMoved;
+    //	}
 
-		if(timesMovedUp < 30){
-			this->sprite_.setPosition(temp->sprite_.getPosition());
-		}
-		else{
-			momentum_.x = 0.0f;
-			momentum_.y = 0.0f;
-		}
-		
-		if(momentum_.x < -0.2f)
-			momentum_.x *= 0.6f;
-		else if(momentum_.x > 0.2f)
-			momentum_.x *= 0.6f;
-		else
-			momentum_.x = 0.0f;
-		
-		if(!colliding)
-			momentum_.y += 1.5f;
-		else
-			state_ = unitState::idle;
-
-	} else {
-		float distance = std::sqrt(std::pow(momentum_.x, 2.0f) + std::pow(momentum_.y, 2.0f));
-		if(environment.getTerrain().isColliding(*temp)){
-			temp->sprite_.move({momentum_.x, momentum_.y});
-			while(environment.getTerrain().isColliding(*temp)){
-				temp->sprite_.move({-momentum_.x/distance, -momentum_.y/distance});
-				if(!environment.getTerrain().isColliding(*temp)){
-					momentum_.y = -1.5f;
-					state_ = unitState::idle;
-				}	
-			}
-		}
-		momentum_.y += 1.5;
-		this->sprite_.setPosition(temp->sprite_.getPosition());	
-	}
-	delete temp;
-
+    //	if(timesMoved < 30){
+    //		this->sprite_.setPosition(temp->sprite_.getPosition());
+    //	}
+    //	else{
+    //		momentum_.x = 0.0f;
+    //		momentum_.y = 0.0f;
+    //	}
+    //	
+    //	if(momentum_.x < -0.2f)
+    //		momentum_.x *= 0.6f;
+    //	else if(momentum_.x > 0.2f)
+    //		momentum_.x *= 0.6f;
+    //	else
+    //		momentum_.x = 0.0f;
+    //	
+    //	if(!colliding)
+    //		momentum_.y += 1.5f;
+    //	else
+    //		state_ = unitState::idle;
+    //} 
+    //else if (momentum_.y != 0 || state_ == unitState::falling){
+    //    float distance = std::sqrt(std::pow(momentum_.x, 2.0f) + std::pow(momentum_.y, 2.0f));
+    //    if(environment.getTerrain().isColliding(*temp)){
+    //        temp->sprite_.move({momentum_.x, momentum_.y});
+    //        while(environment.getTerrain().isColliding(*temp)){
+    //            temp->sprite_.move({-momentum_.x/distance, -momentum_.y/distance});
+    //			if(!environment.getTerrain().isColliding(*temp)){
+    //				momentum_.y = -1.5f;
+    //				state_ = unitState::idle;
+    //			}	
+    //		}
+    //    }
+    //    momentum_.y += 1.5;
+    //}
+    this->sprite_.setPosition(temp->sprite_.getPosition());	
+    delete temp;
 }
 void Unit::move(){
     Entity::move();
