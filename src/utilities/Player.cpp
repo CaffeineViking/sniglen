@@ -37,3 +37,19 @@ std::unique_ptr<Weapon>& Player::getCurrentWeapon(){
     return weaponList_[currentWeapon_].first;
 }
 
+void Player::removeUnits() {
+    unsigned removed{0};
+    unsigned iteratedOver{0};
+    if(!team_.empty()){
+        while(iteratedOver + removed < team_.size()){
+            if(team_.at(iteratedOver)->isRemoved()){
+                team_.at(iteratedOver) = nullptr;
+                std::swap(team_.at(iteratedOver), (team_.at(team_.size()-(++removed))));
+            }
+            else
+                ++iteratedOver;
+        }
+
+        team_.erase(team_.begin() + (team_.size()-removed), team_.end());
+    }
+}

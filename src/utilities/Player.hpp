@@ -27,5 +27,6 @@ class Player{
         void insertUnit(Unit*);
         void selectWeapon(int weaponID);
         std::unique_ptr<Weapon>& getCurrentWeapon();
+        void removeUnits();
 };
 #endif

@@ -133,10 +133,22 @@ void GameWorld::update() {
     }
 
     for (auto& player : playerVector) {
+        bool removed{false};
         for (auto& unit : player->getTeam()) {
             if (currentUnit != unit)
                 unit->update(InputHandler{}, environment_->getTerrain().isColliding(*unit), *environment_);
+
+            if (unit->getPos().y > gameWindow->getSize().y + unit->getSprite().getTexture()->getSize().y) {
+                removed = true;
+                unit->remove();
+
+                if (unit == currentUnit)
+                    nextRound(currentPlayer);
+            }
         }
+
+        if (removed)
+            player->removeUnits();
     }
 
     // The given parameters passed to the camera update function will be used to
