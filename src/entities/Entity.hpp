@@ -61,6 +61,7 @@ class Unit: public Entity{
         void getMovement(const InputHandler&) override;
         void getInput(const InputHandler&);
         void applyPhysics(bool, Environment&) override;
+        sf::Vector2f findCollisionVector(const sf::Vector2f&, const sf::Vector2f&, Environment&);
         void move() override;
         void updateCrosshair();
 

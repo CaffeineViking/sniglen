@@ -18,12 +18,14 @@ void Entity::move(){
     position_ = sprite_.getPosition(); // Get new position
 }
 void Entity::applyPhysics(bool colliding, Environment& environment){
-    if (!colliding) {
+    /*if (!colliding) {
         momentum_.y += 1.5f;
     } else {
 
         momentum_ = {0, -1};
-    }
+    }*/
+
+    momentum_.y += 1.5f;
 }
 void Entity::getMovement(const InputHandler&){
 }
@@ -117,10 +119,8 @@ void Unit::getMovement(const InputHandler& input){
     }
 }
 void Unit::applyPhysics(bool colliding, Environment& environment){
-    int timesMoved = 0;	
+    /*int timesMoved = 0;	
     // Make a copy of unit to check collision on next frame
-    Unit* temp = new Unit{*sprite_.getTexture(), *crosshair_.getTexture(), sprite_.getPosition(), speed_, mass_, nullptr};
-    temp->momentum_ = momentum_;
 
     // Move one pixel at a time on y-axis until you have moved for what it should move
     while(timesMoved < abs(momentum_.y)){
@@ -197,7 +197,7 @@ void Unit::applyPhysics(bool colliding, Environment& environment){
                 momentum_.x = 0.0f;
             break;
         }
-    }
+    }*/
     //if(state_ != unitState::falling){
     //if(momentum_.x != 0 && colliding){
     //	temp->sprite_.move({0.0f, -1.0f});
@@ -244,9 +244,45 @@ void Unit::applyPhysics(bool colliding, Environment& environment){
     //}
 
     // Apply the changes done onto the real unit
-    this->sprite_.setPosition(temp->sprite_.getPosition());
-    delete temp;
+    // this->sprite_.setPosition(temp->sprite_.getPosition());
+    // delete temp;
+
+    // TODO: Move this interface to move procedure, need to add environment reference.
+    // Check if we need to find closest collision point.
+
+    Unit* temp = new Unit{*sprite_.getTexture(), *crosshair_.getTexture(), sprite_.getPosition(), speed_, mass_, nullptr};
+    temp->sprite_.move(momentum_);
+    float distanceX{std::pow(momentum_.x, 2.0f)};
+    float distanceY{std::pow(momentum_.y, 2.0f)};
+    float distance{std::sqrt(distanceX + distanceY)};
+    while(environment.getTerrain().isColliding(*temp)) {
+        temp->sprite_.move(0, -1);
+        colliding = true;
+        state_ = unitState::idle;
+    }
+
+    momentum_ = temp->getPosition() - this->getPosition();
+
+    if (!colliding) {
+        momentum_.y += 1.5f;
+        state_ = unitState::falling;
+    } else {
+        momentum_.x *= 0.85f;
+    }
+    Entity::applyPhysics(colliding, environment);
 }
+
+sf::Vector2f Unit::findCollisionVector(const sf::Vector2f& pos, const sf::Vector2f& direction, Environment& environment) {
+    Unit candidate{*sprite_.getTexture(), *crosshair_.getTexture(), sprite_.getPosition(), speed_, mass_, nullptr};
+    candidate.sprite_ = sprite_;
+    candidate.sprite_.setPosition(pos - direction);
+    while (environment.getTerrain().isColliding(candidate)) {
+        candidate.sprite_.move(-direction);
+    }
+
+    return candidate.getPosition();
+}
+
 void Unit::move(){
     Entity::move();
 }
