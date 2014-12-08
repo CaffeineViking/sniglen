@@ -83,12 +83,12 @@ bool Terrain::isColliding(const Entity& entity) const {
     sf::Image entityImage{entity.getSprite().getTexture()->copyToImage()}; // Could be bottleneck here if there is one. Need this in Entity instead.
 
     // The start coordiantes to check pixels. These use the entities sprite size, no need to check the entire terrain.
-    int startX = (entity.getPos().x - entityImage.getSize().x / 2) - sprite_.getPosition().x;
-    int startY = (entity.getPos().y - entityImage.getSize().y / 2) - sprite_.getPosition().y;
+    int startX = entity.getPos().x - 5  - sprite_.getPosition().x;
+    int startY = entity.getPos().y + ((entityImage.getSize().y / 2) - 10 ) - sprite_.getPosition().y;
 
     // The end coordinates to check for a pixel collision.
-    int endX = startX + entity.getSprite().getTexture()->getSize().x;
-    int endY = startY + entity.getSprite().getTexture()->getSize().y;
+    int endX = startX + 10;
+    int endY = startY + 10;
 
     for (int y{startY}; y < endY; ++y) {
         // Make sure we are within bounds.
