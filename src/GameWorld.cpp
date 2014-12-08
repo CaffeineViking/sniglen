@@ -46,6 +46,7 @@ void GameWorld::nextRound(std::vector<std::unique_ptr<Player>>::iterator& curren
     cameraTarget_ = currentUnit;
     environment_->randomizeWind();
     roundTime_ = gameTime_.getElapsedTime();
+    shot_ = false;
 }
 
 void GameWorld::update() {
@@ -128,7 +129,6 @@ void GameWorld::update() {
 
     if(((gameTime_.getElapsedTime() - roundTime_).asSeconds() > 25.0 && currentUnit->inControl()) ||
         (shot_ && ((gameTime_.getElapsedTime() - delayTime_).asSeconds()) > 5.0)){
-        shot_ = false;
         nextRound(currentPlayer);
     }
 
