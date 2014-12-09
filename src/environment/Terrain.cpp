@@ -46,19 +46,21 @@ Terrain::Terrain(unsigned size) {
 
 std::pair<bool, bool> Terrain::goLeftRightCheckSlope(const sf::Vector2f slopePoint) {
     std::pair<bool, bool> tmp = std::make_pair(false, false); 
-    for(int i {-1}; i <= 1; i++) {
-        if(image_.getPixel(slopePoint.x-2, slopePoint.y+i).a == 0) {
+    for(int i {0}; i <= 2; i++) {
+        if(image_.getPixel(slopePoint.x-2, slopePoint.y+50+i).a == 0) {
             tmp.first = true;
+            std::cerr << "left dont go" << std::endl;
             break;
         }
     }
 
-    /*for(int i {-1}; i<= 1; i++) {
-        if(image_.getPixel(slopePoint.x+2, slopePoint.y+i).a == 0) {
+    for(int i {0}; i<= 2; i++) {
+        if(image_.getPixel(slopePoint.x+2, slopePoint.y+50+i).a == 0) {
             tmp.second = true;
+            std::cerr << "right side dont go pliiizzzzz" << std::endl;
             break;
         }
-    }*/
+    }
     return tmp;
 }
 
