@@ -21,8 +21,7 @@ class MenuScreen{
         bool gameStart_ = false;
         bool redraw_ = false;
         bool buttonClicked(const sf::Sprite&);
-        bool reSpin_ = false;
-        int rot;
+        bool egg = false;
         float masterVolume_{100};
         float musicVolume_{100};
         float gameVolume_{100};
@@ -37,6 +36,8 @@ class MenuScreen{
         void draw();
         bool getGameStart();
         short unsigned int getTeamSize(){return teamSize_;};
+        float getGameVolume(){return gameVolume_;};
+        float getMusicVolume(){return musicVolume_;};
         short unsigned int getPlayerAmount(){return playerAmount_;};
 };
 #endif

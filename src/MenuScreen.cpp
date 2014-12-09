@@ -17,6 +17,7 @@ void MenuScreen::update(){
             createText("™Sniglen: the Game: the Movie: Reloaded: Limited Limited Edition!™", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 - 150});
             createButton("setupGame.png", "Setup", {Assets::WINDOW_SIZE.x/2 - 50, Assets::WINDOW_SIZE.y/2});
             createButton("options.png", "Options", {Assets::WINDOW_SIZE.x/2 + 50, Assets::WINDOW_SIZE.y/2});
+            createButton("est", "Egg", {50,50});
             createButton("quit.png", "Exit", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 + 100});
         }
         else if(state_ == MenuState::setup){
@@ -40,7 +41,6 @@ void MenuScreen::update(){
             createButton("incPlayers.png", "incMusic", {Assets::WINDOW_SIZE.x/2 - 65, Assets::WINDOW_SIZE.y/2 + 100});
             createButton("decPlayers.png", "decMusic", {Assets::WINDOW_SIZE.x/2 + 65, Assets::WINDOW_SIZE.y/2 + 100});
             createButton("back.png", "Back", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y-100});
-        } else {
         }
         redraw_ = false;
     }
@@ -71,6 +71,8 @@ void MenuScreen::update(){
                     --musicVolume_;
                 if(button.first == "Back")
                     state_ = MenuState::main;
+                if(button.first == "Egg")
+                    egg = true;
                 if(button.first == "Exit")
                     window_->close();
 
@@ -79,7 +81,10 @@ void MenuScreen::update(){
         }
     }
     for(std::unique_ptr<sf::Text>& text : textVector_){
+        if(!egg)
             text->setRotation(1.0f);
+        else
+            text->setRotation(text->getRotation() + 100.0f);
     }
 }
 void MenuScreen::draw(){
@@ -93,7 +98,13 @@ void MenuScreen::draw(){
 
 void MenuScreen::createButton(const std::string& filename, const std::string& label, const sf::Vector2f& position){
     // Create button
-    buttonVector_.push_back(std::make_pair(label, new sf::Sprite(Assets::LOAD_TEXTURE(filename))));
+    if(filename == "est"){
+        static sf::Texture est;
+        est.create(50,50);
+        buttonVector_.push_back(std::make_pair(label, new sf::Sprite(est)));
+    }
+    else
+        buttonVector_.push_back(std::make_pair(label, new sf::Sprite(Assets::LOAD_TEXTURE(filename))));
     // Set origin to middle
     buttonVector_.back().second->setOrigin(buttonVector_.back().second->getTexture()->getSize().x/2, buttonVector_.back().second->getTexture()->getSize().y/2);
     // Set position
