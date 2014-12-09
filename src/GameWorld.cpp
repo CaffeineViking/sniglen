@@ -50,7 +50,7 @@ void GameWorld::nextRound(std::vector<std::unique_ptr<Player>>::iterator& curren
     if (spawnCrate == 1) {
         crateVector.push_back(std::unique_ptr<HealthCrate>{new HealthCrate{{static_cast<float>(Random::GENERATE_MAX(environment_->getTerrainSize())), 180}}});
     } else if (spawnCrate == 2) {
-        crateVector.push_back(std::unique_ptr<Weapon>{new WeaponCrate{{static_cast<float>(Random::GENERATE_MAX(environment_->getTerrainSize())), 180}}});
+        crateVector.push_back(std::unique_ptr<WeaponCrate>{new WeaponCrate{{static_cast<float>(Random::GENERATE_MAX(environment_->getTerrainSize())), 180}}});
     }
 
     cameraTarget_ = currentUnit;
