@@ -312,6 +312,7 @@ bool Unit::checkExplosion(const sf::CircleShape& expl, float damage) {
 void Unit::draw(sf::RenderWindow& window){
     window.draw(sprite_);
     window.draw(crosshair_);
+    window.draw(healthText_);
 }
 sf::Vector2f Unit::getShootMomentum(sf::RenderWindow& screen){ 
     sf::Vector2f momentum;
@@ -320,6 +321,11 @@ sf::Vector2f Unit::getShootMomentum(sf::RenderWindow& screen){
     screen.setTitle("x: " + std::to_string(momentum.x) + " - y: " + std::to_string(momentum.y));
     shootPower_ = 0;
     return momentum;
+}
+void Unit::updateHealthText(){
+    healthText_.setString(std::to_string((int)health_));
+    healthText_.setOrigin({healthText_.getLocalBounds().width/2, healthText_.getLocalBounds().height/2});
+    healthText_.setPosition({sprite_.getPosition().x, sprite_.getPosition().y - 50});
 }
 void Projectile::applyPhysics(bool colliding, Environment& environment){
     momentum_.x += wind_;
