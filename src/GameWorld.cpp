@@ -7,7 +7,7 @@
 
 GameWorld::GameWorld(sf::RenderWindow& window, InputHandler& inputhandler) : gameWindow{&window}, input{&inputhandler}, camera_{window}  {}
 
-void GameWorld::initiate(short unsigned int players, short unsigned int units){
+void GameWorld::initiate(short unsigned int players, short unsigned int units, float gameVolume, float musicVolume){
     roundTime_ = gameTime_.getElapsedTime();
     textVector_.clear();
     playerVector.clear();
@@ -15,6 +15,8 @@ void GameWorld::initiate(short unsigned int players, short unsigned int units){
     environment_ = std::unique_ptr<Environment>{new Environment{9.82, static_cast<unsigned>(2560 + (128 * players * units))}};
     environment_->randomizeWind();
 
+    gameVolume_ = gameVolume;
+    musicVolume_ = musicVolume;
     for(int i{0}; i < players; ++i)
         playerVector.push_back(std::unique_ptr<Player>{new Player{{(unsigned char)Random::GENERATE_MAX(255),(unsigned char)Random::GENERATE_MAX(255),(unsigned char)Random::GENERATE_MAX(255)}}});
     for(int i{0}; i < units; ++i){
@@ -24,6 +26,7 @@ void GameWorld::initiate(short unsigned int players, short unsigned int units){
         }
     }
 
+    explosionSound.setVolume(gameVolume_);
     currentUnit = (*playerVector.begin())->getNextUnit();
     currentUnit->enableCrosshair();
     cameraTarget_ = currentUnit;
@@ -117,7 +120,7 @@ void GameWorld::update() {
         if(environment_->getTerrain().isColliding(*projectile)){
             auto explosion = projectile->explode();
             environment_->getTerrain().destroy(explosion);
-            sound.play();
+            explosionSound.play();
             environment_->getTerrain().destroy(explosion);
 
             bool hit{false};

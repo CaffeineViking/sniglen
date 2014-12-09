@@ -31,14 +31,16 @@ class GameWorld {
         Entity* cameraTarget_;
         bool newGame_ = true;
         bool shot_ = false;
-        sf::Sound sound{Assets::LOAD_SOUND("explosion.wav")};
+        float gameVolume_{100};
+        float musicVolume_{100};
+        sf::Sound explosionSound{Assets::LOAD_SOUND("explosion.wav")};
         void createText(const std::string&, const std::string&, const sf::Vector2f&, int = 30, const sf::Color& = sf::Color::White, sf::Text::Style = sf::Text::Regular);
 
     public:
         GameWorld(sf::RenderWindow&, InputHandler&);
         void update();
         void draw();
-        void initiate(short unsigned int players, short unsigned int units);
+        void initiate(short unsigned int, short unsigned int, float, float);
         void nextRound(std::vector<std::unique_ptr<Player>>::iterator&); // Rickard, du hade rätt!
 };
 
