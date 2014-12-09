@@ -20,9 +20,15 @@ class MenuScreen{
         std::vector<std::unique_ptr<sf::Text>> textVector_;
         bool gameStart_ = false;
         bool redraw_ = false;
+        bool buttonClicked(const sf::Sprite&);
+        bool reSpin_ = false;
+        int rot;
+        float masterVolume_{100};
+        float musicVolume_{100};
+        float gameVolume_{100};
+        float voiceVolume_{100};
         short unsigned int teamSize_{4};
         short unsigned int playerAmount_{2};
-        bool buttonClicked(const sf::Sprite&);
         void createButton(const std::string&, const std::string&, const sf::Vector2f&);
         void createText(const std::string&, const std::string&, const sf::Vector2f&, int = 30, const sf::Color& = sf::Color::White, sf::Text::Style = sf::Text::Regular);
     public:
