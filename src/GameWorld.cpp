@@ -43,6 +43,13 @@ void GameWorld::nextRound(std::vector<std::unique_ptr<Player>>::iterator& curren
         }
     }
 
+    int spawnCrate{Random::GENERATE_MINMAX(1, 8)};
+    if (spawnCrate == 1) {
+        crateVector.push_back(std::unique_ptr<HealthCrate>{new HealthCrate{{static_cast<float>(Random::GENERATE_MAX(environment_->getTerrainSize())), 180}}});
+    } else if (spawnCrate == 2) {
+        crateVector.push_back(std::unique_ptr<Weapon>{new WeaponCrate{{static_cast<float>(Random::GENERATE_MAX(environment_->getTerrainSize())), 180}}});
+    }
+
     cameraTarget_ = currentUnit;
     environment_->randomizeWind();
     roundTime_ = gameTime_.getElapsedTime();
@@ -151,6 +158,36 @@ void GameWorld::update() {
             player->removeUnits();
     }
 
+    for (auto& crate : crateVector) {
+        crate->update(InputHandler{}, environment_->getTerrain().isColliding(*crate), *environment_);
+        for (auto& player : playerVector) {
+            for (auto& unit : player->getTeam()) {
+                if (crate->isColliding(*unit)) {
+                    if (HealthCrate* healthCrate = dynamic_cast<HealthCrate*>(crate.get())) {
+                        unit->giveHealth(healthCrate->pickUp());
+                        std::cout << unit->getHealth() << std::endl;
+                    } else if (WeaponCrate* weaponCrate = dynamic_cast<WeaponCrate*>(crate.get())) {
+                        weaponCrate->pickUp();
+                    }
+                }
+            }
+        }
+    }
+
+    iteratedOver = 0;
+    removed = 0;
+    if(!crateVector.empty()){
+        while(iteratedOver + removed < crateVector.size()){
+            if(crateVector.at(iteratedOver)->isRemoved()){
+                crateVector.at(iteratedOver) = nullptr;
+                crateVector.at(iteratedOver).swap(crateVector.at(crateVector.size()-(++removed)));
+            }
+            else
+                ++iteratedOver;
+        }
+        crateVector.erase(crateVector.begin() + (crateVector.size()-removed), crateVector.end());
+    }
+
     // The given parameters passed to the camera update function will be used to
     // detemine how the currentUnit will be followed, thus it is also required to pass
     // in environment and the window size to make sure the player is always looking within game bounds.
@@ -172,6 +209,10 @@ void GameWorld::draw() {
         for(auto& ent : player->getTeam())
             ent->draw(*gameWindow);
     }
+
+    // Draw all crates to the game window.
+    for(std::unique_ptr<Crate>& crate : crateVector)
+        crate->draw(*gameWindow);
 
     // Draw all projectiles to the game window.
     for(std::unique_ptr<Projectile>& projectile : projectileVector)
