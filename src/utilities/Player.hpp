@@ -17,6 +17,7 @@ class Player{
         std::vector<Unit*> team_;
         int unitCounter_{-1};
         int currentWeapon_{0};
+        bool teamDead_ = false;
     public:
         Player(sf::Color col);
         ~Player();

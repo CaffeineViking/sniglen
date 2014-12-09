@@ -12,14 +12,24 @@ Player::~Player(){
 }
 
 Unit* Player::getRandomUnit(){
-    return team_[Random::GENERATE_MAX(team_.size()-1)]; // Return random unit from team
+    if(team_.size() != 0)
+        return team_[Random::GENERATE_MAX(team_.size()-1)]; // Return random unit from team
+    teamDead_ = true;
+
+    return nullptr;
 }
 
 Unit* Player::getNextUnit(){
-    if(unitCounter_+1 >= (int)team_.size()){ // Make sure that the unit counter is in bounds
-        unitCounter_ = -1; 
+    if(team_.size() != 0){
+        if(unitCounter_+1 >= (int)team_.size()){ // Make sure that the unit counter is in bounds
+            unitCounter_ = -1; 
+        }
+        return team_[++unitCounter_]; // Return next unit
     }
-    return team_[++unitCounter_]; // Return next unit
+
+    teamDead_ = true;
+
+    return nullptr;
 }
 void Player::selectWeapon(int weaponID){
     if(!weaponList_.empty()){
