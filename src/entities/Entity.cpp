@@ -252,9 +252,6 @@ void Unit::applyPhysics(bool colliding, Environment& environment){
 
     Unit* temp = new Unit{*sprite_.getTexture(), *crosshair_.getTexture(), sprite_.getPosition(), speed_, mass_, nullptr};
     temp->sprite_.move(momentum_);
-    float distanceX{std::pow(momentum_.x, 2.0f)};
-    float distanceY{std::pow(momentum_.y, 2.0f)};
-    float distance{std::sqrt(distanceX + distanceY)};
     while(environment.getTerrain().isColliding(*temp)) {
         temp->sprite_.move(0, -1);
         colliding = true;

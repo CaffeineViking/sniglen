@@ -17,6 +17,7 @@ public:
     void destroy(sf::Vector2i, float); // Destroys part of the terrain.
     void draw(sf::RenderWindow&) const; // Draws the generated terrain sprite to the main window.
     bool isColliding(const Entity&) const; // Checks the generated Perlin Noise function if a
+    std::pair<bool, bool> Terrain::goLeftRightCheckSlope(const sf::Vector2f slopePoint);
     // intersection between the curve function and the entity is happening.
 
 private:

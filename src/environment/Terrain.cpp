@@ -4,6 +4,7 @@
 #include "../utilities/Random.hpp"
 #include "../perlinnoise/PerlinNoise.hpp"
 #include <cmath>
+#include <utility>
 
 Terrain::Terrain(unsigned size) {
     // Allocate a image with the desired size of the terrain.
@@ -41,6 +42,24 @@ Terrain::Terrain(unsigned size) {
 
     refresh(); // Write terrain to texture.
     sprite_.move(0, 720 - image_.getSize().y);
+}
+
+std::pair<bool, bool> Terrain::goLeftRightCheckSlope(const sf::Vector2f slopePoint) {
+    std::pair<bool, bool> tmp = std::make_pair(false, false); 
+    for(int i {-2}; i <= 2; i++) {
+        if(image_.getPixel(slopePoint.x-2, slopePoint.y+i).a == 0) {
+            tmp.first = true;
+            break;
+        }
+    }
+
+    for(int i {-2}; i<= 2; i++) {
+        if(image_.getPixel(slopePoint.x+2, slopePoint.y+i).a == 0) {
+            tmp.second = true;
+            break;
+        }
+    }
+    return tmp;
 }
 
 void Terrain::refresh() {
