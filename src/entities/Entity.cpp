@@ -253,6 +253,14 @@ void Unit::applyPhysics(bool colliding, Environment& environment){
     Unit* temp = new Unit{*sprite_.getTexture(), *crosshair_.getTexture(), sprite_.getPosition(), speed_, mass_, nullptr};
     temp->sprite_.move(momentum_);
     while(environment.getTerrain().isColliding(*temp)) {
+        /*if(environment.getTerrain().goLeftRightCheckSlope(this->getPosition()) == std::make_pair(false, true)) {
+            temp->sprite_.move(1, 0);
+            std::cout << "left" << std::endl;
+        }
+        if(environment.getTerrain().goLeftRightCheckSlope(this->getPosition()) == std::make_pair(true, false)) {
+            temp->sprite_.move(-1, 0);
+            std::cout << "right" << std::endl;
+        }*/
         temp->sprite_.move(0, -1);
         colliding = true;
         state_ = unitState::idle;

@@ -83,7 +83,6 @@ class Unit: public Entity{
         void disableCrosshair() { crosshair_.setColor({crosshair_.getColor().r, crosshair_.getColor().g, crosshair_.getColor().b, 0}); }
         void update(const InputHandler& input, bool colliding, Environment& environment) override {getInput(input); getMovement(input); applyPhysics(colliding, environment); move(); updateCrosshair(); updateHealthText();};
         void collide();
-        float getHealth() const { return health_; }
         bool isDead() const { return health_ <= 0.0; }
         bool checkExplosion(const sf::CircleShape&, float);
         bool inControl(){return (state_ != unitState::falling);};
@@ -93,6 +92,8 @@ class Unit: public Entity{
         void setColor(sf::Color color){sprite_.setColor(color);}
         bool isShooting(){return shoot_;};
         void draw(sf::RenderWindow&) override;
+        float getHealth() const { return health_; }
+        void giveHealth(float health) { health_ += health; }
 };
 
 class Projectile: public Entity{

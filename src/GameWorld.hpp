@@ -9,6 +9,7 @@
 #include "utilities/Assets.hpp"
 #include "utilities/Player.hpp"
 #include "entities/Entity.hpp"
+#include "entities/Crate.hpp"
 #include "environment/Environment.hpp"
 #include "utilities/InputHandler.hpp"
 #include "utilities/Camera.hpp"
@@ -18,6 +19,7 @@ class GameWorld {
         sf::RenderWindow* gameWindow;
         std::vector<std::unique_ptr<Player>> playerVector;
         std::vector<std::unique_ptr<Projectile>> projectileVector;
+        std::vector<std::unique_ptr<Crate>> crateVector;
         std::vector<std::unique_ptr<sf::Text>> textVector_;
         std::unique_ptr<Environment> environment_;
         InputHandler* input;
