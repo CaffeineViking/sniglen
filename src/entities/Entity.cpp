@@ -119,6 +119,89 @@ void Unit::getMovement(const InputHandler& input){
     }
 }
 void Unit::applyPhysics(bool colliding, Environment& environment){
+    	int timesMovedUp = 0;
+	Unit *temp = new Unit { *sprite_.getTexture(), *crosshair_.getTexture(), sprite_.getPosition(), 2, 150, nullptr};
+	temp->momentum_ = momentum_;
+	if(state_ == unitState::falling){
+		if(momentum_.x == 0.0f && colliding)
+			state_ = unitState::idle;
+	}
+	
+	//If falling/not walking
+	
+	if(state_ == unitState::falling){
+	    float distance = std::sqrt(std::pow(momentum_.x, 2.0f) + std::pow(momentum_.y, 2.0f));
+	    if (!environment.getTerrain().isColliding( *temp)) {
+	        temp->sprite_.move({momentum_.x, momentum_.y});
+			while (environment.getTerrain().isColliding( *temp)) {
+				temp->sprite_.move({-momentum_.x / distance, -momentum_.y / distance});
+				if (!environment.getTerrain().isColliding( *temp)) {
+					momentum_.y = 0;
+					this->sprite_.setPosition(temp->sprite_.getPosition());
+				}
+			}
+			momentum_.y += 1.5f;
+	    }
+		else if(environment.getTerrain().isColliding(*temp)){
+			temp->sprite_.setPosition(sprite_.getPosition());
+			temp->sprite_.move({momentum_.x, momentum_.y});
+			if(environment.getTerrain().isColliding(*temp)){
+				while (environment.getTerrain().isColliding(*temp)) {
+					temp->sprite_.move({-momentum_.x/distance, -std::abs(momentum_.y/distance)});
+					if (!environment.getTerrain().isColliding( *temp)) {
+						momentum_.y = 0;
+						this->sprite_.setPosition(temp->sprite_.getPosition());
+					}
+				}	
+				momentum_.x = 0.0f;
+				momentum_.y = 0.0f;
+			}
+			else{
+				this->sprite_.setPosition(temp->sprite_.getPosition());
+			}
+		}
+		
+	}
+	
+	//If walking
+	
+	else if (state_ != unitState::falling) {
+	    timesMovedUp = 0;
+	    temp->sprite_.move({momentum_.x, 0.0f});
+	    float distance = std::sqrt(std::pow(momentum_.x, 2.0f) + std::pow(momentum_.y, 2.0f));
+
+	    while (environment.getTerrain().isColliding( *temp)) {
+	        temp->sprite_.move({0.0f, -1.0f});
+	        ++timesMovedUp;
+	    }
+
+	    if (timesMovedUp < 30) {
+	        this->sprite_.setPosition(temp->sprite_.getPosition());
+	    } else{
+			temp->sprite_.setPosition(sprite_.getPosition());	
+			temp->sprite_.move({momentum_.x, 0.0f});
+			while (environment.getTerrain().isColliding(*temp)) {	
+					temp->sprite_.move({-momentum_.x/distance, -momentum_.y/distance});
+			}
+			this->sprite_.setPosition(temp->sprite_.getPosition());
+	        momentum_.x = 0.0f;
+	        momentum_.y = 0.0f;
+	        
+	    }
+
+	    if (!colliding)
+	        momentum_.y += 1.5f;
+	}
+	if(colliding){
+		if (momentum_.x < -0.2f)
+			momentum_.x *= 0.6f;
+		else if (momentum_.x > 0.2f)
+			momentum_.x *= 0.6f;
+		else
+			momentum_.x = 0.0f; 
+	}
+	
+	delete temp;
     /*int timesMoved = 0;	
     // Make a copy of unit to check collision on next frame
 
@@ -250,9 +333,9 @@ void Unit::applyPhysics(bool colliding, Environment& environment){
     // TODO: Move this interface to move procedure, need to add environment reference.
     // Check if we need to find closest collision point.
 
-    Unit* temp = new Unit{*sprite_.getTexture(), *crosshair_.getTexture(), sprite_.getPosition(), speed_, mass_, nullptr};
-    temp->sprite_.move(momentum_);
-    while(environment.getTerrain().isColliding(*temp)) {
+ //   Unit* temp = new Unit{*sprite_.getTexture(), *crosshair_.getTexture(), sprite_.getPosition(), speed_, mass_, nullptr};
+ //   temp->sprite_.move(momentum_);
+ //   while(environment.getTerrain().isColliding(*temp)) {
         /*if(environment.getTerrain().goLeftRightCheckSlope(this->getPosition()) == std::make_pair(false, true)) {
             temp->sprite_.move(1, 0);
             std::cout << "left" << std::endl;
@@ -261,7 +344,7 @@ void Unit::applyPhysics(bool colliding, Environment& environment){
             temp->sprite_.move(-1, 0);
             std::cout << "right" << std::endl;
         }*/
-        temp->sprite_.move(0, -1);
+ /*       temp->sprite_.move(0, -1);
         colliding = true;
         state_ = unitState::idle;
     }
@@ -275,7 +358,7 @@ void Unit::applyPhysics(bool colliding, Environment& environment){
     } else {
         momentum_.x *= 0.85f;
     }
-    Entity::applyPhysics(colliding, environment);
+    Entity::applyPhysics(colliding, environment);*/
 }
 
 void Unit::move(){
