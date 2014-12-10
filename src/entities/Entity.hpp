@@ -114,6 +114,7 @@ class Projectile: public Entity{
                 if(angle == angle)
                     angle = angle;
             }
+        bool isColliding(const Entity& entityObj) const;
         sf::CircleShape explode();
         float getDamage() const { return type_->getDamage(); }
 };

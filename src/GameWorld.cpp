@@ -122,7 +122,6 @@ void GameWorld::update() {
             auto explosion = projectile->explode();
             environment_->getTerrain().destroy(explosion);
             explosionSound.play();
-            environment_->getTerrain().destroy(explosion);
 
             bool hit{false};
             for (auto& player : playerVector) {
@@ -135,6 +134,15 @@ void GameWorld::update() {
             }
 
             if (!hit) cameraTarget_ = currentUnit;
+        }
+        else{
+            for (auto& player : playerVector) {
+                for (auto& unit : player->getTeam()) {
+                    if (projectile->isColliding(*unit)) {
+                        std::cout << "Oscar fattar inte styrkan i endl" << std::endl;
+                    }
+                }
+            }
         }
     }
 

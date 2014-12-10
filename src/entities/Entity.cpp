@@ -342,6 +342,16 @@ sf::CircleShape Projectile::explode(){
     return tempExplosion;
 }
 
+bool Projectile::isColliding(const Entity& entityObj) const {
+    float vectorX = this->getPos().x - entityObj.getPos().x;
+    float vectorY = this->getPos().y - entityObj.getPos().y;
+    float result = std::sqrt(std::pow(vectorX, 2.0f) + std::pow(vectorY, 2.0f));
+    float constToCompareWith = (float)(entityObj.getSpriteData().getSize().x/2 + this->getSpriteData().getSize().x/2);
+    if(result <= constToCompareWith)
+        return true;
+    return false;
+}
+
 float toRadians(float degrees){
     return (degrees * (3.14 / 180));
 }
