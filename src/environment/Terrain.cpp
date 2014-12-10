@@ -101,7 +101,7 @@ void Terrain::draw(sf::RenderWindow& window) const {
 }
 
 bool Terrain::isColliding(const Entity& entity) const {
-    sf::Image entityImage{entity.getSprite().getTexture()->copyToImage()}; // Could be bottleneck here if there is one. Need this in Entity instead.
+    const sf::Image& entityImage{entity.getSpriteData()}; // Could be bottleneck here if there is one. Need this in Entity instead.
 
     // The start coordiantes to check pixels. These use the entities sprite size, no need to check the entire terrain.
     int startX = entity.getPos().x - 5  - sprite_.getPosition().x;

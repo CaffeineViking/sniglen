@@ -65,7 +65,7 @@ void Unit::getInput(const InputHandler& input){
                 aimAngle_ = 90;
         }
     }
-    if(state_ == unitState::shooting){
+    if(state_ == unitState::shooting && owner_->getCurrentWeaponAmmo() > 0){
         ++shootPower_;
         if(shootPower_ > 100)
             state_ = unitState::idle;
@@ -267,6 +267,7 @@ void Unit::applyPhysics(bool colliding, Environment& environment){
     }
 
     momentum_ = temp->getPosition() - this->getPosition();
+    delete temp;
 
     if (!colliding) {
         momentum_.y += 1.5f;
@@ -275,17 +276,6 @@ void Unit::applyPhysics(bool colliding, Environment& environment){
         momentum_.x *= 0.85f;
     }
     Entity::applyPhysics(colliding, environment);
-}
-
-sf::Vector2f Unit::findCollisionVector(const sf::Vector2f& pos, const sf::Vector2f& direction, Environment& environment) {
-    Unit candidate{*sprite_.getTexture(), *crosshair_.getTexture(), sprite_.getPosition(), speed_, mass_, nullptr};
-    candidate.sprite_ = sprite_;
-    candidate.sprite_.setPosition(pos - direction);
-    while (environment.getTerrain().isColliding(candidate)) {
-        candidate.sprite_.move(-direction);
-    }
-
-    return candidate.getPosition();
 }
 
 void Unit::move(){
@@ -306,7 +296,7 @@ bool Unit::checkExplosion(const sf::CircleShape& expl, float damage) {
     if (distance <= expl.getRadius()) {
         health_ -= damage * (distance / expl.getRadius());
         if (isDead()) {
-            sprite_.setTexture(Assets::LOAD_TEXTURE("RIP.png"));
+            setTexture(Assets::LOAD_TEXTURE("RIP.png"));
             crosshair_.setColor({0, 0, 0, 0});
         }
 
@@ -320,6 +310,7 @@ bool Unit::checkExplosion(const sf::CircleShape& expl, float damage) {
 void Unit::draw(sf::RenderWindow& window){
     window.draw(sprite_);
     window.draw(crosshair_);
+    window.draw(healthText_);
 }
 sf::Vector2f Unit::getShootMomentum(sf::RenderWindow& screen){ 
     sf::Vector2f momentum;
@@ -328,6 +319,11 @@ sf::Vector2f Unit::getShootMomentum(sf::RenderWindow& screen){
     screen.setTitle("x: " + std::to_string(momentum.x) + " - y: " + std::to_string(momentum.y));
     shootPower_ = 0;
     return momentum;
+}
+void Unit::updateHealthText(){
+    healthText_.setString(std::to_string((int)std::ceil(health_)));
+    healthText_.setOrigin({healthText_.getLocalBounds().width/2, healthText_.getLocalBounds().height/2});
+    healthText_.setPosition({sprite_.getPosition().x, sprite_.getPosition().y - 50});
 }
 void Projectile::applyPhysics(bool colliding, Environment& environment){
     momentum_.x += wind_;

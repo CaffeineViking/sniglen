@@ -1,9 +1,9 @@
 #include "Player.hpp"
 
 Player::Player(sf::Color col) : color_{col}{
-    weaponList_.push_back(std::make_pair<std::unique_ptr<Weapon>, int>(std::unique_ptr<Weapon>{new Bazooka()}, 25));
-    weaponList_.push_back(std::make_pair<std::unique_ptr<Weapon>, int>(std::unique_ptr<Weapon>{new MiniBaz()}, 5));
-    weaponList_.push_back(std::make_pair<std::unique_ptr<Weapon>, int>(std::unique_ptr<Weapon>{new Nuke()}, 2));
+    weaponList_.push_back(std::make_pair<std::unique_ptr<Weapon>, int>(std::unique_ptr<Weapon>{new Bazooka()}, 1));
+    weaponList_.push_back(std::make_pair<std::unique_ptr<Weapon>, int>(std::unique_ptr<Weapon>{new MiniBaz()}, 0));
+    weaponList_.push_back(std::make_pair<std::unique_ptr<Weapon>, int>(std::unique_ptr<Weapon>{new Nuke()}, 0));
 }
 
 Player::~Player(){
@@ -45,6 +45,18 @@ void Player::insertUnit(Unit* unit){
 
 std::unique_ptr<Weapon>& Player::getCurrentWeapon(){
     return weaponList_[currentWeapon_].first;
+}
+
+int Player::getCurrentWeaponAmmo() const {
+    return weaponList_[currentWeapon_].second;
+}
+
+void Player::increaseAmmo(int weaponID, unsigned ammo) {
+    weaponList_[weaponID].second += ammo;
+}
+
+void Player::useCurrentWeapon() {
+    --weaponList_[currentWeapon_].second;
 }
 
 void Player::removeUnits() {

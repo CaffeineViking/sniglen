@@ -20,7 +20,10 @@ float HealthCrate::pickUp() {
     return Random::GENERATE_MINMAX(1, 3) * 5.0f;
 }
 
-Weapon* WeaponCrate::pickUp() {
+std::pair<int, int> WeaponCrate::pickUp() {
     remove();
-    return nullptr;
+    std::pair<int, int> weapon;
+    weapon.first = Random::GENERATE_MINMAX(0, 2);
+    weapon.second = Random::GENERATE_MINMAX(3, 8);
+    return weapon;
 }
