@@ -17,7 +17,8 @@ void MenuScreen::update(){
             createText("™Sniglen: the Game: the Movie: Reloaded: Limited Limited Edition!™", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 - 150});
             createButton("setupGame.png", "Setup", {Assets::WINDOW_SIZE.x/2 - 50, Assets::WINDOW_SIZE.y/2});
             createButton("options.png", "Options", {Assets::WINDOW_SIZE.x/2 + 50, Assets::WINDOW_SIZE.y/2});
-            createButton("est", "Egg", {50,50});
+            createButton("est", "Egg", {50, 50});
+            createButton("est", "Stahp", {600, 600});
             createButton("quit.png", "Exit", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 + 100});
         }
         else if(state_ == MenuState::setup){
@@ -29,6 +30,18 @@ void MenuScreen::update(){
             createButton("decPlayers.png", "decPlayers", {Assets::WINDOW_SIZE.x/2 - 50, Assets::WINDOW_SIZE.y/2 - 50});
             createButton("StartGame.png", "StartGame", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 + 100});
             createButton("back.png", "Back", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y-100});
+            
+            //Instructions on the setup
+            createAlignLeftText("Controls:", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2 + 200, Assets::WINDOW_SIZE.y/2 - 50}, 35);
+            createAlignLeftText("Arrow right/left  -  Move", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2 + 150, Assets::WINDOW_SIZE.y/2 - 20});
+            createAlignLeftText("Arrow up/down  -  Aim", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2 + 150, Assets::WINDOW_SIZE.y/2 + 5});
+            createAlignLeftText("Key 1  -  Bazooka, medium damage, medium explosion", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2 + 150, Assets::WINDOW_SIZE.y/2 + 30});
+            createAlignLeftText("Key 2  -  Mini Bazooka, high damage, mini explosion", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2 + 150, Assets::WINDOW_SIZE.y/2 + 55});
+            createAlignLeftText("Key 3  -  Nuke, low damage, so biggi explosion!!", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2 + 150, Assets::WINDOW_SIZE.y/2 + 80});
+            createAlignLeftText("Space  -  Shoot", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2 + 150, Assets::WINDOW_SIZE.y/2 + 105});
+            createAlignLeftText("Backspace  -  Jump", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2 + 150, Assets::WINDOW_SIZE.y/2 + 130});
+            createAlignLeftText("Delete  -  Back to menu", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2 + 150, Assets::WINDOW_SIZE.y/2 + 155});
+            createAlignLeftText("Escape  -  Turn off game", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2 + 150, Assets::WINDOW_SIZE.y/2 + 180});
         }
         else if(state_ == MenuState::option){
             createText("™", "BebasNeue.otf", {0,0}, 10000, {255,173,248});
@@ -71,8 +84,14 @@ void MenuScreen::update(){
                     --musicVolume_;
                 if(button.first == "Back")
                     state_ = MenuState::main;
-                if(button.first == "Egg")
+                if(button.first == "Egg"){
                     egg = true;
+                    stahp = false;
+                }
+                if(button.first == "Stahp"){
+                    stahp = true;
+                    egg = false;
+                }
                 if(button.first == "Exit")
                     window_->close();
 
@@ -80,11 +99,18 @@ void MenuScreen::update(){
             redraw_ = true;
         }
     }
+    static float tempF = 0;
     for(std::unique_ptr<sf::Text>& text : textVector_){
-        if(!egg)
+        if(egg){
+            text->setRotation(text->getRotation() + 10.0f);
+            tempF = text->getRotation();
+        }
+        if(stahp){
+            text->setRotation(tempF);
+        } 
+        /*else{
             text->setRotation(1.0f);
-        else
-            text->setRotation(text->getRotation() + 100.0f);
+        }*/
     }
 }
 void MenuScreen::draw(){
@@ -117,6 +143,12 @@ void MenuScreen::createText(const std::string& text, const std::string& font, co
     textVector_.back()->setPosition(position);
     textVector_.back()->setStyle(style);
     textVector_.back()->setColor(color);
+}
+
+
+void MenuScreen::createAlignLeftText(const std::string& text, const std::string& font, const sf::Vector2f& position, int size, const sf::Color& color, sf::Text::Style style){
+    createText(text, font, position, size, color, style);
+    textVector_.back()->setOrigin({0, textVector_.back()->getLocalBounds().height/2});
 }
 
 bool MenuScreen::buttonClicked(const sf::Sprite& sprite){

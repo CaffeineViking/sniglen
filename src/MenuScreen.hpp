@@ -22,6 +22,7 @@ class MenuScreen{
         bool redraw_ = false;
         bool buttonClicked(const sf::Sprite&);
         bool egg = false;
+        bool stahp = false;
         float masterVolume_{100};
         float musicVolume_{100};
         float gameVolume_{100};
@@ -30,6 +31,7 @@ class MenuScreen{
         short unsigned int playerAmount_{2};
         void createButton(const std::string&, const std::string&, const sf::Vector2f&);
         void createText(const std::string&, const std::string&, const sf::Vector2f&, int = 30, const sf::Color& = sf::Color::White, sf::Text::Style = sf::Text::Regular);
+        void createAlignLeftText(const std::string& text, const std::string& font, const sf::Vector2f& position, int size = 25, const sf::Color& = sf::Color::White, sf::Text::Style style = sf::Text::Regular);
     public:
         MenuScreen(sf::RenderWindow& screen, InputHandler& handler);
         void update();
