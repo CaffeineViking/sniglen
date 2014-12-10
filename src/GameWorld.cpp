@@ -99,7 +99,7 @@ void GameWorld::update() {
         projectileVector.erase(projectileVector.begin() + (projectileVector.size()-removed), projectileVector.end());
     }
 
-    if(currentUnit->isShooting() && !shot_) {
+    if(currentUnit->isShooting() && !shot_ && (*currentPlayer)->getCurrentWeaponAmmo() > 0) {
         shot_ = true;
         projectileVector.push_back(std::move(std::unique_ptr<Projectile>{
             new Projectile{Assets::LOAD_TEXTURE("bullet.png"), currentUnit->getCrosshairPosition(), 0.0f, 10, 
@@ -109,6 +109,7 @@ void GameWorld::update() {
             (*currentPlayer)->getCurrentWeapon().get()
         }
         }));
+        (*currentPlayer)->useCurrentWeapon();
 
         // nextRound(currentPlayer);
         delayTime_ = gameTime_.getElapsedTime();
@@ -170,7 +171,8 @@ void GameWorld::update() {
                         unit->giveHealth(healthCrate->pickUp());
                         std::cout << unit->getHealth() << std::endl;
                     } else if (WeaponCrate* weaponCrate = dynamic_cast<WeaponCrate*>(crate.get())) {
-                        weaponCrate->pickUp();
+                        auto weapon = weaponCrate->pickUp();
+                        player->increaseAmmo(weapon.first, weapon.second);
                     }
                 }
             }

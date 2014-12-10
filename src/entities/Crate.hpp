@@ -23,7 +23,7 @@ public:
 
 class WeaponCrate : public Crate {
 public:
-    Weapon* pickUp();
+    std::pair<int, int> pickUp();
     WeaponCrate(const sf::Vector2f& pos)
         : Crate{pos} {}
 };

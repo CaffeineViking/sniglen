@@ -65,7 +65,7 @@ void Unit::getInput(const InputHandler& input){
                 aimAngle_ = 90;
         }
     }
-    if(state_ == unitState::shooting){
+    if(state_ == unitState::shooting && owner_->getCurrentWeaponAmmo() > 0){
         ++shootPower_;
         if(shootPower_ > 100)
             state_ = unitState::idle;
@@ -321,7 +321,7 @@ sf::Vector2f Unit::getShootMomentum(sf::RenderWindow& screen){
     return momentum;
 }
 void Unit::updateHealthText(){
-    healthText_.setString(std::to_string((int)health_));
+    healthText_.setString(std::to_string((int)std::ceil(health_)));
     healthText_.setOrigin({healthText_.getLocalBounds().width/2, healthText_.getLocalBounds().height/2});
     healthText_.setPosition({sprite_.getPosition().x, sprite_.getPosition().y - 50});
 }
