@@ -1,7 +1,7 @@
 #include "Player.hpp"
 
 Player::Player(sf::Color col) : color_{col}{
-    weaponList_.push_back(std::make_pair<std::unique_ptr<Weapon>, int>(std::unique_ptr<Weapon>{new Bazooka()}, 1));
+    weaponList_.push_back(std::make_pair<std::unique_ptr<Weapon>, int>(std::unique_ptr<Weapon>{new Bazooka()}, 10));
     weaponList_.push_back(std::make_pair<std::unique_ptr<Weapon>, int>(std::unique_ptr<Weapon>{new MiniBaz()}, 0));
     weaponList_.push_back(std::make_pair<std::unique_ptr<Weapon>, int>(std::unique_ptr<Weapon>{new Nuke()}, 0));
 }
@@ -49,6 +49,17 @@ std::unique_ptr<Weapon>& Player::getCurrentWeapon(){
 
 int Player::getCurrentWeaponAmmo() const {
     return weaponList_[currentWeapon_].second;
+}
+std::string Player::getCurrentWeaponString() const {
+    if (currentWeapon_ == 0) {
+        return "Bazooka";
+    } else if (currentWeapon_ == 1) {
+        return "MiniBaz";
+    } else if (currentWeapon_ == 2) {
+        return "Nuke";
+    }
+
+    return "Mystery Weapon";
 }
 
 void Player::increaseAmmo(int weaponID, unsigned ammo) {

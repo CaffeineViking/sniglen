@@ -84,6 +84,8 @@ void GameWorld::update() {
         nextRound(currentPlayer);
     }
 
+    createText((*currentPlayer)->getCurrentWeaponString() + ": " + std::to_string((*currentPlayer)->getCurrentWeaponAmmo()), "BebasNeue.otf", {camera_.getPosition().x, camera_.getPosition().y - Assets::WINDOW_SIZE.y / 2 + 150}, 32);
+
     unsigned iteratedOver {0};
     unsigned removed {0};
     if(!projectileVector.empty()){
