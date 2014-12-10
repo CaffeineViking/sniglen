@@ -267,6 +267,7 @@ void Unit::applyPhysics(bool colliding, Environment& environment){
     }
 
     momentum_ = temp->getPosition() - this->getPosition();
+    delete temp;
 
     if (!colliding) {
         momentum_.y += 1.5f;
@@ -275,17 +276,6 @@ void Unit::applyPhysics(bool colliding, Environment& environment){
         momentum_.x *= 0.85f;
     }
     Entity::applyPhysics(colliding, environment);
-}
-
-sf::Vector2f Unit::findCollisionVector(const sf::Vector2f& pos, const sf::Vector2f& direction, Environment& environment) {
-    Unit candidate{*sprite_.getTexture(), *crosshair_.getTexture(), sprite_.getPosition(), speed_, mass_, nullptr};
-    candidate.sprite_ = sprite_;
-    candidate.sprite_.setPosition(pos - direction);
-    while (environment.getTerrain().isColliding(candidate)) {
-        candidate.sprite_.move(-direction);
-    }
-
-    return candidate.getPosition();
 }
 
 void Unit::move(){
@@ -306,7 +296,7 @@ bool Unit::checkExplosion(const sf::CircleShape& expl, float damage) {
     if (distance <= expl.getRadius()) {
         health_ -= damage * (distance / expl.getRadius());
         if (isDead()) {
-            sprite_.setTexture(Assets::LOAD_TEXTURE("RIP.png"));
+            setTexture(Assets::LOAD_TEXTURE("RIP.png"));
             crosshair_.setColor({0, 0, 0, 0});
         }
 

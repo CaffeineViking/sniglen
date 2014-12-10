@@ -20,6 +20,7 @@ class Entity{
         bool removed_{false};
         sf::Texture texture_;
         sf::Sprite sprite_;
+        sf::Image sprite_data_;
         sf::Vector2f position_;
         sf::Vector2f momentum_{0,0};
         sf::Vector2f maxMomentum_{10,10};
@@ -28,7 +29,7 @@ class Entity{
         const float speed_;
         Entity(const sf::Texture& tex, sf::Vector2f pos, float spd, int mass):
             texture_{tex}, position_{pos}, mass_{mass}, speed_{spd}{
-                sprite_.setTexture(texture_);
+                setTexture(texture_);
                 sprite_.setOrigin({(float)texture_.getSize().x/2, (float)texture_.getSize().y/2});
                 sprite_.setPosition(pos);
             }
@@ -40,8 +41,9 @@ class Entity{
         void remove() { removed_ = true; }
         bool isRemoved() const { return removed_; }
         const sf::Sprite& getSprite() const {return sprite_;};
+        const sf::Image& getSpriteData() const {return sprite_data_;};
         const sf::Vector2f& getPos() const {return sprite_.getPosition();};
-        void setTexture(const sf::Texture& texture){sprite_.setTexture(texture);};
+        void setTexture(const sf::Texture& texture){sprite_.setTexture(texture); sprite_data_ = texture.copyToImage();};
         bool doUnitLookLeft(){return lookLeft_;};
         virtual ~Entity() = default;
         virtual void update(const InputHandler& input, bool colliding, Environment& environment){getMovement(input); applyPhysics(colliding, environment); move();};
