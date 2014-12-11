@@ -169,8 +169,6 @@ void GameWorld::update() {
         }
     }
 
-    if(((gameTime_.getElapsedTime() - roundTime_).asSeconds() > 25.0 && currentUnit->inControl()) ||
-            (shot_ && ((gameTime_.getElapsedTime() - delayTime_).asSeconds()) > 5.0)){
     static const float ROUND_TIME{10.0f};
     static const float DELAY_TIME{3.0f};
     float realRoundTime{(gameTime_.getElapsedTime() - roundTime_).asSeconds()};
@@ -251,8 +249,6 @@ void GameWorld::update() {
     if (input->isKeyReleased(sf::Keyboard::Key::Tab) || input->isKeyReleased(sf::Keyboard::Key::M)) {
         camera_.toggleZoom(*environment_);
     }
-drawthis:
-    ;
 }
 
 void GameWorld::draw() {
