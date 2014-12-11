@@ -48,9 +48,9 @@ void GameWorld::nextRound(std::vector<std::unique_ptr<Player>>::iterator& curren
 
     int spawnCrate{Random::GENERATE_MINMAX(1, 8)};
     if (spawnCrate == 1) {
-        crateVector.push_back(std::unique_ptr<HealthCrate>{new HealthCrate{{static_cast<float>(Random::GENERATE_MAX(environment_->getTerrainSize())), 180}}});
+        crateVector.push_back(std::unique_ptr<HealthCrate>{new HealthCrate{{static_cast<float>(Random::GENERATE_MAX(environment_->getTerrainSize())), 10}}});
     } else if (spawnCrate == 2) {
-        crateVector.push_back(std::unique_ptr<WeaponCrate>{new WeaponCrate{{static_cast<float>(Random::GENERATE_MAX(environment_->getTerrainSize())), 180}}});
+        crateVector.push_back(std::unique_ptr<WeaponCrate>{new WeaponCrate{{static_cast<float>(Random::GENERATE_MAX(environment_->getTerrainSize())), 10}}});
     }
 
     cameraTarget_ = currentUnit;
@@ -188,6 +188,9 @@ void GameWorld::update() {
     for (auto& crate : crateVector) {
         crate->update(InputHandler{}, environment_->getTerrain().isColliding(*crate), *environment_);
         for (auto& player : playerVector) {
+            if(playerVector.size() == 1) {
+                std::cout << "vinnare" << std::endl;
+            }
             for (auto& unit : player->getTeam()) {
                 if (crate->isColliding(*unit)) {
                     if (HealthCrate* healthCrate = dynamic_cast<HealthCrate*>(crate.get())) {
