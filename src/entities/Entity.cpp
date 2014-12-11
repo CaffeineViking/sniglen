@@ -213,7 +213,7 @@ bool Unit::checkExplosion(const sf::CircleShape& expl, float damage) {
     float distance{std::sqrt(std::pow(distanceX, 2.0f) + std::pow(distanceY, 2.0f))};
 
     if (distance <= expl.getRadius()) {
-        health_ -= damage * (distance / expl.getRadius());
+        health_ -= std::ceil(damage * (distance / expl.getRadius()));
         if (isDead()) {
             setTexture(Assets::LOAD_TEXTURE("RIP.png"));
             crosshair_.setColor({255, 255, 255, 0});

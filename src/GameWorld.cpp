@@ -201,7 +201,7 @@ void GameWorld::update() {
             for (auto& unit : player->getTeam()) {
                 if (crate->isColliding(*unit)) {
                     if (HealthCrate* healthCrate = dynamic_cast<HealthCrate*>(crate.get())) {
-                        unit->giveHealth(healthCrate->pickUp());
+                        unit->giveHealth(std::ceil(healthCrate->pickUp()));
                     } else if (WeaponCrate* weaponCrate = dynamic_cast<WeaponCrate*>(crate.get())) {
                         auto weapon = weaponCrate->pickUp();
                         player->increaseAmmo(weapon.first, weapon.second);

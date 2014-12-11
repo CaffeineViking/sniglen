@@ -53,7 +53,7 @@ class Entity{
 
 class Unit: public Entity{
     private:
-        float health_{10.0f};
+        int health_{10};
         enum class unitState{idle=0, walking, falling, shooting};
         unitState state_ = unitState::falling; // Used to tell what the unit is currently doing
         Player* owner_;
@@ -86,7 +86,7 @@ class Unit: public Entity{
         void update(const InputHandler& input, bool colliding, Environment& environment) override {getInput(input); getMovement(input); applyPhysics(colliding, environment); move(); updateCrosshair(); updateHealthText();};
         void update(bool colliding, Environment& environment) {applyPhysics(colliding, environment); move(); updateCrosshair(); updateHealthText();};
         void collide();
-        bool isDead() const { return health_ <= 0.0; }
+        bool isDead() const { return health_ <= 0; }
         bool checkExplosion(const sf::CircleShape&, float);
         bool inControl(){return (state_ != unitState::falling);};
         float getShootAngle(){return aimAngle_;};
