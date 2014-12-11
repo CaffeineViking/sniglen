@@ -143,7 +143,8 @@ void Unit::applyPhysics(bool colliding, Environment& environment){
 					temp->sprite_.move({-momentum_.x/distance, -std::abs(momentum_.y/distance)});
 					if (!environment.getTerrain().isColliding( *temp)) {
 						momentum_.y = 0;
-						this->sprite_.setPosition(temp->sprite_.getPosition());
+                        if(this->sprite_.getPosition().x - temp->sprite_.getPosition().x < this->maxMomentum_.x && this->sprite_.getPosition().y - temp->sprite_.getPosition().y < this->maxMomentum_.y)
+                            this->sprite_.setPosition(temp->sprite_.getPosition());
 					}
 				}	
 				momentum_.x = 0.0f;
