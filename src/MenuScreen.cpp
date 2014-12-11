@@ -44,15 +44,14 @@ void MenuScreen::update(){
             createAlignLeftText("Escape  -  Turn off game", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2 + 150, Assets::WINDOW_SIZE.y/2 + 180});
         }
         else if(state_ == MenuState::option){
-            createText("™", "BebasNeue.otf", {0,0}, 10000, {255,173,248});
             createText("Game Volume", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 - 50});
-            createText(std::to_string((int)gameVolume_), "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 - 10});
-            createButton("incUnit.png", "incGameVol", {Assets::WINDOW_SIZE.x/2 - 65, Assets::WINDOW_SIZE.y/2});
-            createButton("decUnit.png", "decGameVol", {Assets::WINDOW_SIZE.x/2 + 65, Assets::WINDOW_SIZE.y/2});
+            createText(std::to_string((int)gameVolume_)+ "%", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 - 10});
+            createButton("incUnit.png", "incGameVol", {Assets::WINDOW_SIZE.x/2 - 75, Assets::WINDOW_SIZE.y/2});
+            createButton("decUnit.png", "decGameVol", {Assets::WINDOW_SIZE.x/2 + 75, Assets::WINDOW_SIZE.y/2});
             createText("Music Volume", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 + 50});
-            createText(std::to_string((int)musicVolume_), "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 + 90});
-            createButton("incPlayers.png", "incMusic", {Assets::WINDOW_SIZE.x/2 - 65, Assets::WINDOW_SIZE.y/2 + 100});
-            createButton("decPlayers.png", "decMusic", {Assets::WINDOW_SIZE.x/2 + 65, Assets::WINDOW_SIZE.y/2 + 100});
+            createText(std::to_string((int)musicVolume_)+ "%", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 + 90});
+            createButton("incPlayers.png", "incMusic", {Assets::WINDOW_SIZE.x/2 - 75, Assets::WINDOW_SIZE.y/2 + 100});
+            createButton("decPlayers.png", "decMusic", {Assets::WINDOW_SIZE.x/2 + 75, Assets::WINDOW_SIZE.y/2 + 100});
             createButton("back.png", "Back", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y-100});
         }
         redraw_ = false;
@@ -75,13 +74,13 @@ void MenuScreen::update(){
                 if(button.first == "Options")
                     state_ = MenuState::option;
                 if(button.first == "incGameVol" && gameVolume_ < 100)
-                    ++gameVolume_;
+                    gameVolume_ = gameVolume_ + 10;
                 if(button.first == "decGameVol" && gameVolume_ > 0)
-                    --gameVolume_;
+                    gameVolume_ = gameVolume_ - 10;
                 if(button.first == "incMusic" && musicVolume_ < 100)
-                    ++musicVolume_;
+                    musicVolume_ = musicVolume_ + 10;
                 if(button.first == "decMusic" && musicVolume_ > 0)
-                    --musicVolume_;
+                    musicVolume_ = musicVolume_ - 10;
                 if(button.first == "Back")
                     state_ = MenuState::main;
                 if(button.first == "Egg"){

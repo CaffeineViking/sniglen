@@ -17,14 +17,7 @@ void Entity::move(){
     sprite_.move(momentum_); // Use sf::Sprite::move to move the sprite
     position_ = sprite_.getPosition(); // Get new position
 }
-void Entity::applyPhysics(bool colliding, Environment& environment){
-    /*if (!colliding) {
-        momentum_.y += 1.5f;
-    } else {
-
-        momentum_ = {0, -1};
-    }*/
-
+void Entity::applyPhysics(bool, Environment&){
     momentum_.y += 1.5f;
 }
 void Entity::getMovement(const InputHandler&){
