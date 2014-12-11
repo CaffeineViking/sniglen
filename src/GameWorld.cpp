@@ -1,6 +1,7 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <memory>
+#include <string>
 #include "GameWorld.hpp"
 #include "utilities/Random.hpp"
 #include "utilities/Assets.hpp"
@@ -22,7 +23,7 @@ void GameWorld::initiate(short unsigned int players, short unsigned int units, f
     for(int i{0}; i < units; ++i){
         for(auto& i : playerVector){
             i->insertUnit(new Unit{Assets::LOAD_TEXTURE("unit.png"), Assets::LOAD_TEXTURE("testa.png"), {static_cast<float>(Random::GENERATE_MAX(environment_->getTerrainSize())), 180}, 2, 150, i.get()});
-        i->getTeam().back()->disableCrosshair();
+            i->getTeam().back()->disableCrosshair();
         }
     }
 
@@ -34,11 +35,17 @@ void GameWorld::initiate(short unsigned int players, short unsigned int units, f
 
 void GameWorld::nextRound(std::vector<std::unique_ptr<Player>>::iterator& currentPlayer) {
     shot_ = false;
-    ++currentPlayer;
-    if(currentPlayer == playerVector.end())
-        currentPlayer = playerVector.begin();
-    currentUnit = (*currentPlayer)->getNextUnit();
-    currentUnit->enableCrosshair();
+    auto tempPlayer = currentPlayer;
+    do{
+        ++currentPlayer;
+        if(tempPlayer == currentPlayer)
+            win();
+        if(currentPlayer == playerVector.end())
+            currentPlayer = playerVector.begin();
+
+    }while ((*currentPlayer)->isTeamDead());
+    currentUnit = (*currentPlayer)->getNextUnit(); 
+    /*if(!(*currentPlayer)->isTeamDead())*/ currentUnit->enableCrosshair();
     currentUnit->noShooting();
 
     for (auto& player : playerVector) {
@@ -105,13 +112,13 @@ void GameWorld::update() {
     if(currentUnit->isShooting() && !shot_ && (*currentPlayer)->getCurrentWeaponAmmo() > 0) {
         shot_ = true;
         projectileVector.push_back(std::move(std::unique_ptr<Projectile>{
-            new Projectile{Assets::LOAD_TEXTURE("bullet.png"), currentUnit->getCrosshairPosition(), 0.0f, 10, 
-            currentUnit->getShootMomentum(*gameWindow), 
-            environment_->getWindForce(),
-             currentUnit->getShootAngle(), 
-            (*currentPlayer)->getCurrentWeapon().get()
-        }
-        }));
+                    new Projectile{Assets::LOAD_TEXTURE("bullet.png"), currentUnit->getCrosshairPosition(), 0.0f, 10, 
+                    currentUnit->getShootMomentum(*gameWindow), 
+                    environment_->getWindForce(),
+                    currentUnit->getShootAngle(), 
+                    (*currentPlayer)->getCurrentWeapon().get()
+                    }
+                    }));
         (*currentPlayer)->useCurrentWeapon();
 
         // nextRound(currentPlayer);
@@ -163,7 +170,7 @@ void GameWorld::update() {
     }
 
     if(((gameTime_.getElapsedTime() - roundTime_).asSeconds() > 25.0 && currentUnit->inControl()) ||
-        (shot_ && ((gameTime_.getElapsedTime() - delayTime_).asSeconds()) > 5.0)){
+            (shot_ && ((gameTime_.getElapsedTime() - delayTime_).asSeconds()) > 5.0)){
         nextRound(currentPlayer);
     }
 
@@ -221,8 +228,8 @@ void GameWorld::update() {
     }
 
     if (input->isKeyPressed(sf::Keyboard::Key::Left) ||
-        input->isKeyPressed(sf::Keyboard::Key::Right) ||
-        input->isKeyPressed(sf::Keyboard::Key::BackSpace)) {
+            input->isKeyPressed(sf::Keyboard::Key::Right) ||
+            input->isKeyPressed(sf::Keyboard::Key::BackSpace)) {
         cameraTarget_ = currentUnit;
     }
 
@@ -234,6 +241,8 @@ void GameWorld::update() {
     if (input->isKeyReleased(sf::Keyboard::Key::Tab) || input->isKeyReleased(sf::Keyboard::Key::M)) {
         camera_.toggleZoom(*environment_);
     }
+drawthis:
+    ;
 }
 
 void GameWorld::draw() {
@@ -258,6 +267,26 @@ void GameWorld::draw() {
 
     // Set the current camera state to be drawn on the game window.
     camera_.draw(*gameWindow);
+}
+
+void GameWorld::win(){
+    textVector_.clear();
+    for(size_t i = 0; i < playerVector.size(); ++i){
+        if(!playerVector[i]->isTeamDead()){
+            createText("Player " + std::to_string(i) + " wins! \n Click the mouse to continue.", "BebasNeue.otf", {camera_.getPosition().x, camera_.getPosition().y - Assets::WINDOW_SIZE.y / 2 + 150}, 32);
+            gameWindow->clear({0,255,0});
+        }
+    }
+    if(textVector_.empty()){
+        createText("Draw!", "BebasNeue.otf", {camera_.getPosition().x, camera_.getPosition().y - Assets::WINDOW_SIZE.y / 2 + 150}, 32);
+        gameWindow->clear({0,255,255});
+    }
+
+    draw();
+    gameWindow->display();
+    while(!input->mouseClicked()){
+        input->update(gameWindow);
+    }
 }
 void GameWorld::createText(const std::string& text, const std::string& font, const sf::Vector2f& position, int size, const sf::Color& color, sf::Text::Style style){
     textVector_.push_back(std::move(std::unique_ptr<sf::Text>{new sf::Text(text, Assets::LOAD_FONT(font), size)}));

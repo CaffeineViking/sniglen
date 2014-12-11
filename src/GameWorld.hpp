@@ -34,6 +34,7 @@ class GameWorld {
         float gameVolume_{100};
         float musicVolume_{100};
         sf::Sound explosionSound{Assets::LOAD_SOUND("explosion.wav")};
+        void win();
         void createText(const std::string&, const std::string&, const sf::Vector2f&, int = 30, const sf::Color& = sf::Color::White, sf::Text::Style = sf::Text::Regular);
 
     public:
