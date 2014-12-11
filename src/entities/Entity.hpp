@@ -84,6 +84,7 @@ class Unit: public Entity{
         void enableCrosshair() { crosshair_.setColor({crosshair_.getColor().r, crosshair_.getColor().g, crosshair_.getColor().b, 255}); }
         void disableCrosshair() { crosshair_.setColor({crosshair_.getColor().r, crosshair_.getColor().g, crosshair_.getColor().b, 0}); }
         void update(const InputHandler& input, bool colliding, Environment& environment) override {getInput(input); getMovement(input); applyPhysics(colliding, environment); move(); updateCrosshair(); updateHealthText();};
+        void update(bool colliding, Environment& environment) {applyPhysics(colliding, environment); move(); updateCrosshair(); updateHealthText();};
         void collide();
         bool isDead() const { return health_ <= 0.0; }
         bool checkExplosion(const sf::CircleShape&, float);
@@ -93,6 +94,7 @@ class Unit: public Entity{
         sf::Vector2f getPosition() const {return sprite_.getPosition();}; // Kanske måste tas bort då vi redan har getPos sen förut!?
         void setColor(sf::Color color){sprite_.setColor(color);}
         bool isShooting(){return shoot_;};
+        void noShooting(){shoot_ = false; shootPower_ = false;};
         void draw(sf::RenderWindow&) override;
         float getHealth() const { return health_; }
         void giveHealth(float health) { health_ += health; }

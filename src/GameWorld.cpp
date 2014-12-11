@@ -33,11 +33,13 @@ void GameWorld::initiate(short unsigned int players, short unsigned int units, f
 }
 
 void GameWorld::nextRound(std::vector<std::unique_ptr<Player>>::iterator& currentPlayer) {
+    shot_ = false;
     ++currentPlayer;
     if(currentPlayer == playerVector.end())
         currentPlayer = playerVector.begin();
     currentUnit = (*currentPlayer)->getNextUnit();
     currentUnit->enableCrosshair();
+    currentUnit->noShooting();
 
     for (auto& player : playerVector) {
         for (auto& unit : player->getTeam()) {
@@ -56,7 +58,6 @@ void GameWorld::nextRound(std::vector<std::unique_ptr<Player>>::iterator& curren
     cameraTarget_ = currentUnit;
     environment_->randomizeWind();
     roundTime_ = gameTime_.getElapsedTime();
-    shot_ = false;
 }
 
 void GameWorld::update() {
@@ -101,6 +102,7 @@ void GameWorld::update() {
         projectileVector.erase(projectileVector.begin() + (projectileVector.size()-removed), projectileVector.end());
     }
 
+    std::cout << currentUnit->isShooting() << std::endl;
     if(currentUnit->isShooting() && !shot_ && (*currentPlayer)->getCurrentWeaponAmmo() > 0) {
         shot_ = true;
         projectileVector.push_back(std::move(std::unique_ptr<Projectile>{
@@ -170,7 +172,7 @@ void GameWorld::update() {
         bool removed{false};
         for (auto& unit : player->getTeam()) {
             if (currentUnit != unit)
-                unit->update(InputHandler{}, environment_->getTerrain().isColliding(*unit), *environment_);
+                unit->update(environment_->getTerrain().isColliding(*unit), *environment_);
 
             if (unit->getPos().y > gameWindow->getSize().y + unit->getSprite().getTexture()->getSize().y) {
                 removed = true;
@@ -217,6 +219,12 @@ void GameWorld::update() {
                 ++iteratedOver;
         }
         crateVector.erase(crateVector.begin() + (crateVector.size()-removed), crateVector.end());
+    }
+
+    if (input->isKeyPressed(sf::Keyboard::Key::Left) ||
+        input->isKeyPressed(sf::Keyboard::Key::Right) ||
+        input->isKeyPressed(sf::Keyboard::Key::BackSpace)) {
+        cameraTarget_ = currentUnit;
     }
 
     // The given parameters passed to the camera update function will be used to
