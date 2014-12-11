@@ -21,7 +21,7 @@ void GameWorld::initiate(short unsigned int players, short unsigned int units, f
         playerVector.push_back(std::unique_ptr<Player>{new Player{{(unsigned char)Random::GENERATE_MAX(255),(unsigned char)Random::GENERATE_MAX(255),(unsigned char)Random::GENERATE_MAX(255)}}});
     for(int i{0}; i < units; ++i){
         for(auto& i : playerVector){
-            i->insertUnit(new Unit{Assets::LOAD_TEXTURE("unit.png"), Assets::LOAD_TEXTURE("testa.png"), {static_cast<float>(Random::GENERATE_MAX(environment_->getTerrainSize())), 180}, 2, 150, i.get()});
+            i->insertUnit(new Unit{Assets::LOAD_TEXTURE("unit.png"), Assets::LOAD_TEXTURE("testa.png"), {static_cast<float>(Random::GENERATE_MAX(environment_->getTerrainSize())), 180}, 1.5, 150, i.get()});
         i->getTeam().back()->disableCrosshair();
         }
     }
@@ -85,7 +85,7 @@ void GameWorld::update() {
         nextRound(currentPlayer);
     }
 
-    createText((*currentPlayer)->getCurrentWeaponString() + ": " + std::to_string((*currentPlayer)->getCurrentWeaponAmmo()), "BebasNeue.otf", {camera_.getPosition().x, camera_.getPosition().y - Assets::WINDOW_SIZE.y / 2 + 150}, 32);
+    createText((*currentPlayer)->getCurrentWeaponString() + ": " + std::to_string((*currentPlayer)->getCurrentWeaponAmmo()), "BebasNeue.otf", {camera_.getPosition().x, camera_.getPosition().y - Assets::WINDOW_SIZE.y / 2 + 175}, 32);
 
     unsigned iteratedOver {0};
     unsigned removed {0};
@@ -162,10 +162,19 @@ void GameWorld::update() {
         }
     }
 
-    if(((gameTime_.getElapsedTime() - roundTime_).asSeconds() > 25.0 && currentUnit->inControl()) ||
-        (shot_ && ((gameTime_.getElapsedTime() - delayTime_).asSeconds()) > 5.0)){
+    static const float ROUND_TIME{10.0f};
+    static const float DELAY_TIME{3.0f};
+    float realRoundTime{(gameTime_.getElapsedTime() - roundTime_).asSeconds()};
+    float realDelayTime{(gameTime_.getElapsedTime() - delayTime_).asSeconds()};
+    if((realRoundTime> ROUND_TIME && currentUnit->inControl()) ||
+        (shot_ && realDelayTime > DELAY_TIME)){
         nextRound(currentPlayer);
     }
+
+    if (!shot_)
+        createText(std::to_string(static_cast<unsigned>(ROUND_TIME -  realRoundTime)), "BebasNeue.otf", {camera_.getPosition().x, camera_.getPosition().y - Assets::WINDOW_SIZE.y / 2 + 25}, 48);
+    else
+        createText(std::to_string(static_cast<unsigned>(DELAY_TIME - realDelayTime)), "BebasNeue.otf", {camera_.getPosition().x, camera_.getPosition().y - Assets::WINDOW_SIZE.y / 2 + 25}, 48);
 
     for (auto& player : playerVector) {
         bool removed{false};
