@@ -17,14 +17,7 @@ void Entity::move(){
     sprite_.move(momentum_); // Use sf::Sprite::move to move the sprite
     position_ = sprite_.getPosition(); // Get new position
 }
-void Entity::applyPhysics(bool colliding, Environment& environment){
-    /*if (!colliding) {
-        momentum_.y += 1.5f;
-    } else {
-
-        momentum_ = {0, -1};
-    }*/
-
+void Entity::applyPhysics(bool, Environment&){
     momentum_.y += 1.5f;
 }
 void Entity::getMovement(const InputHandler&){
@@ -87,7 +80,7 @@ void Unit::getMovement(const InputHandler& input){
 
         if (input.isKeyPressed(sf::Keyboard::Key::BackSpace)){ // To be changed to variable y coords
             state_ = unitState::falling;
-            momentum_.y = -6.0f;
+            momentum_.y = -10.0f;
             if(lookLeft_)
                 momentum_.x = -10.0f;
             else
@@ -224,7 +217,8 @@ bool Unit::checkExplosion(const sf::CircleShape& expl, float damage) {
         health_ -= damage * (distance / expl.getRadius());
         if (isDead()) {
             setTexture(Assets::LOAD_TEXTURE("RIP.png"));
-            crosshair_.setColor({0, 0, 0, 0});
+            crosshair_.setColor({255, 255, 255, 0});
+            healthText_.setColor({255, 255, 255, 0});
         }
 
         momentum_.x -= (distanceX * ((expl.getRadius() * damage) / 32.0f)) / distance;
@@ -247,6 +241,19 @@ sf::Vector2f Unit::getShootMomentum(sf::RenderWindow& screen){
     shootPower_ = 0;
     return momentum;
 }
+
+void Unit::giveHealth(float health) {
+    if(!isDead())
+        health_ += health;
+    else
+        health_ = health;
+
+    if (!isDead()) {
+        setTexture(Assets::LOAD_TEXTURE("unit.png"));
+        healthText_.setColor({255, 255, 255, 255});
+    }
+}
+
 void Unit::updateHealthText(){
     healthText_.setString(std::to_string((int)std::ceil(health_)));
     healthText_.setOrigin({healthText_.getLocalBounds().width/2, healthText_.getLocalBounds().height/2});

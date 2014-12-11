@@ -12,22 +12,41 @@ Player::~Player(){
 }
 
 Unit* Player::getRandomUnit(){
-    if(team_.size() != 0)
+    if(team_.size() != 0 && teamAlive())
         return team_[Random::GENERATE_MAX(team_.size()-1)]; // Return random unit from team
-    teamDead_ = true;
 
     return nullptr;
 }
 
+bool Player::teamAlive(){
+    short unsigned int deadUnits{0};
+    for(unsigned i{0}; i < team_.size(); ++i){
+        if(team_[i]->isDead())
+            ++deadUnits;
+    }
+    if(deadUnits == team_.size())
+        return false;
+    return true;
+}
+
+bool Player::isTeamDead(){
+    short unsigned int deadUnits{0};
+    for(unsigned i{0}; i < team_.size(); ++i){
+        if(team_[i]->isDead())
+            ++deadUnits;
+    }
+    if(deadUnits == team_.size())
+        return true;
+    return false;
+}
+
 Unit* Player::getNextUnit(){
-    if(team_.size() != 0){
+    if(team_.size() != 0 && teamAlive()){
         if(unitCounter_+1 >= (int)team_.size()){ // Make sure that the unit counter is in bounds
             unitCounter_ = -1; 
         }
         return team_[++unitCounter_]; // Return next unit
     }
-
-    teamDead_ = true;
 
     return nullptr;
 }
