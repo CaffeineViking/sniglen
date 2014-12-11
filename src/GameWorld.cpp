@@ -21,7 +21,7 @@ void GameWorld::initiate(short unsigned int players, short unsigned int units, f
         playerVector.push_back(std::unique_ptr<Player>{new Player{{(unsigned char)Random::GENERATE_MAX(255),(unsigned char)Random::GENERATE_MAX(255),(unsigned char)Random::GENERATE_MAX(255)}}});
     for(int i{0}; i < units; ++i){
         for(auto& i : playerVector){
-            i->insertUnit(new Unit{Assets::LOAD_TEXTURE("unit.png"), Assets::LOAD_TEXTURE("testa.png"), {static_cast<float>(Random::GENERATE_MAX(environment_->getTerrainSize())), 180}, 1.5, 150, i.get()});
+            i->insertUnit(new Unit{Assets::LOAD_TEXTURE("unit.png"), Assets::LOAD_TEXTURE("testa.png"), {static_cast<float>(Random::GENERATE_MAX(environment_->getTerrainSize())), 180}, 1, 150, i.get()});
         i->getTeam().back()->disableCrosshair();
         }
     }
@@ -48,7 +48,7 @@ void GameWorld::nextRound(std::vector<std::unique_ptr<Player>>::iterator& curren
         }
     }
 
-    int spawnCrate{Random::GENERATE_MINMAX(1, 8)};
+    int spawnCrate{Random::GENERATE_MINMAX(1, 4)};
     if (spawnCrate == 1) {
         crateVector.push_back(std::unique_ptr<HealthCrate>{new HealthCrate{{static_cast<float>(Random::GENERATE_MAX(environment_->getTerrainSize())), 180}}});
     } else if (spawnCrate == 2) {

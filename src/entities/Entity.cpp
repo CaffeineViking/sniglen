@@ -87,11 +87,11 @@ void Unit::getMovement(const InputHandler& input){
 
         if (input.isKeyPressed(sf::Keyboard::Key::BackSpace)){ // To be changed to variable y coords
             state_ = unitState::falling;
-            momentum_.y = -15.0f;
+            momentum_.y = -10.0f;
             if(lookLeft_)
-                momentum_.x = -15.0f;
+                momentum_.x = -10.0f;
             else
-                momentum_.x = 15.0f;
+                momentum_.x = 10.0f;
         } else { 
             if(momentum_.y < 0) 
                 momentum_.y = momentum_.y * 0.99f; 
