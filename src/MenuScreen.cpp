@@ -45,11 +45,11 @@ void MenuScreen::update(){
         }
         else if(state_ == MenuState::option){
             createText("Game Volume", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 - 50});
-            createText(std::to_string((int)gameVolume_)+ "%", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 - 10});
+            createText(std::to_string((int)gameVolume_)+ " %", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 - 10});
             createButton("incUnit.png", "incGameVol", {Assets::WINDOW_SIZE.x/2 - 75, Assets::WINDOW_SIZE.y/2});
             createButton("decUnit.png", "decGameVol", {Assets::WINDOW_SIZE.x/2 + 75, Assets::WINDOW_SIZE.y/2});
             createText("Music Volume", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 + 50});
-            createText(std::to_string((int)musicVolume_)+ "%", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 + 90});
+            createText(std::to_string((int)musicVolume_)+ " %", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 + 90});
             createButton("incPlayers.png", "incMusic", {Assets::WINDOW_SIZE.x/2 - 75, Assets::WINDOW_SIZE.y/2 + 100});
             createButton("decPlayers.png", "decMusic", {Assets::WINDOW_SIZE.x/2 + 75, Assets::WINDOW_SIZE.y/2 + 100});
             createButton("back.png", "Back", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y-100});
