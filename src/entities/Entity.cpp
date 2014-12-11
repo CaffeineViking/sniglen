@@ -35,7 +35,6 @@ void Entity::draw(sf::RenderWindow& window){
 void Entity::collide(){
 }
 void Unit::getInput(const InputHandler& input){
-
     shoot_ = false;
     if(state_ != unitState::falling && input.isKeyPressed(sf::Keyboard::Key::Space))
         state_ = unitState::shooting;
@@ -70,6 +69,7 @@ void Unit::getInput(const InputHandler& input){
         if(shootPower_ > 100)
             state_ = unitState::idle;
     }
+
     if(state_ != unitState::shooting && shootPower_ != 0){
         shoot_ = true;
     }
