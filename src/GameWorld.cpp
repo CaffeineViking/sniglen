@@ -102,7 +102,6 @@ void GameWorld::update() {
         projectileVector.erase(projectileVector.begin() + (projectileVector.size()-removed), projectileVector.end());
     }
 
-    std::cout << currentUnit->isShooting() << std::endl;
     if(currentUnit->isShooting() && !shot_ && (*currentPlayer)->getCurrentWeaponAmmo() > 0) {
         shot_ = true;
         projectileVector.push_back(std::move(std::unique_ptr<Projectile>{
