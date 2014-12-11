@@ -97,7 +97,7 @@ class Unit: public Entity{
         void noShooting(){shoot_ = false; shootPower_ = false;};
         void draw(sf::RenderWindow&) override;
         float getHealth() const { return health_; }
-        void giveHealth(float health) { health_ += health; }
+        void giveHealth(float);
 };
 
 class Projectile: public Entity{

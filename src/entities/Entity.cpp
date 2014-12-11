@@ -223,7 +223,8 @@ bool Unit::checkExplosion(const sf::CircleShape& expl, float damage) {
         health_ -= damage * (distance / expl.getRadius());
         if (isDead()) {
             setTexture(Assets::LOAD_TEXTURE("RIP.png"));
-            crosshair_.setColor({0, 0, 0, 0});
+            crosshair_.setColor({255, 255, 255, 0});
+            healthText_.setColor({255, 255, 255, 0});
         }
 
         momentum_.x -= (distanceX * ((expl.getRadius() * damage) / 32.0f)) / distance;
@@ -246,6 +247,19 @@ sf::Vector2f Unit::getShootMomentum(sf::RenderWindow& screen){
     shootPower_ = 0;
     return momentum;
 }
+
+void Unit::giveHealth(float health) {
+    if(!isDead())
+        health_ += health;
+    else
+        health_ = health;
+
+    if (!isDead()) {
+        setTexture(Assets::LOAD_TEXTURE("unit.png"));
+        healthText_.setColor({255, 255, 255, 255});
+    }
+}
+
 void Unit::updateHealthText(){
     healthText_.setString(std::to_string((int)std::ceil(health_)));
     healthText_.setOrigin({healthText_.getLocalBounds().width/2, healthText_.getLocalBounds().height/2});
