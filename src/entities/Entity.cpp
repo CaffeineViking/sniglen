@@ -31,6 +31,7 @@ void Unit::getInput(const InputHandler& input){
     shoot_ = false;
     if(state_ != unitState::falling && input.isKeyPressed(sf::Keyboard::Key::Space))
         state_ = unitState::shooting;
+     
     else if(state_ != unitState::falling && input.isKeyReleased(sf::Keyboard::Key::Space))
         state_ = unitState::idle;
     if(input.isKeyPressed(sf::Keyboard::Key::Up)){
@@ -66,7 +67,9 @@ void Unit::getInput(const InputHandler& input){
     if(state_ != unitState::shooting && shootPower_ != 0){
         shoot_ = true;
     }
-
+    
+	powerMeter_.setTextureRect({0, 0, shootPower_ / 2, powerMeter_.getTexture()->getSize().y});
+	
     if(input.isKeyPressed(sf::Keyboard::Key::Num1))
         owner_->selectWeapon(0);
     if(input.isKeyPressed(sf::Keyboard::Key::Num2))
@@ -203,6 +206,8 @@ void Unit::move(){
 }
 void Unit::updateCrosshair(){
     crosshair_.setPosition(sprite_.getPosition().x + 50*cos(toRadians(aimAngle_)), sprite_.getPosition().y + 50*sin(toRadians(aimAngle_)));
+	powerMeter_.setPosition(sprite_.getPosition());
+	powerMeter_.setRotation(aimAngle_);
 }
 void Unit::collide(){
     state_ = unitState::idle;
@@ -232,12 +237,12 @@ void Unit::draw(sf::RenderWindow& window){
     window.draw(sprite_);
     window.draw(crosshair_);
     window.draw(healthText_);
+    window.draw(powerMeter_);
 }
 sf::Vector2f Unit::getShootMomentum(sf::RenderWindow& screen){ 
     sf::Vector2f momentum;
     momentum.x = shootPower_ * cos(toRadians(aimAngle_));
     momentum.y = shootPower_ * sin(toRadians(aimAngle_));
-    screen.setTitle("x: " + std::to_string(momentum.x) + " - y: " + std::to_string(momentum.y));
     shootPower_ = 0;
     return momentum;
 }

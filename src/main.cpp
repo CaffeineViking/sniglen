@@ -35,10 +35,7 @@ int main() {
             window.close();
         }
         if(input.isKeyReleased(sf::Keyboard::Key::Delete)){
-            if(state == gameState::menu)
-                state = gameState::game;
-            else
-                state = gameState::menu;
+            state = gameState::menu;
         }
 
         if(state == gameState::game){

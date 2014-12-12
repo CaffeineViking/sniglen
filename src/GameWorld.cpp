@@ -10,6 +10,7 @@ GameWorld::GameWorld(sf::RenderWindow& window, InputHandler& inputhandler) : gam
 
 void GameWorld::initiate(short unsigned int players, short unsigned int units, float gameVolume, float musicVolume){
     roundTime_ = gameTime_.getElapsedTime();
+    delayTime_ = gameTime_.getElapsedTime();
     textVector_.clear();
     playerVector.clear();
     projectileVector.clear();
@@ -111,6 +112,7 @@ void GameWorld::update() {
 
     if(currentUnit->isShooting() && !shot_ && (*currentPlayer)->getCurrentWeaponAmmo() > 0) {
         shot_ = true;
+        currentUnit->disableCrosshair();
         projectileVector.push_back(std::move(std::unique_ptr<Projectile>{
                     new Projectile{Assets::LOAD_TEXTURE("bullet.png"), currentUnit->getCrosshairPosition(), 0.0f, 10, 
                     currentUnit->getShootMomentum(*gameWindow), 
@@ -205,9 +207,6 @@ void GameWorld::update() {
     for (auto& crate : crateVector) {
         crate->update(InputHandler{}, environment_->getTerrain().isColliding(*crate), *environment_);
         for (auto& player : playerVector) {
-            if(playerVector.size() == 1) {
-                std::cout << "vinnare" << std::endl;
-            }
             for (auto& unit : player->getTeam()) {
                 if (crate->isColliding(*unit)) {
                     if (HealthCrate* healthCrate = dynamic_cast<HealthCrate*>(crate.get())) {
@@ -293,6 +292,8 @@ void GameWorld::win(){
     while(!input->mouseClicked()){
         input->update(gameWindow);
     }
+    input->quitGame();
+    
 }
 void GameWorld::createText(const std::string& text, const std::string& font, const sf::Vector2f& position, int size, const sf::Color& color, sf::Text::Style style){
     textVector_.push_back(std::move(std::unique_ptr<sf::Text>{new sf::Text(text, Assets::LOAD_FONT(font), size)}));

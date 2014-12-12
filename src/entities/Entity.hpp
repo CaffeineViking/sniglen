@@ -77,7 +77,7 @@ class Unit: public Entity{
                 sprite_.setPosition(position_);
                 crosshair_.setOrigin({(float)crosshair_.getTexture()->getSize().x/2, (float)crosshair_.getTexture()->getSize().y/2});
                 crosshair_.setPosition(sprite_.getOrigin());
-                powerMeter_ = Assets::LOAD_TEXTURE("powerIndicator.png");
+                powerMeter_.setTexture(Assets::LOAD_TEXTURE("powerIndicator.png"));
                 powerMeter_.setOrigin({powerMeter_.getOrigin().x, powerMeter_.getOrigin().y + powerMeter_.getTexture()->getSize().y/2});
                 powerMeter_.setPosition(sprite_.getPosition());
                 healthText_.setOrigin({healthText_.getLocalBounds().width/2, healthText_.getLocalBounds().height/2});
@@ -85,8 +85,8 @@ class Unit: public Entity{
             }
 
         const sf::Vector2f& getCrosshairPosition() const { return crosshair_.getPosition(); }
-        void enableCrosshair() { crosshair_.setColor({crosshair_.getColor().r, crosshair_.getColor().g, crosshair_.getColor().b, 255}); }
-        void disableCrosshair() { crosshair_.setColor({crosshair_.getColor().r, crosshair_.getColor().g, crosshair_.getColor().b, 0}); }
+        void enableCrosshair() { crosshair_.setColor({255, 255, 255, 255}); powerMeter_.setColor({255, 255, 255, 255});}
+        void disableCrosshair() { crosshair_.setColor({255, 255, 255, 0}); powerMeter_.setColor({255, 255, 255, 0});}
         void update(const InputHandler& input, bool colliding, Environment& environment) override {getInput(input); getMovement(input); applyPhysics(colliding, environment); move(); updateCrosshair(); updateHealthText();};
         void update(bool colliding, Environment& environment) {applyPhysics(colliding, environment); move(); updateCrosshair(); updateHealthText();};
         void collide();

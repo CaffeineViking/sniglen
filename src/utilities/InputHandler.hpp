@@ -26,5 +26,6 @@ class InputHandler{
         const sf::Vector2i& mousePosition() const {return mousePos_;};
         void update(){keyboardUpdate();};
         void update(sf::RenderWindow* window){keyboardUpdate(); mouseUpdate(window);};
+        void quitGame(){pressedKeys_.insert(sf::Keyboard::Key::Delete);};
 };
 #endif

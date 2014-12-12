@@ -69,7 +69,7 @@ void MenuScreen::update(){
                     --teamSize_;
                 if(button.first == "incPlayers" && playerAmount_ < 5)
                     ++playerAmount_;
-                if(button.first == "decPlayers" && playerAmount_ > 1)
+                if(button.first == "decPlayers" && playerAmount_ > 2)
                     --playerAmount_;
                 if(button.first == "Options")
                     state_ = MenuState::option;
