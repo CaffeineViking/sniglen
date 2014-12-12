@@ -4,8 +4,8 @@
 
 MenuScreen::MenuScreen(sf::RenderWindow& screen, InputHandler& handler): window_{&screen}, input_{&handler} {
     createText("™Sniglen: the Game: the Movie: Reloaded: Limited Limited Edition!™", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 - 150});
-    createButton("setupGame.png", "Setup", {Assets::WINDOW_SIZE.x/2 - 50, Assets::WINDOW_SIZE.y/2});
-    createButton("options.png", "Options", {Assets::WINDOW_SIZE.x/2 + 50, Assets::WINDOW_SIZE.y/2});
+    createButton("setupGame.png", "Setup", {Assets::WINDOW_SIZE.x/2 - 100, Assets::WINDOW_SIZE.y/2});
+    createButton("options.png", "Options", {Assets::WINDOW_SIZE.x/2 + 100, Assets::WINDOW_SIZE.y/2});
     createButton("quit.png", "Exit", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 + 100});
 }
 
@@ -15,43 +15,43 @@ void MenuScreen::update(){
         textVector_.clear();
         if(state_ == MenuState::main){
             createText("™Sniglen: the Game: the Movie: Reloaded: Limited Limited Edition!™", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 - 150});
-            createButton("setupGame.png", "Setup", {Assets::WINDOW_SIZE.x/2 - 50, Assets::WINDOW_SIZE.y/2});
-            createButton("options.png", "Options", {Assets::WINDOW_SIZE.x/2 + 50, Assets::WINDOW_SIZE.y/2});
+            createButton("setupGame.png", "Setup", {Assets::WINDOW_SIZE.x/2 - 100, Assets::WINDOW_SIZE.y/2});
+            createButton("options.png", "Options", {Assets::WINDOW_SIZE.x/2 + 100, Assets::WINDOW_SIZE.y/2});
             createButton("est", "Egg", {50, 50});
             createButton("est", "Stahp", {600, 600});
             createButton("quit.png", "Exit", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 + 100});
         }
         else if(state_ == MenuState::setup){
-            createText(std::to_string(teamSize_), "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 - 5}, 15);
-            createText(std::to_string(playerAmount_), "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 - 55}, 15);
-            createButton("incUnit.png", "incTeam", {Assets::WINDOW_SIZE.x/2 + 50, Assets::WINDOW_SIZE.y/2});
-            createButton("decUnit.png", "decTeam", {Assets::WINDOW_SIZE.x/2 - 50, Assets::WINDOW_SIZE.y/2});
-            createButton("incPlayers.png", "incPlayers", {Assets::WINDOW_SIZE.x/2 + 50, Assets::WINDOW_SIZE.y/2 - 50});
-            createButton("decPlayers.png", "decPlayers", {Assets::WINDOW_SIZE.x/2 - 50, Assets::WINDOW_SIZE.y/2 - 50});
-            createButton("StartGame.png", "StartGame", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 + 100});
-            createButton("back.png", "Back", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y-100});
+            createText(std::to_string(teamSize_), "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 + 40}, 30);
+            createText(std::to_string(playerAmount_), "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 - 60}, 30);
+            createButton("incUnit.png", "incTeam", {Assets::WINDOW_SIZE.x/2 + 100, Assets::WINDOW_SIZE.y/2 + 50});
+            createButton("decUnit.png", "decTeam", {Assets::WINDOW_SIZE.x/2 - 100, Assets::WINDOW_SIZE.y/2 + 50});
+            createButton("incPlayers.png", "incPlayers", {Assets::WINDOW_SIZE.x/2 + 100, Assets::WINDOW_SIZE.y/2 - 50});
+            createButton("decPlayers.png", "decPlayers", {Assets::WINDOW_SIZE.x/2 - 100, Assets::WINDOW_SIZE.y/2 - 50});
+            createButton("startGame.png", "StartGame", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 + 175});
+            createButton("back.png", "Back", {Assets::WINDOW_SIZE.x/2 + 400, Assets::WINDOW_SIZE.y-100});
             
             //Instructions on the setup
-            createAlignLeftText("Controls:", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2 + 200, Assets::WINDOW_SIZE.y/2 - 50}, 35);
-            createAlignLeftText("Arrow right/left  -  Move", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2 + 150, Assets::WINDOW_SIZE.y/2 - 20});
-            createAlignLeftText("Arrow up/down  -  Aim", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2 + 150, Assets::WINDOW_SIZE.y/2 + 5});
-            createAlignLeftText("Key 1  -  Bazooka, medium damage, medium explosion", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2 + 150, Assets::WINDOW_SIZE.y/2 + 30});
-            createAlignLeftText("Key 2  -  Mini Bazooka, high damage, mini explosion", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2 + 150, Assets::WINDOW_SIZE.y/2 + 55});
-            createAlignLeftText("Key 3  -  Nuke, low damage, so biggi explosion!!", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2 + 150, Assets::WINDOW_SIZE.y/2 + 80});
-            createAlignLeftText("Space  -  Shoot", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2 + 150, Assets::WINDOW_SIZE.y/2 + 105});
-            createAlignLeftText("Backspace  -  Jump", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2 + 150, Assets::WINDOW_SIZE.y/2 + 130});
-            createAlignLeftText("Delete  -  Back to menu", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2 + 150, Assets::WINDOW_SIZE.y/2 + 155});
-            createAlignLeftText("Escape  -  Turn off game", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2 + 150, Assets::WINDOW_SIZE.y/2 + 180});
+            createAlignLeftText("Controls:", "BebasNeue.otf", {150, 50}, 35);
+            createAlignLeftText("Arrow right/left  -  Move", "BebasNeue.otf", {100, 85});
+            createAlignLeftText("Arrow up/down  -  Aim", "BebasNeue.otf", {100, 110});
+            createAlignLeftText("Key 1  -  Bazooka, medium damage, medium explosion", "BebasNeue.otf", {100, 135});
+            createAlignLeftText("Key 2  -  Mini Bazooka, high damage, mini explosion", "BebasNeue.otf", {100, 160});
+            createAlignLeftText("Key 3  -  Nuke, low damage, so biggi explosion!!", "BebasNeue.otf", {100, 185});
+            createAlignLeftText("Space  -  Shoot", "BebasNeue.otf", {100, 210});
+            createAlignLeftText("Backspace  -  Jump", "BebasNeue.otf", {100, 235});
+            createAlignLeftText("Delete  -  Back to menu", "BebasNeue.otf", {100, 260});
+            createAlignLeftText("Escape  -  Turn off game", "BebasNeue.otf", {100, 285});
         }
         else if(state_ == MenuState::option){
-            createText("Game Volume", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 - 50});
+            createText("Game Volume", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 - 70});
             createText(std::to_string((int)gameVolume_)+ " %", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 - 10});
-            createButton("incUnit.png", "incGameVol", {Assets::WINDOW_SIZE.x/2 - 75, Assets::WINDOW_SIZE.y/2});
-            createButton("decUnit.png", "decGameVol", {Assets::WINDOW_SIZE.x/2 + 75, Assets::WINDOW_SIZE.y/2});
-            createText("Music Volume", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 + 50});
-            createText(std::to_string((int)musicVolume_)+ " %", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 + 90});
-            createButton("incPlayers.png", "incMusic", {Assets::WINDOW_SIZE.x/2 - 75, Assets::WINDOW_SIZE.y/2 + 100});
-            createButton("decPlayers.png", "decMusic", {Assets::WINDOW_SIZE.x/2 + 75, Assets::WINDOW_SIZE.y/2 + 100});
+            createButton("increase.png", "incGameVol", {Assets::WINDOW_SIZE.x/2 + 125, Assets::WINDOW_SIZE.y/2});
+            createButton("decrease.png", "decGameVol", {Assets::WINDOW_SIZE.x/2 - 125, Assets::WINDOW_SIZE.y/2});
+            createText("Music Volume", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 + 55});
+            createText(std::to_string((int)musicVolume_)+ " %", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 + 115});
+            createButton("increase.png", "incMusic", {Assets::WINDOW_SIZE.x/2 + 125, Assets::WINDOW_SIZE.y/2 + 125});
+            createButton("decrease.png", "decMusic", {Assets::WINDOW_SIZE.x/2 - 125, Assets::WINDOW_SIZE.y/2 + 125});
             createButton("back.png", "Back", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y-100});
         }
         redraw_ = false;
