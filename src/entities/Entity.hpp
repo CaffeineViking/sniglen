@@ -59,6 +59,7 @@ class Unit: public Entity{
         Player* owner_;
         float aimAngle_ = 0;
         sf::Sprite crosshair_;
+        sf::Sprite powerMeter_;
         sf::Text healthText_;
         int shootPower_{0}; // Release power of shots
         bool shoot_ = false;
@@ -76,6 +77,9 @@ class Unit: public Entity{
                 sprite_.setPosition(position_);
                 crosshair_.setOrigin({(float)crosshair_.getTexture()->getSize().x/2, (float)crosshair_.getTexture()->getSize().y/2});
                 crosshair_.setPosition(sprite_.getOrigin());
+                powerMeter_ = Assets::LOAD_TEXTURE("powerIndicator.png");
+                powerMeter_.setOrigin({powerMeter_.getOrigin().x, powerMeter_.getOrigin().y + powerMeter_.getTexture()->getSize().y/2});
+                powerMeter_.setPosition(sprite_.getPosition());
                 healthText_.setOrigin({healthText_.getLocalBounds().width/2, healthText_.getLocalBounds().height/2});
                 healthText_.setPosition({sprite_.getPosition().x, sprite_.getPosition().y - 50});
             }
