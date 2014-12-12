@@ -22,7 +22,7 @@ void GameWorld::initiate(short unsigned int players, short unsigned int units, f
         playerVector.push_back(std::unique_ptr<Player>{new Player{{(unsigned char)Random::GENERATE_MAX(255),(unsigned char)Random::GENERATE_MAX(255),(unsigned char)Random::GENERATE_MAX(255)}}});
     for(int i{0}; i < units; ++i){
         for(auto& i : playerVector){
-            i->insertUnit(new Unit{Assets::LOAD_TEXTURE("unit.png"), Assets::LOAD_TEXTURE("testa.png"), {static_cast<float>(Random::GENERATE_MAX(environment_->getTerrainSize())), 180}, 1, 150, i.get()});
+            i->insertUnit(new Unit{Assets::LOAD_TEXTURE("unit.png"), Assets::LOAD_TEXTURE("crosshair.png"), {static_cast<float>(Random::GENERATE_MAX(environment_->getTerrainSize())), 180}, 1, 150, i.get()});
         i->getTeam().back()->disableCrosshair();
         }
     }
