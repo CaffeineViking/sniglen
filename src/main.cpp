@@ -38,6 +38,10 @@ int main() {
             state = gameState::menu;
         }
 
+        while (input.isKeyPressed(sf::Keyboard::Key::F)) {
+            input.update(&window);
+        }
+
         if(state == gameState::game){
             game.update();
         }

@@ -36,14 +36,13 @@ void GameWorld::initiate(short unsigned int players, short unsigned int units, f
 
 void GameWorld::nextRound(std::vector<std::unique_ptr<Player>>::iterator& currentPlayer) {
     shot_ = false;
-    auto tempPlayer = currentPlayer;
+    std::vector<std::unique_ptr<Player>>::iterator tempPlayer = currentPlayer;
     do{
         ++currentPlayer;
-        if(tempPlayer == currentPlayer)
-            win();
         if(currentPlayer == playerVector.end())
             currentPlayer = playerVector.begin();
-
+        if(tempPlayer == currentPlayer)
+            win();
     }while ((*currentPlayer)->isTeamDead());
     currentUnit = (*currentPlayer)->getNextUnit(); 
     /*if(!(*currentPlayer)->isTeamDead())*/ currentUnit->enableCrosshair();
@@ -171,7 +170,7 @@ void GameWorld::update() {
         }
     }
 
-    static const float ROUND_TIME{10.0f};
+    static const float ROUND_TIME{15.0f};
     static const float DELAY_TIME{3.0f};
     float realRoundTime{(gameTime_.getElapsedTime() - roundTime_).asSeconds()};
     float realDelayTime{(gameTime_.getElapsedTime() - delayTime_).asSeconds()};
@@ -278,7 +277,7 @@ void GameWorld::win(){
     textVector_.clear();
     for(size_t i = 0; i < playerVector.size(); ++i){
         if(!playerVector[i]->isTeamDead()){
-            createText("Player " + std::to_string(i) + " wins! \n Click the mouse to continue.", "BebasNeue.otf", {camera_.getPosition().x, camera_.getPosition().y - Assets::WINDOW_SIZE.y / 2 + 150}, 32);
+            createText("Player " + std::to_string(i + 1) + " wins! \n Click the mouse to continue.", "BebasNeue.otf", {camera_.getPosition().x, camera_.getPosition().y - Assets::WINDOW_SIZE.y / 2 + 150}, 32);
             gameWindow->clear({0,255,0});
         }
     }
