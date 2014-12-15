@@ -114,7 +114,7 @@ void GameWorld::update() {
         currentUnit->disableCrosshair();
         projectileVector.push_back(std::move(std::unique_ptr<Projectile>{
                     new Projectile{Assets::LOAD_TEXTURE("bullet.png"), currentUnit->getCrosshairPosition(), 0.0f, 10, 
-                    currentUnit->getShootMomentum(*gameWindow), 
+                    currentUnit->getShootMomentum(), 
                     environment_->getWindForce(),
                     currentUnit->getShootAngle(), 
                     (*currentPlayer)->getCurrentWeapon().get()

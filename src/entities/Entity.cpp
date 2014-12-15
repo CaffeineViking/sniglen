@@ -68,7 +68,7 @@ void Unit::getInput(const InputHandler& input){
         shoot_ = true;
     }
     
-	powerMeter_.setTextureRect({0, 0, shootPower_ / 2, powerMeter_.getTexture()->getSize().y});
+	powerMeter_.setTextureRect({0, 0, shootPower_ / 2, (int)powerMeter_.getTexture()->getSize().y});
 	
     if(input.isKeyPressed(sf::Keyboard::Key::Num1))
         owner_->selectWeapon(0);
@@ -239,7 +239,7 @@ void Unit::draw(sf::RenderWindow& window){
     window.draw(healthText_);
     window.draw(powerMeter_);
 }
-sf::Vector2f Unit::getShootMomentum(sf::RenderWindow& screen){ 
+sf::Vector2f Unit::getShootMomentum(){ 
     sf::Vector2f momentum;
     momentum.x = shootPower_ * cos(toRadians(aimAngle_));
     momentum.y = shootPower_ * sin(toRadians(aimAngle_));

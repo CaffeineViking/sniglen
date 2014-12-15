@@ -41,14 +41,22 @@ bool Player::isTeamDead(){
 }
 
 Unit* Player::getNextUnit(){
-    if(team_.size() != 0 && teamAlive()){
-        if(unitCounter_+1 >= (int)team_.size()){ // Make sure that the unit counter is in bounds
-            unitCounter_ = -1; 
+    Unit* unit;
+    int check = unitCounter_;
+    do{
+        if(team_.size() != 0 && teamAlive()){
+            if(unitCounter_+1 >= (int)team_.size()){ // Make sure that the unit counter is in bounds
+                unitCounter_ = -1; 
+            }
+            unit = team_[++unitCounter_]; // Return next unit
         }
-        return team_[++unitCounter_]; // Return next unit
-    }
+        else if(unitCounter_ == check){
+            unit = team_[unitCounter_];
+            break;
+        }
+    }while (unit->isDead());
 
-    return nullptr;
+    return unit;
 }
 void Player::selectWeapon(int weaponID){
     if(!weaponList_.empty()){

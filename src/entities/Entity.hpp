@@ -94,7 +94,7 @@ class Unit: public Entity{
         bool checkExplosion(const sf::CircleShape&, float);
         bool inControl(){return (state_ != unitState::falling);};
         float getShootAngle(){return aimAngle_;};
-        sf::Vector2f getShootMomentum(sf::RenderWindow&);
+        sf::Vector2f getShootMomentum();
         sf::Vector2f getPosition() const {return sprite_.getPosition();}; // Kanske måste tas bort då vi redan har getPos sen förut!?
         void setColor(sf::Color color){sprite_.setColor(color);}
         bool isShooting(){return shoot_;};
