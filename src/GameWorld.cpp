@@ -5,6 +5,7 @@
 #include "GameWorld.hpp"
 #include "utilities/Random.hpp"
 #include "utilities/Assets.hpp"
+#include "utilities/to_string.hpp"
 
 GameWorld::GameWorld(sf::RenderWindow& window, InputHandler& inputhandler) : gameWindow{&window}, input{&inputhandler}, camera_{window}  {}
 
@@ -92,7 +93,7 @@ void GameWorld::update() {
         nextRound(currentPlayer);
     }
 
-    createText((*currentPlayer)->getCurrentWeaponString() + ": " + std::to_string((*currentPlayer)->getCurrentWeaponAmmo()), "BebasNeue.otf", {camera_.getPosition().x, camera_.getPosition().y - Assets::WINDOW_SIZE.y / 2 + 175}, 32);
+    createText((*currentPlayer)->getCurrentWeaponString() + ": " + to_string((*currentPlayer)->getCurrentWeaponAmmo()), "BebasNeue.otf", {camera_.getPosition().x, camera_.getPosition().y - Assets::WINDOW_SIZE.y / 2 + 175}, 32);
 
     unsigned iteratedOver {0};
     unsigned removed {0};
@@ -180,9 +181,9 @@ void GameWorld::update() {
     }
 
     if (!shot_)
-        createText(std::to_string(static_cast<unsigned>(ROUND_TIME -  realRoundTime)), "BebasNeue.otf", {camera_.getPosition().x, camera_.getPosition().y - Assets::WINDOW_SIZE.y / 2 + 25}, 48);
+        createText(to_string(static_cast<unsigned>(ROUND_TIME -  realRoundTime)), "BebasNeue.otf", {camera_.getPosition().x, camera_.getPosition().y - Assets::WINDOW_SIZE.y / 2 + 25}, 48);
     else
-        createText(std::to_string(static_cast<unsigned>(DELAY_TIME - realDelayTime)), "BebasNeue.otf", {camera_.getPosition().x, camera_.getPosition().y - Assets::WINDOW_SIZE.y / 2 + 25}, 48);
+        createText(to_string(static_cast<unsigned>(DELAY_TIME - realDelayTime)), "BebasNeue.otf", {camera_.getPosition().x, camera_.getPosition().y - Assets::WINDOW_SIZE.y / 2 + 25}, 48);
 
     for (auto& player : playerVector) {
         bool removed{false};
@@ -277,7 +278,7 @@ void GameWorld::win(){
     textVector_.clear();
     for(size_t i = 0; i < playerVector.size(); ++i){
         if(!playerVector[i]->isTeamDead()){
-            createText("Player " + std::to_string(i + 1) + " wins! \n Click the mouse to continue.", "BebasNeue.otf", {camera_.getPosition().x, camera_.getPosition().y - Assets::WINDOW_SIZE.y / 2 + 150}, 32);
+            createText("Player " + to_string(i + 1) + " wins! \n Click the mouse to continue.", "BebasNeue.otf", {camera_.getPosition().x, camera_.getPosition().y - Assets::WINDOW_SIZE.y / 2 + 150}, 32);
             gameWindow->clear({0,255,0});
         }
     }

@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include "../utilities/Player.hpp"
 #include "../utilities/Weapon.hpp"
+#include "../utilities/to_string.hpp"
 #include "../environment/Terrain.hpp"
 //#include "../environment/Environment.hpp"
 #include "../utilities/InputHandler.hpp"
@@ -73,7 +74,7 @@ class Unit: public Entity{
 
     public:
         Unit(const sf::Texture& tex, const sf::Texture& crosshair, sf::Vector2f pos, float spd, int mass, Player* player = nullptr):
-            Entity(tex, pos, spd, mass), owner_{player}, crosshair_(crosshair), healthText_(std::to_string(health_), Assets::LOAD_FONT("BebasNeue.otf")){
+            Entity(tex, pos, spd, mass), owner_{player}, crosshair_(crosshair), healthText_(to_string(health_), Assets::LOAD_FONT("BebasNeue.otf")){
                 sprite_.setPosition(position_);
                 crosshair_.setOrigin({(float)crosshair_.getTexture()->getSize().x/2, (float)crosshair_.getTexture()->getSize().y/2});
                 crosshair_.setPosition(sprite_.getOrigin());

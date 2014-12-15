@@ -1,6 +1,7 @@
 #include "MenuScreen.hpp"
 #include <string>
 #include <iostream>
+#include "utilities/to_string.hpp"
 
 MenuScreen::MenuScreen(sf::RenderWindow& screen, InputHandler& handler): window_{&screen}, input_{&handler} {
     createText("™Sniglen: the Game: the Movie: Reloaded: Limited Limited Edition!™", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 - 150});
@@ -22,8 +23,8 @@ void MenuScreen::update(){
             createButton("quit.png", "Exit", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 + 100});
         }
         else if(state_ == MenuState::setup){
-            createText(std::to_string(teamSize_), "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 + 40}, 30);
-            createText(std::to_string(playerAmount_), "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 - 60}, 30);
+            createText(to_string(teamSize_), "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 + 40}, 30);
+            createText(to_string(playerAmount_), "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 - 60}, 30);
             createButton("incUnit.png", "incTeam", {Assets::WINDOW_SIZE.x/2 + 100, Assets::WINDOW_SIZE.y/2 + 50});
             createButton("decUnit.png", "decTeam", {Assets::WINDOW_SIZE.x/2 - 100, Assets::WINDOW_SIZE.y/2 + 50});
             createButton("incPlayers.png", "incPlayers", {Assets::WINDOW_SIZE.x/2 + 100, Assets::WINDOW_SIZE.y/2 - 50});
@@ -45,11 +46,11 @@ void MenuScreen::update(){
         }
         else if(state_ == MenuState::option){
             createText("Game Volume", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 - 70});
-            createText(std::to_string((int)gameVolume_)+ " %", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 - 10});
+            createText(to_string((int)gameVolume_)+ " %", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 - 10});
             createButton("increase.png", "incGameVol", {Assets::WINDOW_SIZE.x/2 + 125, Assets::WINDOW_SIZE.y/2});
             createButton("decrease.png", "decGameVol", {Assets::WINDOW_SIZE.x/2 - 125, Assets::WINDOW_SIZE.y/2});
             createText("Music Volume", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 + 55});
-            createText(std::to_string((int)musicVolume_)+ " %", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 + 115});
+            createText(to_string((int)musicVolume_)+ " %", "BebasNeue.otf", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y/2 + 115});
             createButton("increase.png", "incMusic", {Assets::WINDOW_SIZE.x/2 + 125, Assets::WINDOW_SIZE.y/2 + 125});
             createButton("decrease.png", "decMusic", {Assets::WINDOW_SIZE.x/2 - 125, Assets::WINDOW_SIZE.y/2 + 125});
             createButton("back.png", "Back", {Assets::WINDOW_SIZE.x/2, Assets::WINDOW_SIZE.y-100});
