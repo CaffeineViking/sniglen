@@ -289,7 +289,7 @@ void GameWorld::win(){
 
     draw();
     gameWindow->display();
-    while(!input->mouseClicked()){
+    while(!input->mouseReleased()){
         input->update(gameWindow);
     }
     input->quitGame();
