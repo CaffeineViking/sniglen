@@ -1,5 +1,5 @@
 Sniglen: An Artillery Game
-======================
+==========================
 
 <p align="center"><img width=100% src="/share/images/screenshot.png" /></p>
 
@@ -13,7 +13,7 @@ Just running `make` should do it if you've got the dependencies resolved. You mu
 Disclaimer
 ----------
 
-This project was done as part of a programming project course at LiU, and was one of the first games we ever made. When we look back at the code it makes us want to puke, but it was one of the first "real" programming projects after our basic C++ programming course, so we're still proud of what we were able to accomplish back then. It still builds and runs OK after ~6-7 years with no updates to the original source code. I would highly recommend you to turn down you volume to 10% or lower when launching the game, as the music is VERY loud on game startup. There are also a lot of bugs and balancing issues.
+This project was done as part of a programming project course at LiU, and was one of the first games we ever made. When we look back at the code it makes us want to puke, but it was one of the first "real" programming projects after our basic C++ programming course, so we're still proud of what we were able to accomplish back then. It still builds and runs OK after ~6-7 years with no updates to the original source code. I would highly recommend you to turn down you volume to 10% or lower when launching the game, as the music is VERY loud on game startup. There are a lot of bugs and balancing issues too.
 
 Libraries
 ---------
