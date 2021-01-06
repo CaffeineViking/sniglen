@@ -35,8 +35,10 @@ program_NAME := $(program_NAME)_release
 endif
 
 .PHONY: all run clean distclean
+
 all: bin/$(program_NAME)
 bin/$(program_NAME): $(program_OBJS)
+	mkdir -p bin
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(program_OBJS) -o bin/$(program_NAME) $(LDFLAGS)
 
 run: all
